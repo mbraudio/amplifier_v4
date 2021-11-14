@@ -27,8 +27,7 @@ inline void ADC_StoreValue(const uint32_t value)
 void ADC_Finalize(void)
 {
 	uint32_t i;
-	for (i = 0; i < ADC_NUMBER_OF_CHANNELS; i++)
-	{
+	for (i = 0; i < ADC_NUMBER_OF_CHANNELS; i++) {
 		adc.data[i] = adc.rawData[i];
 	}
 	adc.rawDataIndex = 0;

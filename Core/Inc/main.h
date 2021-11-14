@@ -66,8 +66,10 @@ void Error_Handler(void);
 #define LEDS_PWM_GPIO_Port GPIOE
 #define ENCODER_A_Pin GPIO_PIN_4
 #define ENCODER_A_GPIO_Port GPIOE
+#define ENCODER_A_EXTI_IRQn EXTI4_15_IRQn
 #define ENCODER_B_Pin GPIO_PIN_5
 #define ENCODER_B_GPIO_Port GPIOE
+#define ENCODER_B_EXTI_IRQn EXTI4_15_IRQn
 #define INPUT_DAC_Pin GPIO_PIN_6
 #define INPUT_DAC_GPIO_Port GPIOE
 #define INPUT_2_Pin GPIO_PIN_13
@@ -78,12 +80,14 @@ void Error_Handler(void);
 #define INPUT_1_GPIO_Port GPIOC
 #define DC_PROTECT_Pin GPIO_PIN_9
 #define DC_PROTECT_GPIO_Port GPIOH
+#define DC_PROTECT_EXTI_IRQn EXTI4_15_IRQn
 #define INPUT_0_Pin GPIO_PIN_10
 #define INPUT_0_GPIO_Port GPIOH
 #define SPEAKERS_ENABLE_Pin GPIO_PIN_0
 #define SPEAKERS_ENABLE_GPIO_Port GPIOH
 #define V_PROTECT_Pin GPIO_PIN_1
 #define V_PROTECT_GPIO_Port GPIOH
+#define V_PROTECT_EXTI_IRQn EXTI0_1_IRQn
 #define BUTTONS_2_Pin GPIO_PIN_0
 #define BUTTONS_2_GPIO_Port GPIOC
 #define LED_VOLUME_Pin GPIO_PIN_1
@@ -126,12 +130,14 @@ void Error_Handler(void);
 #define LED_DIRECT_GPIO_Port GPIOD
 #define IR_Pin GPIO_PIN_11
 #define IR_GPIO_Port GPIOD
+#define IR_EXTI_IRQn EXTI4_15_IRQn
 #define POWER_ENABLE_Pin GPIO_PIN_12
 #define POWER_ENABLE_GPIO_Port GPIOD
 #define GPIO_0_Pin GPIO_PIN_13
 #define GPIO_0_GPIO_Port GPIOD
 #define POWER_BUTTON_Pin GPIO_PIN_14
 #define POWER_BUTTON_GPIO_Port GPIOD
+#define POWER_BUTTON_EXTI_IRQn EXTI4_15_IRQn
 #define LED_POWER_Pin GPIO_PIN_15
 #define LED_POWER_GPIO_Port GPIOD
 #define LED_STANDBY_Pin GPIO_PIN_6
@@ -140,6 +146,7 @@ void Error_Handler(void);
 #define LED_APD_GPIO_Port GPIOC
 #define SEC_POWER_Pin GPIO_PIN_8
 #define SEC_POWER_GPIO_Port GPIOC
+#define SEC_POWER_EXTI_IRQn EXTI4_15_IRQn
 #define BUZZER_Pin GPIO_PIN_9
 #define BUZZER_GPIO_Port GPIOC
 #define BT_ENABLE_Pin GPIO_PIN_8
@@ -176,6 +183,7 @@ void Error_Handler(void);
 #define DIR_RESET_GPIO_Port GPIOD
 #define DIR_ERR_Pin GPIO_PIN_7
 #define DIR_ERR_GPIO_Port GPIOD
+#define DIR_ERR_EXTI_IRQn EXTI4_15_IRQn
 #define DIR_NPCM_Pin GPIO_PIN_3
 #define DIR_NPCM_GPIO_Port GPIOB
 #define LED_SACD_Pin GPIO_PIN_4

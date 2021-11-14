@@ -26,6 +26,7 @@
 #include "led.h"
 #include "buzzer.h"
 #include "adc.h"
+#include "encoder.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -79,13 +80,13 @@ static void MX_TIM7_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+const void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim == &htim6)
 	{
-		/*buttons.timer++;
+		//buttons.timer++;
 		encoder.timer++;
-		motors.timer++;*/
+		//motors.timer++;
 		HEARTBEAT_Process();
 	}
 	else if (htim == &htim7)
@@ -94,7 +95,57 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	}
 }
 
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* phadc)
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	/*
+	// IR
+	if (GPIO_Pin == GPIO_PIN_11)
+	{
+		IR_Encode();
+	}
+	// POWER
+	else if (GPIO_Pin == GPIO_PIN_14)
+	{
+		if (EXTI->FTSR & GPIO_PIN_14)
+		{
+			CLEAR_BIT(EXTI->FTSR, GPIO_PIN_14);
+			SET_BIT(EXTI->RTSR, GPIO_PIN_14);
+			buttons.power.time = buttons.timer;
+			buttons.power.state = Pressed;
+		}
+		else if (EXTI->RTSR & GPIO_PIN_14)
+		{
+			CLEAR_BIT(EXTI->RTSR, GPIO_PIN_14);
+			buttons.power.state = Released;
+
+			if (BUTTONS_PressValid(buttons.power.time, BUTTON_LONG_HOLD_TIME))
+			{
+				uint32_t i = 4;
+				while (i--)
+				{
+					LED_Standby(GPIO_PIN_SET);
+					HAL_Delay(200);
+					LED_Standby(GPIO_PIN_RESET);
+					HAL_Delay(200);
+				}
+				//PROTECTION_Reset();
+			}
+			else if (BUTTONS_PressValid(buttons.power.time, BUTTON_PRESSED_TIME))
+			{
+				AMP_PowerToggle();
+			}
+			buttons.power.time = buttons.timer;
+			SET_BIT(EXTI->FTSR, GPIO_PIN_14);
+		}
+	}*/
+	// ENCODER
+	/*else*/ if ((GPIO_Pin == GPIO_PIN_4) || (GPIO_Pin == GPIO_PIN_5))
+	{
+		ENCODER_Encode(GPIO_Pin);
+	}
+}
+
+const void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* phadc)
 {
 	if (__HAL_ADC_GET_FLAG(phadc, ADC_FLAG_EOC))
 	{
@@ -110,6 +161,16 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* phadc)
 	}
 
 	HAL_ADC_Start_IT(phadc);
+}
+
+const void INPUT_Changed(const int32_t value)
+{
+
+}
+
+const void INPUT_Confirmed()
+{
+
 }
 /* USER CODE END 0 */
 
@@ -164,8 +225,8 @@ int main(void)
   // ADC
   ADC_Initialize();
   HAL_ADC_Start_IT(&hadc);
-
-
+  // ENCODER | 40 * 10ms = 0.4s
+  ENCODER_Initialize(40, INPUT_Changed, INPUT_Confirmed);
 
   /* USER CODE END 2 */
 
@@ -173,6 +234,15 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	ENCODER_Process();
+/*
+	if (system.power.state == On)
+	{
+		ENCODER_Process();
+		MOTORS_Process();
+		//CALIBRATOR_Process();
+	}
+*/
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -742,7 +812,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : ENCODER_A_Pin ENCODER_B_Pin */
   GPIO_InitStruct.Pin = ENCODER_A_Pin|ENCODER_B_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
@@ -816,6 +886,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(DIR_NPCM_GPIO_Port, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI0_1_IRQn, 2, 0);
+  HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI4_15_IRQn, 2, 0);
+  HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);
 
 }
 
