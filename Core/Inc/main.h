@@ -182,8 +182,8 @@ void Error_Handler(void);
 #define LED_SACD_GPIO_Port GPIOB
 #define LED_NETWORK_Pin GPIO_PIN_5
 #define LED_NETWORK_GPIO_Port GPIOB
-#define LED_OHONO_Pin GPIO_PIN_8
-#define LED_OHONO_GPIO_Port GPIOB
+#define LED_PHONO_Pin GPIO_PIN_8
+#define LED_PHONO_GPIO_Port GPIOB
 #define LED_TUNER_Pin GPIO_PIN_9
 #define LED_TUNER_GPIO_Port GPIOB
 #define LED_AUX_Pin GPIO_PIN_0

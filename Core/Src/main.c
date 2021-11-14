@@ -23,6 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "heartbeat.h"
+#include "led.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -134,6 +135,10 @@ int main(void)
   // START TIMERS
   HAL_TIM_Base_Start_IT(&htim7);
   HAL_TIM_Base_Start_IT(&htim6);
+
+  // INITIALIZE
+  // LED
+  LED_Initialize(&htim3);
 
   /* USER CODE END 2 */
 
@@ -698,7 +703,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LED_BASS_Pin|LED_LOUDNESS_Pin|LED_SACD_Pin|LED_NETWORK_Pin
-                          |LED_OHONO_Pin|LED_TUNER_Pin, GPIO_PIN_RESET);
+                          |LED_PHONO_Pin|LED_TUNER_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, LED_SPEAKERS_B_Pin|LED_SPEAKERS_A_Pin|LED_DIRECT_Pin|POWER_ENABLE_Pin
@@ -752,9 +757,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED_BASS_Pin LED_LOUDNESS_Pin LED_SACD_Pin LED_NETWORK_Pin
-                           LED_OHONO_Pin LED_TUNER_Pin */
+                           LED_PHONO_Pin LED_TUNER_Pin */
   GPIO_InitStruct.Pin = LED_BASS_Pin|LED_LOUDNESS_Pin|LED_SACD_Pin|LED_NETWORK_Pin
-                          |LED_OHONO_Pin|LED_TUNER_Pin;
+                          |LED_PHONO_Pin|LED_TUNER_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
