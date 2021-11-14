@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "heartbeat.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -82,8 +82,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	{
 		/*buttons.timer++;
 		encoder.timer++;
-		motors.timer++;
-		HEARTBEAT_Process();*/
+		motors.timer++;*/
+		HEARTBEAT_Process();
 	}
 	else if (htim == &htim7)
 	{
@@ -141,10 +141,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  HAL_GPIO_TogglePin(LED_HEARTBEAT_GPIO_Port, LED_HEARTBEAT_Pin);
-	  HAL_Delay(500);
-
-
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
