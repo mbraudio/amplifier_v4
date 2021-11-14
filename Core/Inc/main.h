@@ -140,8 +140,8 @@ void Error_Handler(void);
 #define LED_APD_GPIO_Port GPIOC
 #define SEC_POWER_Pin GPIO_PIN_8
 #define SEC_POWER_GPIO_Port GPIOC
-#define BUZZER_PWM_Pin GPIO_PIN_9
-#define BUZZER_PWM_GPIO_Port GPIOC
+#define BUZZER_Pin GPIO_PIN_9
+#define BUZZER_GPIO_Port GPIOC
 #define BT_ENABLE_Pin GPIO_PIN_8
 #define BT_ENABLE_GPIO_Port GPIOA
 #define BT_TX_Pin GPIO_PIN_9

@@ -7,14 +7,14 @@
 #include "led.h"
 #include "main.h"
 
-TIM_HandleTypeDef* htim;
+TIM_HandleTypeDef* bhtim;
 LedData ledData[LED_COUNT];
 
 void LED_Initialize(TIM_HandleTypeDef* h)
 {
 	uint32_t led;
 
-	htim = h;
+	bhtim = h;
 
 	led = LED_POWER;
 	ledData[led].gpio = LED_POWER_GPIO_Port;
@@ -80,14 +80,14 @@ void LED_SetBrightness(const uint8_t brightness)
 	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
 	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 
-	HAL_TIM_PWM_Stop(htim, TIM_CHANNEL_1);
+	HAL_TIM_PWM_Stop(bhtim, TIM_CHANNEL_1);
 
-	if (HAL_TIM_PWM_ConfigChannel(htim, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+	if (HAL_TIM_PWM_ConfigChannel(bhtim, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
 	{
 		Error_Handler();
 	}
 
-	HAL_TIM_PWM_Start(htim, TIM_CHANNEL_1);
+	HAL_TIM_PWM_Start(bhtim, TIM_CHANNEL_1);
 }
 
 inline void LED_Standby(const GPIO_PinState state)
