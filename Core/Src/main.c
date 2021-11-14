@@ -221,7 +221,7 @@ int main(void)
   // LED
   LED_Initialize(&htim3);
   // BUZZER
-  BUZZER_PowerOn();
+  //BUZZER_PowerOn();
   // ADC
   ADC_Initialize();
   HAL_ADC_Start_IT(&hadc);
@@ -234,7 +234,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	ENCODER_Process();
 /*
 	if (system.power.state == On)
 	{
