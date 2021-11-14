@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-#define ADC_NUMBER_OF_CHANNELS	6
+#define ADC_NUMBER_OF_CHANNELS	7
 
 typedef struct
 {

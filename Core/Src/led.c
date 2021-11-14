@@ -8,7 +8,7 @@
 #include "main.h"
 
 TIM_HandleTypeDef* bhtim;
-LedData ledData[LED_COUNT];
+static LedData ledData[LED_COUNT];
 
 void LED_Initialize(TIM_HandleTypeDef* h)
 {

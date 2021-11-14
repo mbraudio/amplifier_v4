@@ -1,4 +1,9 @@
 #MicroXplorer Configuration settings - do not modify
+ADC.ClockPrescaler=ADC_CLOCK_SYNC_PCLK_DIV4
+ADC.IPParameters=ClockPrescaler,Resolution,LowPowerAutoWait,SamplingTime
+ADC.LowPowerAutoWait=ENABLE
+ADC.Resolution=ADC_RESOLUTION_8B
+ADC.SamplingTime=ADC_SAMPLETIME_39CYCLES_5
 File.Version=6
 I2C1.IPParameters=Timing
 I2C1.Timing=0x00707CBB
@@ -103,6 +108,7 @@ Mcu.UserConstants=
 Mcu.UserName=STM32L071VBTx
 MxCube.Version=6.3.0
 MxDb.Version=DB.6.0.30
+NVIC.ADC1_COMP_IRQn=true\:0\:0\:false\:false\:true\:true\:true
 NVIC.ForceEnableDMAVector=true
 NVIC.HardFault_IRQn=true\:0\:0\:false\:false\:true\:false\:false
 NVIC.NonMaskableInt_IRQn=true\:0\:0\:false\:false\:true\:false\:false

@@ -25,6 +25,7 @@
 #include "heartbeat.h"
 #include "led.h"
 #include "buzzer.h"
+#include "adc.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -92,6 +93,24 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		//IR_ProcessTimer();
 	}
 }
+
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* phadc)
+{
+	if (__HAL_ADC_GET_FLAG(phadc, ADC_FLAG_EOC))
+	{
+		ADC_StoreValue(HAL_ADC_GetValue(phadc));
+	}
+
+	if (__HAL_ADC_GET_FLAG(phadc, ADC_FLAG_EOS))
+	{
+		ADC_Finalize();
+		//BUTTONS_ProcessADC_MainGroup(adc.data[5]);
+		//BUTTONS_ProcessADC_SelectorGroup(adc.data[6]);
+		//MOTORS_SetCurrent(adc.data[0], adc.data[1], adc.data[4], adc.data[3], adc.data[2]);
+	}
+
+	HAL_ADC_Start_IT(phadc);
+}
 /* USER CODE END 0 */
 
 /**
@@ -142,6 +161,9 @@ int main(void)
   LED_Initialize(&htim3);
   // BUZZER
   BUZZER_PowerOn();
+  // ADC
+  ADC_Initialize();
+  HAL_ADC_Start_IT(&hadc);
 
 
 
@@ -228,9 +250,9 @@ static void MX_ADC_Init(void)
   */
   hadc.Instance = ADC1;
   hadc.Init.OversamplingMode = DISABLE;
-  hadc.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
-  hadc.Init.Resolution = ADC_RESOLUTION_12B;
-  hadc.Init.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+  hadc.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc.Init.Resolution = ADC_RESOLUTION_8B;
+  hadc.Init.SamplingTime = ADC_SAMPLETIME_39CYCLES_5;
   hadc.Init.ScanConvMode = ADC_SCAN_DIRECTION_FORWARD;
   hadc.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc.Init.ContinuousConvMode = DISABLE;
@@ -240,7 +262,7 @@ static void MX_ADC_Init(void)
   hadc.Init.DMAContinuousRequests = DISABLE;
   hadc.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   hadc.Init.Overrun = ADC_OVR_DATA_PRESERVED;
-  hadc.Init.LowPowerAutoWait = DISABLE;
+  hadc.Init.LowPowerAutoWait = ENABLE;
   hadc.Init.LowPowerFrequencyMode = DISABLE;
   hadc.Init.LowPowerAutoPowerOff = DISABLE;
   if (HAL_ADC_Init(&hadc) != HAL_OK)

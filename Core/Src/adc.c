@@ -19,13 +19,14 @@ void ADC_Initialize(void)
 
 inline void ADC_StoreValue(const uint32_t value)
 {
-	adc.rawData[adc.rawDataIndex++] = value;
+	if (adc.rawDataIndex < ADC_NUMBER_OF_CHANNELS) {
+		adc.rawData[adc.rawDataIndex++] = value;
+	}
 }
 
 void ADC_Finalize(void)
 {
 	uint32_t i;
-
 	for (i = 0; i < ADC_NUMBER_OF_CHANNELS; i++)
 	{
 		adc.data[i] = adc.rawData[i];
