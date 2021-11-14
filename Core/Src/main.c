@@ -22,6 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "system.h"
 #include "heartbeat.h"
 #include "led.h"
 #include "buzzer.h"
@@ -80,7 +81,7 @@ static void MX_TIM7_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-const void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim == &htim6)
 	{
@@ -145,7 +146,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	}
 }
 
-const void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* phadc)
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* phadc)
 {
 	if (__HAL_ADC_GET_FLAG(phadc, ADC_FLAG_EOC))
 	{
@@ -163,12 +164,12 @@ const void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* phadc)
 	HAL_ADC_Start_IT(phadc);
 }
 
-const void INPUT_Changed(const int32_t value)
+void INPUT_Changed(const int32_t value)
 {
 
 }
 
-const void INPUT_Confirmed()
+void INPUT_Confirmed()
 {
 
 }
@@ -218,6 +219,9 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim6);
 
   // INITIALIZE
+  // SYSTEM
+  SYSTEM_Initialize();
+  SYSTEM_InitializeValues();
   // LED
   LED_Initialize(&htim3);
   // BUZZER
@@ -234,14 +238,23 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-/*
+	//IR_Process();
+
+	/*if (uartHandler.rxDataReady)
+	{
+		UART_Process();
+		uartHandler.rxDataReady = 0;
+	}*/
+
 	if (system.power.state == On)
 	{
 		ENCODER_Process();
-		MOTORS_Process();
-		//CALIBRATOR_Process();
+		//MOTORS_Process();
+	    //CALIBRATOR_Process();
 	}
-*/
+
+	//AMP_ProcessPower();
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
