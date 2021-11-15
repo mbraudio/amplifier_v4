@@ -28,6 +28,7 @@
 #include "buzzer.h"
 #include "adc.h"
 #include "encoder.h"
+#include "input.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -164,15 +165,6 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* phadc)
 	HAL_ADC_Start_IT(phadc);
 }
 
-void INPUT_Changed(const int32_t value)
-{
-
-}
-
-void INPUT_Confirmed()
-{
-
-}
 /* USER CODE END 0 */
 
 /**
@@ -231,6 +223,8 @@ int main(void)
   HAL_ADC_Start_IT(&hadc);
   // ENCODER | 40 * 10ms = 0.4s
   ENCODER_Initialize(40, INPUT_Changed, INPUT_Confirmed);
+  // INPUT
+  INPUT_Initialize();
 
   /* USER CODE END 2 */
 
@@ -246,7 +240,7 @@ int main(void)
 		uartHandler.rxDataReady = 0;
 	}*/
 
-	if (system.power.state == On)
+	//if (system.power.state == On)
 	{
 		ENCODER_Process();
 		//MOTORS_Process();
@@ -824,7 +818,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : ENCODER_A_Pin ENCODER_B_Pin */
   GPIO_InitStruct.Pin = ENCODER_A_Pin|ENCODER_B_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
@@ -900,10 +894,10 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(DIR_NPCM_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI0_1_IRQn, 2, 0);
+  HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
 
-  HAL_NVIC_SetPriority(EXTI4_15_IRQn, 2, 0);
+  HAL_NVIC_SetPriority(EXTI4_15_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);
 
 }
