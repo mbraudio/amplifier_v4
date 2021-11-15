@@ -29,6 +29,7 @@
 #include "adc.h"
 #include "encoder.h"
 #include "input.h"
+#include "potentiometer.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -88,7 +89,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	{
 		//buttons.timer++;
 		encoder.timer++;
-		//motors.timer++;
+		potentiometers.timer++;
 		HEARTBEAT_Process();
 	}
 	else if (htim == &htim7)
@@ -225,6 +226,8 @@ int main(void)
   ENCODER_Initialize(40, INPUT_Changed, INPUT_Confirmed);
   // INPUT
   INPUT_Initialize();
+  // POTENTIOMETERS
+  POTENTIOMETERS_Initialize();
 
   /* USER CODE END 2 */
 
@@ -243,7 +246,7 @@ int main(void)
 	if (system.power.state == On)
 	{
 		ENCODER_Process();
-		//MOTORS_Process();
+		POTENTIOMETERS_Process();
 	    //CALIBRATOR_Process();
 	}
 
