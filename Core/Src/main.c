@@ -31,6 +31,8 @@
 #include "input.h"
 #include "potentiometer.h"
 #include "protection.h"
+#include "buttons.h"
+#include "amp.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -88,7 +90,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim == &htim6)
 	{
-		//buttons.timer++;
+		buttons.timer++;
 		encoder.timer++;
 		potentiometers.timer++;
 		HEARTBEAT_Process();
@@ -106,9 +108,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	if (GPIO_Pin == GPIO_PIN_11)
 	{
 		IR_Encode();
-	}
+	}*/
 	// POWER
-	else if (GPIO_Pin == GPIO_PIN_14)
+	if (GPIO_Pin == GPIO_PIN_14)
 	{
 		if (EXTI->FTSR & GPIO_PIN_14)
 		{
@@ -141,7 +143,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 			buttons.power.time = buttons.timer;
 			SET_BIT(EXTI->FTSR, GPIO_PIN_14);
 		}
-	}*/
+	}
 	// ENCODER
 	/*else*/ if ((GPIO_Pin == GPIO_PIN_4) || (GPIO_Pin == GPIO_PIN_5))
 	{
@@ -251,7 +253,7 @@ int main(void)
 	    //CALIBRATOR_Process();
 	}
 
-	//AMP_ProcessPower();
+	AMP_ProcessPower();
 
     /* USER CODE END WHILE */
 
@@ -879,11 +881,17 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : IR_Pin POWER_BUTTON_Pin DIR_ERR_Pin */
-  GPIO_InitStruct.Pin = IR_Pin|POWER_BUTTON_Pin|DIR_ERR_Pin;
+  /*Configure GPIO pins : IR_Pin DIR_ERR_Pin */
+  GPIO_InitStruct.Pin = IR_Pin|DIR_ERR_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : POWER_BUTTON_Pin */
+  GPIO_InitStruct.Pin = POWER_BUTTON_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(POWER_BUTTON_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : SEC_POWER_Pin */
   GPIO_InitStruct.Pin = SEC_POWER_Pin;
