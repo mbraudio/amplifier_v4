@@ -240,7 +240,7 @@ int main(void)
 		uartHandler.rxDataReady = 0;
 	}*/
 
-	//if (system.power.state == On)
+	if (system.power.state == On)
 	{
 		ENCODER_Process();
 		//MOTORS_Process();
