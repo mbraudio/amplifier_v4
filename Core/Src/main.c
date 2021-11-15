@@ -32,6 +32,7 @@
 #include "potentiometer.h"
 #include "protection.h"
 #include "buttons.h"
+#include "ir_nec.h"
 #include "amp.h"
 /* USER CODE END Includes */
 
@@ -97,57 +98,58 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	}
 	else if (htim == &htim7)
 	{
-		//IR_ProcessTimer();
+		IR_ProcessTimer();
 	}
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	/*
-	// IR
-	if (GPIO_Pin == GPIO_PIN_11)
-	{
-		IR_Encode();
-	}*/
-	// POWER
-	if (GPIO_Pin == GPIO_PIN_14)
-	{
-		if (EXTI->FTSR & GPIO_PIN_14)
-		{
-			CLEAR_BIT(EXTI->FTSR, GPIO_PIN_14);
-			SET_BIT(EXTI->RTSR, GPIO_PIN_14);
-			buttons.power.time = buttons.timer;
-			buttons.power.state = Pressed;
-		}
-		else if (EXTI->RTSR & GPIO_PIN_14)
-		{
-			CLEAR_BIT(EXTI->RTSR, GPIO_PIN_14);
-			buttons.power.state = Released;
+	switch (GPIO_Pin) {
+		// IR
+		case GPIO_PIN_11: {
+			IR_Encode();
+		} break;
 
-			if (BUTTONS_PressValid(buttons.power.time, BUTTON_LONG_HOLD_TIME))
+		// POWER
+		case GPIO_PIN_14: {
+			if (EXTI->FTSR & GPIO_PIN_14)
 			{
-				uint32_t i = 4;
-				while (i--)
+				CLEAR_BIT(EXTI->FTSR, GPIO_PIN_14);
+				SET_BIT(EXTI->RTSR, GPIO_PIN_14);
+				buttons.power.time = buttons.timer;
+				buttons.power.state = Pressed;
+			}
+			else if (EXTI->RTSR & GPIO_PIN_14)
+			{
+				CLEAR_BIT(EXTI->RTSR, GPIO_PIN_14);
+				buttons.power.state = Released;
+
+				if (BUTTONS_PressValid(buttons.power.time, BUTTON_LONG_HOLD_TIME))
 				{
-					LED_Standby(GPIO_PIN_SET);
-					HAL_Delay(200);
-					LED_Standby(GPIO_PIN_RESET);
-					HAL_Delay(200);
+					uint32_t i = 4;
+					while (i--)
+					{
+						LED_Standby(GPIO_PIN_SET);
+						HAL_Delay(200);
+						LED_Standby(GPIO_PIN_RESET);
+						HAL_Delay(200);
+					}
+					//PROTECTION_Reset();
 				}
-				//PROTECTION_Reset();
+				else if (BUTTONS_PressValid(buttons.power.time, BUTTON_PRESSED_TIME))
+				{
+					AMP_PowerToggle();
+				}
+				buttons.power.time = buttons.timer;
+				SET_BIT(EXTI->FTSR, GPIO_PIN_14);
 			}
-			else if (BUTTONS_PressValid(buttons.power.time, BUTTON_PRESSED_TIME))
-			{
-				AMP_PowerToggle();
-			}
-			buttons.power.time = buttons.timer;
-			SET_BIT(EXTI->FTSR, GPIO_PIN_14);
-		}
-	}
-	// ENCODER
-	/*else*/ if ((GPIO_Pin == GPIO_PIN_4) || (GPIO_Pin == GPIO_PIN_5))
-	{
-		ENCODER_Encode(GPIO_Pin);
+		} break;
+
+		// ENCODER
+		case GPIO_PIN_4:
+		case GPIO_PIN_5: {
+			ENCODER_Encode(GPIO_Pin);
+		} break;
 	}
 }
 
@@ -231,6 +233,8 @@ int main(void)
   INPUT_Initialize();
   // POTENTIOMETERS
   POTENTIOMETERS_Initialize();
+  // IR
+  IR_Initialize();
 
   /* USER CODE END 2 */
 
@@ -238,7 +242,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	//IR_Process();
+	IR_Process();
 
 	/*if (uartHandler.rxDataReady)
 	{
@@ -881,11 +885,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : IR_Pin DIR_ERR_Pin */
-  GPIO_InitStruct.Pin = IR_Pin|DIR_ERR_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  /*Configure GPIO pin : IR_Pin */
+  GPIO_InitStruct.Pin = IR_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+  HAL_GPIO_Init(IR_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : POWER_BUTTON_Pin */
   GPIO_InitStruct.Pin = POWER_BUTTON_Pin;
@@ -898,6 +902,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(SEC_POWER_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : DIR_ERR_Pin */
+  GPIO_InitStruct.Pin = DIR_ERR_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(DIR_ERR_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : DIR_NPCM_Pin */
   GPIO_InitStruct.Pin = DIR_NPCM_Pin;
