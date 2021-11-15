@@ -73,9 +73,10 @@ void POTENTIOMETERS_DisableUpdate(void)
 	potentiometers.update = 0;
 }
 
-void POTENTIOMETERS_SetCurrent(const uint8_t volume, const uint8_t bass, const uint8_t treble, const uint8_t balance)
+void POTENTIOMETERS_SetCurrent(const uint8_t volume0, const uint8_t volume1, const uint8_t bass, const uint8_t treble, const uint8_t balance)
 {
-	potentiometers.pots[POT_INDEX_VOLUME].current = volume;
+	potentiometers.pots[POT_INDEX_VOLUME_0].current = volume0;
+	potentiometers.pots[POT_INDEX_VOLUME_1].current = volume1;
 	potentiometers.pots[POT_INDEX_BASS].current = bass;
 	potentiometers.pots[POT_INDEX_TREBLE].current = treble;
 	potentiometers.pots[POT_INDEX_BALANCE].current = balance;

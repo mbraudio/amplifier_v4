@@ -11,10 +11,11 @@
 #include <stdint.h>
 #include "system.h"
 
-#define POT_INDEX_VOLUME 0
-#define POT_INDEX_BASS 1
-#define POT_INDEX_TREBLE 2
-#define POT_INDEX_BALANCE 3
+#define POT_INDEX_VOLUME_0 	0
+#define POT_INDEX_VOLUME_1 	1
+#define POT_INDEX_BASS 		2
+#define POT_INDEX_TREBLE 	3
+#define POT_INDEX_BALANCE 	4
 
 typedef struct
 {
@@ -65,7 +66,7 @@ void POTENTIOMETERS_BalanceMinus(void);
 void POTENTIOMETERS_BalanceStop(void);
 
 // Common
-void POTENTIOMETERS_SetCurrent(const uint8_t volume, const uint8_t bass, const uint8_t treble, const uint8_t balance);
+void POTENTIOMETERS_SetCurrent(const uint8_t volume0, const uint8_t volume1, const uint8_t bass, const uint8_t treble, const uint8_t balance);
 void POTENTIOMETERS_Process(void);
 uint8_t POTENTIOMETERS_GetValueFromIndex(const uint8_t index);
 uint8_t POTENTIOMETERS_GetIndexFromValue(const uint8_t value);

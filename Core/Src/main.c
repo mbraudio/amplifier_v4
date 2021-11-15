@@ -161,9 +161,9 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* phadc)
 	if (__HAL_ADC_GET_FLAG(phadc, ADC_FLAG_EOS))
 	{
 		ADC_Finalize();
-		//BUTTONS_ProcessADC_MainGroup(adc.data[5]);
-		//BUTTONS_ProcessADC_SelectorGroup(adc.data[6]);
-		//MOTORS_SetCurrent(adc.data[0], adc.data[1], adc.data[4], adc.data[3], adc.data[2]);
+		BUTTONS_ProcessADC_MainGroup(adc.data[5]);
+		BUTTONS_ProcessADC_SelectorGroup(adc.data[6]);
+		POTENTIOMETERS_SetCurrent(adc.data[0], adc.data[1], adc.data[4], adc.data[3], adc.data[2]);
 	}
 
 	HAL_ADC_Start_IT(phadc);
