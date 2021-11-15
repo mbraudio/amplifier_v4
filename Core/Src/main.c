@@ -30,6 +30,7 @@
 #include "encoder.h"
 #include "input.h"
 #include "potentiometer.h"
+#include "protection.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
