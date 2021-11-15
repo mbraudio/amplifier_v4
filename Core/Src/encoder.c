@@ -10,9 +10,6 @@
 
 RotaryEncoder encoder;
 
-#define ENCODER_PIN_A	GPIO_PIN_4
-#define ENCODER_PIN_B	GPIO_PIN_5
-
 void ENCODER_Initialize(const uint32_t timeout, void(*valueChanged)(const int32_t), void(*valueConfirmed)(void))
 {
 	encoder.a = 1;
@@ -31,12 +28,12 @@ void ENCODER_Initialize(const uint32_t timeout, void(*valueChanged)(const int32_
 
 void ENCODER_Encode(const uint16_t pin)
 {
-	if (pin == ENCODER_PIN_B)
+	if (pin == ENCODER_B_PIN)
 	{
-		if (EXTI->FTSR & ENCODER_PIN_B)
+		if (EXTI->FTSR & ENCODER_B_PIN)
 		{
-			CLEAR_BIT(EXTI->FTSR, ENCODER_PIN_B);
-			SET_BIT(EXTI->RTSR, ENCODER_PIN_B);
+			CLEAR_BIT(EXTI->FTSR, ENCODER_B_PIN);
+			SET_BIT(EXTI->RTSR, ENCODER_B_PIN);
 			encoder.a = 0;
 			if (encoder.b)
 			{
@@ -45,19 +42,19 @@ void ENCODER_Encode(const uint16_t pin)
 				encoder.timer = 0;
 			}
 		}
-		else if (EXTI->RTSR & ENCODER_PIN_B)
+		else if (EXTI->RTSR & ENCODER_B_PIN)
 		{
-			SET_BIT(EXTI->FTSR, ENCODER_PIN_B);
-			CLEAR_BIT(EXTI->RTSR, ENCODER_PIN_B);
+			SET_BIT(EXTI->FTSR, ENCODER_B_PIN);
+			CLEAR_BIT(EXTI->RTSR, ENCODER_B_PIN);
 			encoder.a = 1;
 		}
 	}
-	else if (pin == ENCODER_PIN_A)
+	else if (pin == ENCODER_A_PIN)
 	{
-		if (EXTI->FTSR & ENCODER_PIN_A)
+		if (EXTI->FTSR & ENCODER_A_PIN)
 		{
-			CLEAR_BIT(EXTI->FTSR, ENCODER_PIN_A);
-			SET_BIT(EXTI->RTSR, ENCODER_PIN_A);
+			CLEAR_BIT(EXTI->FTSR, ENCODER_A_PIN);
+			SET_BIT(EXTI->RTSR, ENCODER_A_PIN);
 			encoder.b = 0;
 			if (encoder.a)
 			{
@@ -66,10 +63,10 @@ void ENCODER_Encode(const uint16_t pin)
 				encoder.timer = 0;
 			}
 		}
-		else if (EXTI->RTSR & ENCODER_PIN_A)
+		else if (EXTI->RTSR & ENCODER_A_PIN)
 		{
-			CLEAR_BIT(EXTI->RTSR, ENCODER_PIN_A);
-			SET_BIT(EXTI->FTSR, ENCODER_PIN_A);
+			CLEAR_BIT(EXTI->RTSR, ENCODER_A_PIN);
+			SET_BIT(EXTI->FTSR, ENCODER_A_PIN);
 			encoder.b = 1;
 		}
 	}

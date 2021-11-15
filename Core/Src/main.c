@@ -106,22 +106,22 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	switch (GPIO_Pin) {
 		// IR
-		case GPIO_PIN_11: {
+		case IR_PIN: {
 			IR_Encode();
 		} break;
 
 		// POWER
-		case GPIO_PIN_14: {
-			if (EXTI->FTSR & GPIO_PIN_14)
+		case POWER_PIN: {
+			if (EXTI->FTSR & POWER_PIN)
 			{
-				CLEAR_BIT(EXTI->FTSR, GPIO_PIN_14);
-				SET_BIT(EXTI->RTSR, GPIO_PIN_14);
+				CLEAR_BIT(EXTI->FTSR, POWER_PIN);
+				SET_BIT(EXTI->RTSR, POWER_PIN);
 				buttons.power.time = buttons.timer;
 				buttons.power.state = Pressed;
 			}
-			else if (EXTI->RTSR & GPIO_PIN_14)
+			else if (EXTI->RTSR & POWER_PIN)
 			{
-				CLEAR_BIT(EXTI->RTSR, GPIO_PIN_14);
+				CLEAR_BIT(EXTI->RTSR, POWER_PIN);
 				buttons.power.state = Released;
 
 				if (BUTTONS_PressValid(buttons.power.time, BUTTON_LONG_HOLD_TIME))
@@ -141,13 +141,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 					AMP_PowerToggle();
 				}
 				buttons.power.time = buttons.timer;
-				SET_BIT(EXTI->FTSR, GPIO_PIN_14);
+				SET_BIT(EXTI->FTSR, POWER_PIN);
 			}
 		} break;
 
 		// ENCODER
-		case GPIO_PIN_4:
-		case GPIO_PIN_5: {
+		case ENCODER_A_PIN:
+		case ENCODER_B_PIN: {
 			ENCODER_Encode(GPIO_Pin);
 		} break;
 	}

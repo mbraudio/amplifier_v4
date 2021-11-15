@@ -58,6 +58,8 @@
 #define IR_CODE_NAP_HOME_MENU			0xC13E50AF // Twin 0xDF2058A7
 #define IR_CODE_NAP_DOWN				0x9E6150AF // Twin 0xDF2058A7
 #define IR_CODE_NAP_RETURN				0x9A6550AF // Twin 0xDF2058A7
+// IR external interrupt id pin
+#define IR_PIN	GPIO_PIN_11
 
 /*
 typedef struct

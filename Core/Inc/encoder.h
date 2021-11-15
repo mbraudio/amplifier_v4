@@ -10,6 +10,9 @@
 
 #include <stdint.h>
 
+#define ENCODER_A_PIN				GPIO_PIN_4
+#define ENCODER_B_PIN				GPIO_PIN_5
+
 #define ENCODER_PLUS				1
 #define ENCODER_MINUS				-1
 
