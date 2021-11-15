@@ -4,13 +4,13 @@
  *  Created on: Nov 15, 2021
  *      Author: Admin
  */
+#include <amplifier.h>
 #include "ir_nec.h"
 #include "stm32l0xx.h"
 #include "led.h"
 #include "system.h"
 #include "potentiometer.h"
 #include "input.h"
-#include "amp.h"
 
 /* INFO:
 	 Timer is 0.1ms.

@@ -13,7 +13,7 @@
 #define SYSTEM_VALUE_COUNT		14 // 1 command + 10 Settings + 2 States + 1 crc
 #define BRIGHTNESS_VALUES_COUNT 5
 
-// Power external interrupt pin
+// Power - external interrupt pin
 #define POWER_PIN	GPIO_PIN_14
 
 typedef struct

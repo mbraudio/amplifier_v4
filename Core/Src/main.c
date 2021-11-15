@@ -18,6 +18,7 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+#include <amplifier.h>
 #include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -33,7 +34,6 @@
 #include "protection.h"
 #include "buttons.h"
 #include "ir_nec.h"
-#include "amp.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

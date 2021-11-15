@@ -4,7 +4,7 @@
  *  Created on: Nov 15, 2021
  *      Author: Admin
  */
-#include "amp.h"
+#include <amplifier.h>
 #include "system.h"
 //#include "bluetooth.h"
 #include "led.h"

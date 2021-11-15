@@ -1,12 +1,12 @@
 /*
- * amp.h
+ * amplifier.h
  *
  *  Created on: Nov 15, 2021
  *      Author: Admin
  */
 
-#ifndef INC_AMP_H_
-#define INC_AMP_H_
+#ifndef INC_AMPLIFIER_H_
+#define INC_AMPLIFIER_H_
 
 #include <stdint.h>
 
@@ -30,4 +30,4 @@ void AMP_PowerToggle(void);
 // Power processing
 void AMP_ProcessPower(void);
 
-#endif /* INC_AMP_H_ */
+#endif /* INC_AMPLIFIER_H_ */

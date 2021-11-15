@@ -4,12 +4,12 @@
  *  Created on: Nov 15, 2021
  *      Author: Admin
  */
+#include <amplifier.h>
 #include "buttons.h"
 #include "led.h"
 //#include "bluetooth.h"
 #include "system.h"
 #include "input.h"
-#include "amp.h"
 #include "stm32l0xx.h"
 
 
