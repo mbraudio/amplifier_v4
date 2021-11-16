@@ -12,29 +12,66 @@
 
 Input input;
 
-void INPUT_Write(const uint16_t index);
+void INPUT_Set(const InputData* data);
+
+// SCHEMATIC
+/*
+ * > ANALOG
+ * INPUT 0 - AUX
+ * INPUT 1 - NETWORK
+ * INPUT 2 - RECORDER
+ * DIGITAL - OPTICAL
+ * > DIGITAL
+ * SACD - OPTICAL 1
+ * TUNER - OPTICAL 2
+ * PHONO LED - Used for DAC notification.
+ */
+
 
 void INPUT_Initialize(void)
 {
 	// Set values
 	input.inputs[0].led = LED_INPUT_SACD;
 	input.inputs[0].value = 0;
+	input.inputs[0].digital = 1;
+
 	input.inputs[1].led = LED_INPUT_NETWORK;
 	input.inputs[1].value = 1;
-	input.inputs[2].led = LED_INPUT_PHONO;
+	input.inputs[1].digital = 0;
+
+	input.inputs[2].led = LED_INPUT_TUNER;
 	input.inputs[2].value = 2;
-	input.inputs[3].led = LED_INPUT_TUNER;
+	input.inputs[2].digital = 1;
+
+	input.inputs[3].led = LED_INPUT_AUX;
 	input.inputs[3].value = 3;
-	input.inputs[4].led = LED_INPUT_AUX;
+	input.inputs[3].digital = 0;
+
+	input.inputs[4].led = LED_INPUT_RECORDER;
 	input.inputs[4].value = 4;
-	input.inputs[5].led = LED_INPUT_RECORDER;
-	input.inputs[5].value = 5;
+	input.inputs[4].digital = 0;
+}
+
+void INPUT_EnableDAC(void)
+{
+	/* For digital input
+	 * - turn on PHONO LED (WHITE LED)
+	 * - enable DAC power
+	*/
+	if (input.inputs[system.settings.input].digital) {
+		LED_Set(LED_INPUT_PHONO, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(DAC_ENABLE_GPIO_Port, DAC_ENABLE_Pin, GPIO_PIN_SET);
+	} else {
+		LED_Set(LED_INPUT_PHONO, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(DAC_ENABLE_GPIO_Port, DAC_ENABLE_Pin, GPIO_PIN_RESET);
+	}
 }
 
 void INPUT_Activate(void)
 {
 	LED_Set(input.inputs[system.settings.input].led, GPIO_PIN_SET);
-	INPUT_Write(input.inputs[system.settings.input].value);
+	INPUT_EnableDAC();
+	INPUT_Set(&input.inputs[system.settings.input]);
 }
 
 void INPUT_Changed(const int32_t direction)
@@ -56,7 +93,8 @@ void INPUT_Changed(const int32_t direction)
 
 void INPUT_Confirmed(void)
 {
-	INPUT_Write(input.inputs[system.settings.input].value);
+	INPUT_EnableDAC();
+	INPUT_Set(&input.inputs[system.settings.input]);
 	//BLUETOOTH_Send(COMMAND_CHANGE_INPUT, system.settings.input);
 	SYSTEM_Save();
 }
@@ -72,9 +110,41 @@ void INPUT_SetDirect(const uint8_t newIndex)
 	INPUT_Confirmed();
 }
 
-void INPUT_Write(const uint16_t value)
+void INPUT_Set(const InputData* data)
 {
-	// TODO: Code here...
+	HAL_GPIO_WritePin(INPUT_0_GPIO_Port, INPUT_0_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(INPUT_1_GPIO_Port, INPUT_1_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(INPUT_2_GPIO_Port, INPUT_2_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(INPUT_DAC_GPIO_Port, INPUT_DAC_Pin, GPIO_PIN_RESET);
+
+	//HAL_Delay(100);
+
+	switch (data->value) {
+		case 0: {
+			// SACD - DIGITAL - OPTICAL 0
+			HAL_GPIO_WritePin(INPUT_DAC_GPIO_Port, INPUT_DAC_Pin, GPIO_PIN_SET);
+		} break;
+
+		case 1: {
+			// NETWORK - ANALOG
+			HAL_GPIO_WritePin(INPUT_1_GPIO_Port, INPUT_1_Pin, GPIO_PIN_SET);
+		} break;
+
+		case 2: {
+			// TUNER - DIGITAL - OPTICAL 1
+			HAL_GPIO_WritePin(INPUT_DAC_GPIO_Port, INPUT_DAC_Pin, GPIO_PIN_SET);
+		} break;
+
+		case 3: {
+			// AUX - ANALOG
+			HAL_GPIO_WritePin(INPUT_0_GPIO_Port, INPUT_0_Pin, GPIO_PIN_SET);
+		} break;
+
+		case 4: {
+			// RECORDER - ANALOG
+			HAL_GPIO_WritePin(INPUT_2_GPIO_Port, INPUT_2_Pin, GPIO_PIN_SET);
+		} break;
+	}
 }
 
 void INPUT_Mute(const uint32_t status)

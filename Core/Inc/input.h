@@ -10,12 +10,13 @@
 
 #include <stdint.h>
 
-#define INPUT_MAX_SELECTION		6
+#define INPUT_MAX_SELECTION		5
 
 typedef struct
 {
 	uint16_t led;
 	uint8_t  value;
+	uint8_t  digital;
 } InputData;
 
 typedef struct

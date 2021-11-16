@@ -18,7 +18,7 @@ typedef struct
 } LedData;
 
 #define LED_MAX_BRIGHTNESS 255
-#define LED_DEFAULT_BRIGHTNESS 127
+#define LED_DEFAULT_BRIGHTNESS 200
 
 // GPIO Leds
 // Leds

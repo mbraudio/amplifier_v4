@@ -236,6 +236,7 @@ int main(void)
   // IR
   IR_Initialize();
 
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
