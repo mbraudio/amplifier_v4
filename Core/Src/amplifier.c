@@ -13,6 +13,7 @@
 #include "encoder.h"
 #include "utilities.h"
 #include "potentiometer.h"
+#include "mcp23008.h"
 #include "main.h"
 
 void AMP_SetPowerPin(const GPIO_PinState state)
@@ -206,6 +207,8 @@ void AMP_ProcessPower(void)
 				AMP_SetDirect(system.settings.direct);
 				// Loudness
 				AMP_SetLoudness(system.settings.loudness);
+				// MCP23008
+				MCP23008_Setup();
 
 				// Delay
 				HAL_Delay(200);

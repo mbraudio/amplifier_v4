@@ -7,6 +7,7 @@
 #include "potentiometer.h"
 #include "main.h"
 #include "adc.h"
+#include "mcp23008.h"
 //#include "bluetooth.h"
 
 #define POTENTIOMETERS_UPDATE_TIMEOUT 10 // POTENTIOMETERS_UPDATE_TIMEOUT * 10ms = X ms
@@ -27,7 +28,7 @@ void POTENTIOMETERS_Initialize(void)
 	potentiometers.activeIR = 0;
 	potentiometers.update = 0;
 	potentiometers.timer = 0;
-	//POTENTIOMETER_Init(&motors.pots[POT_INDEX_VOLUME], MOTORS_VolumePlus, MOTORS_VolumeMinus, MOTORS_VolumeStop, 1, COMMAND_UPDATE_VOLUME_VALUE);
+	//POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_VOLUME], POTENTIOMETERS_VolumePlus, POTENTIOMETERS_VolumeMinus, POTENTIOMETERS_VolumeStop, 1, COMMAND_UPDATE_VOLUME_VALUE);
 	//POTENTIOMETER_Init(&motors.pots[POT_INDEX_BASS], MOTORS_BassPlus, MOTORS_BassMinus, MOTORS_BassStop, 0, COMMAND_UPDATE_BASS_VALUE);
 	//POTENTIOMETER_Init(&motors.pots[POT_INDEX_TREBLE], MOTORS_TreblePlus, MOTORS_TrebleMinus, MOTORS_TrebleStop, 0, COMMAND_UPDATE_TREBLE_VALUE);
 	//POTENTIOMETER_Init(&motors.pots[POT_INDEX_BALANCE], MOTORS_BalancePlus, MOTORS_BalanceMinus, MOTORS_BalanceStop, 0, COMMAND_UPDATE_BALANCE_VALUE);
@@ -162,6 +163,8 @@ void POTENTIOMETERS_VolumePlus(void)
 {
 	/*HAL_GPIO_WritePin(VR_DOWN_GPIO_Port, VR_DOWN_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(VR_UP_GPIO_Port, VR_UP_Pin, GPIO_PIN_SET);*/
+
+	MCP23008_VolumePlus();
 }
 
 void POTENTIOMETERS_VolumePlusIr(void)
@@ -172,8 +175,7 @@ void POTENTIOMETERS_VolumePlusIr(void)
 
 void POTENTIOMETERS_VolumeMinus(void)
 {
-	/*HAL_GPIO_WritePin(VR_DOWN_GPIO_Port, VR_DOWN_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(VR_UP_GPIO_Port, VR_UP_Pin, GPIO_PIN_RESET);*/
+	MCP23008_VolumeMinus();
 }
 
 void POTENTIOMETERS_VolumeMinusIr(void)
@@ -184,8 +186,7 @@ void POTENTIOMETERS_VolumeMinusIr(void)
 
 void POTENTIOMETERS_VolumeStop(void)
 {
-	/*HAL_GPIO_WritePin(VR_DOWN_GPIO_Port, VR_DOWN_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(VR_UP_GPIO_Port, VR_UP_Pin, GPIO_PIN_RESET);*/
+	MCP23008_VolumeStop();
 }
 
 void POTENTIOMETERS_VolumeStopIr(void)
