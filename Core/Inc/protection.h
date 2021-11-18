@@ -29,7 +29,7 @@ void PROTECTION_LoadCheck(void);
 void PROTECTION_LiveCheck(void);
 void PROTECTION_EnableDc(void);
 void PROTECTION_EnableOverload(void);
-void PROTECTION_EnableOverheat(void);
+//void PROTECTION_EnableOverheat(void);
 void PROTECTION_EnableVoltage(void);
 
 #endif /* INC_PROTECTION_H_ */

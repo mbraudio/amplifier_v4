@@ -29,6 +29,8 @@ void INPUT_Activate(void);
 void INPUT_Changed(const int32_t direction);
 void INPUT_Confirmed(void);
 void INPUT_SetDirect(const uint8_t newIndex);
+void INPUT_InputsOff(void);
+void INPUT_AllOff(void);
 
 void INPUT_Mute(const uint32_t status);
 

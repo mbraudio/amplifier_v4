@@ -47,7 +47,7 @@ void PROTECTION_EnableDc(void)
 	PROTECTION_Save();
 	//AMP_PowerOff(); //TODO: Enable...
 }
-
+/*
 void PROTECTION_EnableOverheat(void)
 {
 	protection.overheat1 = PROTECTION_ENABLED_FLAG_1;
@@ -55,7 +55,7 @@ void PROTECTION_EnableOverheat(void)
 	PROTECTION_Save();
 	//AMP_PowerOff(); //TODO: Enable...
 }
-
+*/
 void PROTECTION_EnableVoltage(void)
 {
 	protection.voltage1 = PROTECTION_ENABLED_FLAG_1;
@@ -91,10 +91,10 @@ void PROTECTION_LoadCheck(void)
 		PROTECTION_NotifyError(ERROR_1_DC);
 	}
 
-	if ((protection.overheat1 == PROTECTION_ENABLED_FLAG_1) && (protection.overheat2 == PROTECTION_ENABLED_FLAG_2))
+	/*if ((protection.overheat1 == PROTECTION_ENABLED_FLAG_1) && (protection.overheat2 == PROTECTION_ENABLED_FLAG_2))
 	{
 		PROTECTION_NotifyError(ERROR_3_OVERHEAT);
-	}
+	}*/
 
 	if ((protection.voltage1 == PROTECTION_ENABLED_FLAG_1) && (protection.voltage2 == PROTECTION_ENABLED_FLAG_2))
 	{
@@ -104,46 +104,45 @@ void PROTECTION_LoadCheck(void)
 
 void PROTECTION_LiveCheck(void)
 {
-	// TODO: Enable this...
-	// DC - PD2 (not used here due schematics bug...)
-	// Overload - PD3
-	/*
+	// TODO: Enable this functionality...
+
+	// DC
 	GPIO_PinState state;
-	state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_3);
+	state = HAL_GPIO_ReadPin(DC_PROTECT_GPIO_Port, DC_PROTECT_Pin);
 	if (state == 0)
 	{
-		HAL_Delay(20);
-		state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_3);
+		HAL_Delay(10);
+		state = HAL_GPIO_ReadPin(DC_PROTECT_GPIO_Port, DC_PROTECT_Pin);
 		if (state == 0)
 		{
-			PROTECTION_EnableOverload();
+			PROTECTION_EnableDc();
 		}
 	}
 
 	// Thermal - PD4
-	state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
+	/*state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
 	if (state == 0)
 	{
-		HAL_Delay(20);
+		HAL_Delay(10);
 		state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
 		if (state == 0)
 		{
 			PROTECTION_EnableOverheat();
 		}
-	}
+	}*/
 
 	// Voltage - PD5
-	state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_5);
+	state = HAL_GPIO_ReadPin(V_PROTECT_GPIO_Port, V_PROTECT_Pin);
 	if (state == 0)
 	{
-		HAL_Delay(20);
-		state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_5);
+		HAL_Delay(10);
+		state = HAL_GPIO_ReadPin(V_PROTECT_GPIO_Port, V_PROTECT_Pin);
 		if (state == 0)
 		{
 			PROTECTION_EnableVoltage();
 		}
 	}
-	*/
+
 }
 
 

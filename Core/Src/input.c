@@ -110,12 +110,23 @@ void INPUT_SetDirect(const uint8_t newIndex)
 	INPUT_Confirmed();
 }
 
-void INPUT_Set(const InputData* data)
+void INPUT_InputsOff(void)
 {
 	HAL_GPIO_WritePin(INPUT_0_GPIO_Port, INPUT_0_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(INPUT_1_GPIO_Port, INPUT_1_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(INPUT_2_GPIO_Port, INPUT_2_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(INPUT_DAC_GPIO_Port, INPUT_DAC_Pin, GPIO_PIN_RESET);
+}
+
+void INPUT_AllOff(void)
+{
+	INPUT_InputsOff();
+	HAL_GPIO_WritePin(DAC_ENABLE_GPIO_Port, DAC_ENABLE_Pin, GPIO_PIN_RESET);
+}
+
+void INPUT_Set(const InputData* data)
+{
+	INPUT_InputsOff();
 
 	//HAL_Delay(100);
 

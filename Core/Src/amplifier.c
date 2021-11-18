@@ -31,7 +31,7 @@ void AMP_SetSpeakersA(const uint8_t state)
 {
 	system.settings.speakersA = state;
 	LED_Set(LED_SPEAKERS_A, state);
-	//HAL_GPIO_WritePin(SPEAKERS_A_GPIO_Port, SPEAKERS_A_Pin, (GPIO_PinState)system.settings.speakersA);
+	HAL_GPIO_WritePin(SPEAKERS_ENABLE_GPIO_Port, SPEAKERS_ENABLE_Pin, (GPIO_PinState)system.settings.speakersA);
 }
 
 // Speakers B
@@ -60,16 +60,24 @@ void AMP_SetLoudness(const uint8_t state)
 	//HAL_GPIO_WritePin(LOUDNESS_GPIO_Port, LOUDNESS_Pin, (GPIO_PinState)system.settings.loudness);
 }
 
+//TODO: Careful with delays here, more than 200ms in delays causes
+// amp to re-power itself when using IR remote control... Check why!!!
 void AMP_PowerOff(void)
 {
 	// Mute
 	INPUT_Mute(1);
+	// Delay
+	HAL_Delay(50);
 	// Standby LED pin Off - Led turns On
 	LED_Standby(GPIO_PIN_RESET);
 	// All leds off
 	LED_AllOff();
 	// Delay
-	HAL_Delay(200);
+	HAL_Delay(50);
+	// All inputs and DAC off
+	INPUT_AllOff();
+	// Delay
+	HAL_Delay(50);
 	// Turn OFF
 	// Speakers A
 	AMP_SetSpeakersA(0);
