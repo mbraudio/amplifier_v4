@@ -10,6 +10,8 @@
 #define MCP23008_I2C_WRITE_ADDRESS  0x40
 #define MCP23008_I2C_READ_ADDRESS   0x41
 
+#define MCP23008_TIMEOUT 100
+
 // REGISTERS
 #define IODIR		0x00
 #define IPOL		0x01
@@ -37,23 +39,23 @@ void MCP23008_Setup(void)
 	HAL_Delay(20);
 	// Set as outputs
 	uint8_t data[2] = { IODIR, 0x00 };
-	HAL_I2C_Master_Transmit(hi2c, MCP23008_I2C_WRITE_ADDRESS, data, 2, 100);
+	HAL_I2C_Master_Transmit(hi2c, MCP23008_I2C_WRITE_ADDRESS, data, 2, MCP23008_TIMEOUT);
 }
 
 void MCP23008_VolumePlus(void)
 {
 	 uint8_t data[2] = { OLAT, 0x01 };
-	 HAL_I2C_Master_Transmit(hi2c, MCP23008_I2C_WRITE_ADDRESS, data, 2, 100);
+	 HAL_I2C_Master_Transmit(hi2c, MCP23008_I2C_WRITE_ADDRESS, data, 2, MCP23008_TIMEOUT);
 }
 
 void MCP23008_VolumeMinus(void)
 {
 	 uint8_t data[2] = { OLAT, 0x02 };
-	 HAL_I2C_Master_Transmit(hi2c, MCP23008_I2C_WRITE_ADDRESS, data, 2, 100);
+	 HAL_I2C_Master_Transmit(hi2c, MCP23008_I2C_WRITE_ADDRESS, data, 2, MCP23008_TIMEOUT);
 }
 
 void MCP23008_VolumeStop(void)
 {
 	uint8_t data[2] = { OLAT, 0x00 };
-	HAL_I2C_Master_Transmit(hi2c, MCP23008_I2C_WRITE_ADDRESS, data, 2, 100);
+	HAL_I2C_Master_Transmit(hi2c, MCP23008_I2C_WRITE_ADDRESS, data, 2, MCP23008_TIMEOUT);
 }
