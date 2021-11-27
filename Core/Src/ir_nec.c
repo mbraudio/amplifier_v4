@@ -250,10 +250,7 @@ void IR_Disengage(void)
 {
 	if (potentiometers.activeIR)
 	{
-		POTENTIOMETERS_VolumeStopIr();
-		POTENTIOMETERS_BalanceStopIr();
-		POTENTIOMETERS_TrebleStopIr();
-		POTENTIOMETERS_BassStopIr();
+		POTENTIOMETERS_StopIr();
 	}
 }
 

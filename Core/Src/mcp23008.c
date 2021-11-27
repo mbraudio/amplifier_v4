@@ -42,6 +42,12 @@ void MCP23008_Setup(void)
 	HAL_I2C_Master_Transmit(hi2c, MCP23008_I2C_WRITE_ADDRESS, data, 2, MCP23008_TIMEOUT);
 }
 
+void MCP23008_Stop(void)
+{
+	uint8_t data[2] = { OLAT, 0x00 };
+	HAL_I2C_Master_Transmit(hi2c, MCP23008_I2C_WRITE_ADDRESS, data, 2, MCP23008_TIMEOUT);
+}
+
 // Volume
 void MCP23008_VolumePlus(void)
 {
@@ -53,12 +59,6 @@ void MCP23008_VolumeMinus(void)
 {
 	 uint8_t data[2] = { OLAT, 0x02 };
 	 HAL_I2C_Master_Transmit(hi2c, MCP23008_I2C_WRITE_ADDRESS, data, 2, MCP23008_TIMEOUT);
-}
-
-void MCP23008_VolumeStop(void)
-{
-	uint8_t data[2] = { OLAT, 0x00 };
-	HAL_I2C_Master_Transmit(hi2c, MCP23008_I2C_WRITE_ADDRESS, data, 2, MCP23008_TIMEOUT);
 }
 
 // Balance
@@ -74,12 +74,6 @@ void MCP23008_BalanceMinus(void)
 	 HAL_I2C_Master_Transmit(hi2c, MCP23008_I2C_WRITE_ADDRESS, data, 2, MCP23008_TIMEOUT);
 }
 
-void MCP23008_BalanceStop(void)
-{
-	uint8_t data[2] = { OLAT, 0x00 };
-	HAL_I2C_Master_Transmit(hi2c, MCP23008_I2C_WRITE_ADDRESS, data, 2, MCP23008_TIMEOUT);
-}
-
 // Treble
 void MCP23008_TreblePlus(void)
 {
@@ -93,12 +87,6 @@ void MCP23008_TrebleMinus(void)
 	 HAL_I2C_Master_Transmit(hi2c, MCP23008_I2C_WRITE_ADDRESS, data, 2, MCP23008_TIMEOUT);
 }
 
-void MCP23008_TrebleStop(void)
-{
-	uint8_t data[2] = { OLAT, 0x00 };
-	HAL_I2C_Master_Transmit(hi2c, MCP23008_I2C_WRITE_ADDRESS, data, 2, MCP23008_TIMEOUT);
-}
-
 // Bass
 void MCP23008_BassPlus(void)
 {
@@ -110,10 +98,4 @@ void MCP23008_BassMinus(void)
 {
 	 uint8_t data[2] = { OLAT, 0x40 };
 	 HAL_I2C_Master_Transmit(hi2c, MCP23008_I2C_WRITE_ADDRESS, data, 2, MCP23008_TIMEOUT);
-}
-
-void MCP23008_BassStop(void)
-{
-	uint8_t data[2] = { OLAT, 0x00 };
-	HAL_I2C_Master_Transmit(hi2c, MCP23008_I2C_WRITE_ADDRESS, data, 2, MCP23008_TIMEOUT);
 }

@@ -158,6 +158,17 @@ uint8_t POTENTIOMETERS_GetValueFromIndex(const uint8_t index)
 	return adcValues[index];
 }
 
+void POTENTIOMETERS_Stop(void)
+{
+	MCP23008_Stop();
+}
+
+void POTENTIOMETERS_StopIr(void)
+{
+	potentiometers.activeIR = 0;
+	POTENTIOMETERS_Stop();
+}
+
 // VOLUME
 void POTENTIOMETERS_VolumePlus(void)
 {
@@ -181,17 +192,6 @@ void POTENTIOMETERS_VolumeMinusIr(void)
 	POTENTIOMETERS_VolumeMinus();
 }
 
-void POTENTIOMETERS_VolumeStop(void)
-{
-	MCP23008_VolumeStop();
-}
-
-void POTENTIOMETERS_VolumeStopIr(void)
-{
-	potentiometers.activeIR = 0;
-	POTENTIOMETERS_VolumeStop();
-}
-
 // BASS
 void POTENTIOMETERS_BassPlus(void)
 {
@@ -203,17 +203,6 @@ void POTENTIOMETERS_BassMinus(void)
 {
 	potentiometers.activeIR = 1;
 	MCP23008_BassMinus();
-}
-
-void POTENTIOMETERS_BassStop(void)
-{
-	MCP23008_BassStop();
-}
-
-void POTENTIOMETERS_BassStopIr(void)
-{
-	potentiometers.activeIR = 0;
-	POTENTIOMETERS_BassStop();
 }
 
 // TREBLE
@@ -229,17 +218,6 @@ void POTENTIOMETERS_TrebleMinus(void)
 	MCP23008_TrebleMinus();
 }
 
-void POTENTIOMETERS_TrebleStop(void)
-{
-	MCP23008_TrebleStop();
-}
-
-void POTENTIOMETERS_TrebleStopIr(void)
-{
-	potentiometers.activeIR = 0;
-	POTENTIOMETERS_TrebleStop();
-}
-
 // BALANCE
 void POTENTIOMETERS_BalancePlus(void)
 {
@@ -251,15 +229,4 @@ void POTENTIOMETERS_BalanceMinus(void)
 {
 	potentiometers.activeIR = 1;
 	MCP23008_BalanceMinus();
-}
-
-void POTENTIOMETERS_BalanceStop(void)
-{
-	MCP23008_BalanceStop();
-}
-
-void POTENTIOMETERS_BalanceStopIr(void)
-{
-	potentiometers.activeIR = 0;
-	POTENTIOMETERS_BalanceStop();
 }
