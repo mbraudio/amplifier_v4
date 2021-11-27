@@ -161,9 +161,6 @@ uint8_t POTENTIOMETERS_GetValueFromIndex(const uint8_t index)
 // VOLUME
 void POTENTIOMETERS_VolumePlus(void)
 {
-	/*HAL_GPIO_WritePin(VR_DOWN_GPIO_Port, VR_DOWN_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(VR_UP_GPIO_Port, VR_UP_Pin, GPIO_PIN_SET);*/
-
 	MCP23008_VolumePlus();
 }
 
@@ -198,57 +195,71 @@ void POTENTIOMETERS_VolumeStopIr(void)
 // BASS
 void POTENTIOMETERS_BassPlus(void)
 {
-	/*HAL_GPIO_WritePin(BASS_MINUS_GPIO_Port, BASS_MINUS_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(BASS_PLUS_GPIO_Port, BASS_PLUS_Pin, GPIO_PIN_SET);*/
+	potentiometers.activeIR = 1;
+	MCP23008_BassPlus();
 }
 
 void POTENTIOMETERS_BassMinus(void)
 {
-	/*HAL_GPIO_WritePin(BASS_MINUS_GPIO_Port, BASS_MINUS_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(BASS_PLUS_GPIO_Port, BASS_PLUS_Pin, GPIO_PIN_RESET);*/
+	potentiometers.activeIR = 1;
+	MCP23008_BassMinus();
 }
 
 void POTENTIOMETERS_BassStop(void)
 {
-	/*HAL_GPIO_WritePin(BASS_MINUS_GPIO_Port, BASS_MINUS_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(BASS_PLUS_GPIO_Port, BASS_PLUS_Pin, GPIO_PIN_RESET);*/
+	MCP23008_BassStop();
+}
+
+void POTENTIOMETERS_BassStopIr(void)
+{
+	potentiometers.activeIR = 0;
+	POTENTIOMETERS_BassStop();
 }
 
 // TREBLE
 void POTENTIOMETERS_TreblePlus(void)
 {
-	/*HAL_GPIO_WritePin(TREBLE_MINUS_GPIO_Port, TREBLE_MINUS_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(TREBLE_PLUS_GPIO_Port, TREBLE_PLUS_Pin, GPIO_PIN_RESET);*/
+	potentiometers.activeIR = 1;
+	MCP23008_TreblePlus();
 }
 
 void POTENTIOMETERS_TrebleMinus(void)
 {
-	/*HAL_GPIO_WritePin(TREBLE_MINUS_GPIO_Port, TREBLE_MINUS_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(TREBLE_PLUS_GPIO_Port, TREBLE_PLUS_Pin, GPIO_PIN_SET);*/
+	potentiometers.activeIR = 1;
+	MCP23008_TrebleMinus();
 }
 
 void POTENTIOMETERS_TrebleStop(void)
 {
-	/*HAL_GPIO_WritePin(TREBLE_MINUS_GPIO_Port, TREBLE_MINUS_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(TREBLE_PLUS_GPIO_Port, TREBLE_PLUS_Pin, GPIO_PIN_RESET);*/
+	MCP23008_TrebleStop();
+}
+
+void POTENTIOMETERS_TrebleStopIr(void)
+{
+	potentiometers.activeIR = 0;
+	POTENTIOMETERS_TrebleStop();
 }
 
 // BALANCE
 void POTENTIOMETERS_BalancePlus(void)
 {
-	/*HAL_GPIO_WritePin(BALANCE_MINUS_GPIO_Port, BALANCE_MINUS_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(BALANCE_PLUS_GPIO_Port, BALANCE_PLUS_Pin, GPIO_PIN_SET);*/
+	potentiometers.activeIR = 1;
+	MCP23008_BalancePlus();
 }
 
 void POTENTIOMETERS_BalanceMinus(void)
 {
-	/*HAL_GPIO_WritePin(BALANCE_MINUS_GPIO_Port, BALANCE_MINUS_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(BALANCE_PLUS_GPIO_Port, BALANCE_PLUS_Pin, GPIO_PIN_RESET);*/
+	potentiometers.activeIR = 1;
+	MCP23008_BalanceMinus();
 }
 
 void POTENTIOMETERS_BalanceStop(void)
 {
-	/*HAL_GPIO_WritePin(BALANCE_MINUS_GPIO_Port, BALANCE_MINUS_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(BALANCE_PLUS_GPIO_Port, BALANCE_PLUS_Pin, GPIO_PIN_RESET);*/
+	MCP23008_BalanceStop();
 }
 
+void POTENTIOMETERS_BalanceStopIr(void)
+{
+	potentiometers.activeIR = 0;
+	POTENTIOMETERS_BalanceStop();
+}

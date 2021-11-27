@@ -56,14 +56,17 @@ void POTENTIOMETERS_VolumeStopIr(void);
 void POTENTIOMETERS_BassPlus(void);
 void POTENTIOMETERS_BassMinus(void);
 void POTENTIOMETERS_BassStop(void);
+void POTENTIOMETERS_BassStopIr(void);
 // TREBLE
 void POTENTIOMETERS_TreblePlus(void);
 void POTENTIOMETERS_TrebleMinus(void);
 void POTENTIOMETERS_TrebleStop(void);
+void POTENTIOMETERS_TrebleStopIr(void);
 // BALANCE
 void POTENTIOMETERS_BalancePlus(void);
 void POTENTIOMETERS_BalanceMinus(void);
 void POTENTIOMETERS_BalanceStop(void);
+void POTENTIOMETERS_BalanceStopIr(void);
 
 // Common
 void POTENTIOMETERS_SetCurrent(const uint8_t volume0, const uint8_t volume1, const uint8_t bass, const uint8_t treble, const uint8_t balance);

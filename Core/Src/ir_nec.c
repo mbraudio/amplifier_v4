@@ -123,6 +123,63 @@ void IR_Decode(void)
 			}
 		} break;
 
+		// Balance
+		case IR_CODE_NAP_ON_OFF: {
+			if (ir.lastCommand != ir.commandToDecode)
+			{
+				ir.ignoreTime = IR_IGNORE_TIME_VOLUME;
+				POTENTIOMETERS_BalancePlus();
+				ir.lastCommand = ir.commandToDecode;
+			}
+		} break;
+
+		case IR_CODE_NAP_REWIND: {
+			if (ir.lastCommand != ir.commandToDecode)
+			{
+				ir.ignoreTime = IR_IGNORE_TIME_VOLUME;
+				POTENTIOMETERS_BalanceMinus();
+				ir.lastCommand = ir.commandToDecode;
+			}
+		} break;
+
+		// Treble
+		case IR_CODE_NAP_PLAY: {
+			if (ir.lastCommand != ir.commandToDecode)
+			{
+				ir.ignoreTime = IR_IGNORE_TIME_VOLUME;
+				POTENTIOMETERS_TreblePlus();
+				ir.lastCommand = ir.commandToDecode;
+			}
+		} break;
+
+		case IR_CODE_NAP_STOP: {
+			if (ir.lastCommand != ir.commandToDecode)
+			{
+				ir.ignoreTime = IR_IGNORE_TIME_VOLUME;
+				POTENTIOMETERS_TrebleMinus();
+				ir.lastCommand = ir.commandToDecode;
+			}
+		} break;
+
+		// Bass
+		case IR_CODE_NAP_FUNC: {
+			if (ir.lastCommand != ir.commandToDecode)
+			{
+				ir.ignoreTime = IR_IGNORE_TIME_VOLUME;
+				POTENTIOMETERS_BassPlus();
+				ir.lastCommand = ir.commandToDecode;
+			}
+		} break;
+
+		case IR_CODE_NAP_FORWARD: {
+			if (ir.lastCommand != ir.commandToDecode)
+			{
+				ir.ignoreTime = IR_IGNORE_TIME_VOLUME;
+				POTENTIOMETERS_BassMinus();
+				ir.lastCommand = ir.commandToDecode;
+			}
+		} break;
+
 		case IR_CODE_SPEAKERS_A:
 		{
 			if (ir.lastCommand != ir.commandToDecode)
@@ -194,6 +251,9 @@ void IR_Disengage(void)
 	if (potentiometers.activeIR)
 	{
 		POTENTIOMETERS_VolumeStopIr();
+		POTENTIOMETERS_BalanceStopIr();
+		POTENTIOMETERS_TrebleStopIr();
+		POTENTIOMETERS_BassStopIr();
 	}
 }
 
