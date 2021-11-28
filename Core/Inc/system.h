@@ -47,6 +47,7 @@ typedef enum
 typedef enum
 {
 	Idle = 0,
+	ProtectionCheckPhase,
 	InitialPhase,
 	LoadPhase,
 	LedPhase,

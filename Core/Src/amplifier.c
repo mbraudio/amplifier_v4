@@ -135,6 +135,10 @@ void AMP_ProcessPower(void)
 
 			} break;
 
+			case ProtectionCheckPhase: {
+				PROTECTION_LoadCheck();
+			} break;
+
 			case InitialPhase:
 			{
 				// Mute
@@ -185,10 +189,6 @@ void AMP_ProcessPower(void)
 
 			case ProtectionPhase:
 			{
-				// Protection Phase
-				//PROTECTION_Reset();
-				// Protection Check - EEPROM Load
-				PROTECTION_LoadCheck();
 				// Live check
 				PROTECTION_LiveCheck();
 
