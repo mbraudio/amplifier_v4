@@ -17,8 +17,7 @@
 #define ERROR_4_FAULTY_VOLTAGE			4
 // Flags
 #define PROTECTION_CLEAR_FLAG			0xFF
-#define PROTECTION_ENABLED_FLAG_1		0xAA
-#define PROTECTION_ENABLED_FLAG_2		0x55
+#define PROTECTION_ENABLED_FLAG			0xAA
 #define PROTECTION_DELAY_SHORT			200
 #define PROTECTION_DELAY_LONG 			2000
 
@@ -42,26 +41,19 @@ void PROTECTION_Reset(void)
 
 void PROTECTION_EnableDc(void)
 {
-	protection.dc1 = PROTECTION_ENABLED_FLAG_1;
-	protection.dc2 = PROTECTION_ENABLED_FLAG_2;
+	protection.dc = PROTECTION_ENABLED_FLAG;
 	PROTECTION_Save();
-	//AMP_PowerOff(); //TODO: Enable...
 }
 /*
 void PROTECTION_EnableOverheat(void)
 {
-	protection.overheat1 = PROTECTION_ENABLED_FLAG_1;
-	protection.overheat2 = PROTECTION_ENABLED_FLAG_2;
-	PROTECTION_Save();
-	//AMP_PowerOff(); //TODO: Enable...
+	protection.overheat = PROTECTION_ENABLED_FLAG;
 }
 */
 void PROTECTION_EnableVoltage(void)
 {
-	protection.voltage1 = PROTECTION_ENABLED_FLAG_1;
-	protection.voltage2 = PROTECTION_ENABLED_FLAG_2;
+	protection.voltage = PROTECTION_ENABLED_FLAG;
 	PROTECTION_Save();
-	//AMP_PowerOff(); //TODO: Enable...
 }
 
 void PROTECTION_NotifyError(const uint32_t errorId)
@@ -86,7 +78,7 @@ void PROTECTION_LoadCheck(void)
 {
 	PROTECTION_Load();
 
-	if ((protection.dc1 == PROTECTION_ENABLED_FLAG_1) && (protection.dc2 == PROTECTION_ENABLED_FLAG_2))
+	if (protection.dc == PROTECTION_ENABLED_FLAG)
 	{
 		PROTECTION_NotifyError(ERROR_1_DC);
 	}
@@ -96,7 +88,7 @@ void PROTECTION_LoadCheck(void)
 		PROTECTION_NotifyError(ERROR_3_OVERHEAT);
 	}*/
 
-	if ((protection.voltage1 == PROTECTION_ENABLED_FLAG_1) && (protection.voltage2 == PROTECTION_ENABLED_FLAG_2))
+	if (protection.voltage == PROTECTION_ENABLED_FLAG)
 	{
 		PROTECTION_NotifyError(ERROR_4_FAULTY_VOLTAGE);
 	}
@@ -111,7 +103,6 @@ void PROTECTION_LiveCheck(void)
 	state = HAL_GPIO_ReadPin(DC_PROTECT_GPIO_Port, DC_PROTECT_Pin);
 	if (state == 0)
 	{
-		HAL_Delay(10);
 		state = HAL_GPIO_ReadPin(DC_PROTECT_GPIO_Port, DC_PROTECT_Pin);
 		if (state == 0)
 		{
@@ -119,7 +110,7 @@ void PROTECTION_LiveCheck(void)
 		}
 	}
 
-	// Thermal - PD4
+	// Thermal
 	/*state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
 	if (state == 0)
 	{
@@ -131,11 +122,10 @@ void PROTECTION_LiveCheck(void)
 		}
 	}*/
 
-	// Voltage - PD5
+	// Voltage
 	state = HAL_GPIO_ReadPin(V_PROTECT_GPIO_Port, V_PROTECT_Pin);
 	if (state == 0)
 	{
-		HAL_Delay(10);
 		state = HAL_GPIO_ReadPin(V_PROTECT_GPIO_Port, V_PROTECT_Pin);
 		if (state == 0)
 		{

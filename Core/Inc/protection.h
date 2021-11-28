@@ -12,12 +12,10 @@
 
 typedef struct
 {
-	uint8_t		dc1;
-	uint8_t		overheat1;
-	uint8_t		voltage1;
-	uint8_t		dc2;
-	uint8_t		overheat2;
-	uint8_t		voltage2;
+	uint8_t		dc;
+	uint8_t		overheat;
+	uint8_t		voltage;
+	uint8_t 	crc;
 } __attribute__((packed)) Protection;
 
 extern Protection protection;
