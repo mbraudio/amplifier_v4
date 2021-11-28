@@ -48,25 +48,24 @@ void PROTECTION_Reset(void)
 
 void PROTECTION_EnableDc(void)
 {
-	AMP_SetPowerPin(GPIO_PIN_RESET);
+	AMP_SetPowerPin(0);
 	protection.dc = PROTECTION_ENABLED_FLAG;
 	PROTECTION_Save();
-	AMP_PowerOff();
-	PROTECTION_NotifyError(ERROR_1_DC);
 }
 /*
 void PROTECTION_EnableOverheat(void)
 {
-
+	AMP_SetPowerPin(0);
+	protection.overheat1 = PROTECTION_ENABLED_FLAG_1;
+	protection.overheat2 = PROTECTION_ENABLED_FLAG_2;
+	PROTECTION_Save();
 }
 */
 void PROTECTION_EnableVoltage(void)
 {
-	AMP_SetPowerPin(GPIO_PIN_RESET);
+	AMP_SetPowerPin(0);
 	protection.voltage = PROTECTION_ENABLED_FLAG;
 	PROTECTION_Save();
-	AMP_PowerOff();
-	PROTECTION_NotifyError(ERROR_3_VOLTAGE);
 }
 
 void PROTECTION_NotifyError(const uint32_t errorId)
@@ -89,10 +88,7 @@ void PROTECTION_NotifyError(const uint32_t errorId)
 
 void PROTECTION_LoadCheck(void)
 {
-	uint32_t status = PROTECTION_Load();
-	if (status == 0) {
-		return;
-	}
+	PROTECTION_Load();
 
 	if (protection.dc == PROTECTION_ENABLED_FLAG)
 	{

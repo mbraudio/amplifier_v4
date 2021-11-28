@@ -28,7 +28,6 @@ uint32_t PROTECTION_Load(void);
 void PROTECTION_Reset(void);
 void PROTECTION_LoadCheck(void);
 void PROTECTION_LiveCheck(void);
-void PROTECTION_NotifyError(const uint32_t errorId);
 void PROTECTION_EnableDc(void);
 //void PROTECTION_EnableOverheat(void);
 void PROTECTION_EnableVoltage(void);
