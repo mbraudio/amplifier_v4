@@ -48,17 +48,16 @@ void AMP_SetDirect(const uint8_t state)
 {
 	system.settings.direct = state;
 	LED_Set(LED_DIRECT, state);
-	// CHECK WHICH RELAY IS DIRECT
-	//HAL_GPIO_WritePin(DIRECT_GPIO_Port, DIRECT_Pin, (GPIO_PinState)system.settings.direct);
+	HAL_GPIO_WritePin(TONE_ENABLE_GPIO_Port, TONE_ENABLE_Pin, (GPIO_PinState)system.settings.direct);
 }
 
-// TODO: THERE IS NO LOUDNESS - THERE IS BASS BOOST
-// Loudness
+
+// Loudness / Bass Boost
 void AMP_SetLoudness(const uint8_t state)
 {
 	system.settings.loudness = state;
 	LED_Set(LED_LOUDNESS, state);
-	//HAL_GPIO_WritePin(LOUDNESS_GPIO_Port, LOUDNESS_Pin, (GPIO_PinState)system.settings.loudness);
+	HAL_GPIO_WritePin(BASS_ENABLE_GPIO_Port, BASS_ENABLE_Pin, (GPIO_PinState)system.settings.loudness);
 }
 
 //TODO: Careful with delays here, more than 200ms in delays causes

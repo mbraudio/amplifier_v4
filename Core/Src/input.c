@@ -158,12 +158,12 @@ void INPUT_Set(const InputData* data)
 	}
 }
 
+// MUTE is by default ENABLED. To disable it, set MUTE_DISABLE_Pin to SET!
 void INPUT_Mute(const uint32_t status)
 {
-	const GPIO_PinState value = status ? GPIO_PIN_SET : GPIO_PIN_RESET;
-	// TODO: Code here...
-	SYSTEM_Mute((uint8_t)value);
-
+	const GPIO_PinState value = status ? GPIO_PIN_RESET : GPIO_PIN_SET;
+	HAL_GPIO_WritePin(MUTE_DISABLE_GPIO_Port, MUTE_DISABLE_Pin, value);
+	SYSTEM_Mute((uint8_t)status);
 }
 
 

@@ -241,7 +241,6 @@ int main(void)
 
   /* USER CODE END 2 */
 
-
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -805,8 +804,8 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, INPUT_2_Pin|DAC_ENABLE_Pin|INPUT_1_Pin|LED_VOLUME_Pin
                           |LED_RGB_0_Pin|LED_RGB_1_Pin|LED_BALANCE_Pin|LED_TREBLE_Pin
-                          |LED_STANDBY_Pin|LED_APD_Pin|BUZZER_Pin|RELAY_0_Pin
-                          |RELAY_1_Pin|RELAY_2_Pin, GPIO_PIN_RESET);
+                          |LED_STANDBY_Pin|LED_APD_Pin|BUZZER_Pin|BASS_ENABLE_Pin
+                          |MUTE_DISABLE_Pin|DIRECT_ENABLE_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOH, INPUT_0_Pin|SPEAKERS_ENABLE_Pin, GPIO_PIN_RESET);
@@ -838,12 +837,12 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : INPUT_2_Pin DAC_ENABLE_Pin INPUT_1_Pin LED_VOLUME_Pin
                            LED_RGB_0_Pin LED_RGB_1_Pin LED_BALANCE_Pin LED_TREBLE_Pin
-                           LED_STANDBY_Pin LED_APD_Pin BUZZER_Pin RELAY_0_Pin
-                           RELAY_1_Pin RELAY_2_Pin */
+                           LED_STANDBY_Pin LED_APD_Pin BUZZER_Pin BASS_ENABLE_Pin
+                           MUTE_DISABLE_Pin DIRECT_ENABLE_Pin */
   GPIO_InitStruct.Pin = INPUT_2_Pin|DAC_ENABLE_Pin|INPUT_1_Pin|LED_VOLUME_Pin
                           |LED_RGB_0_Pin|LED_RGB_1_Pin|LED_BALANCE_Pin|LED_TREBLE_Pin
-                          |LED_STANDBY_Pin|LED_APD_Pin|BUZZER_Pin|RELAY_0_Pin
-                          |RELAY_1_Pin|RELAY_2_Pin;
+                          |LED_STANDBY_Pin|LED_APD_Pin|BUZZER_Pin|BASS_ENABLE_Pin
+                          |MUTE_DISABLE_Pin|DIRECT_ENABLE_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

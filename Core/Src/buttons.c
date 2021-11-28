@@ -275,7 +275,7 @@ void BUTTONS_ProcessADC_SelectorGroup(const uint8_t value)
 	}
 
 	// Selector
-	if (value > BUTTON_ADC_MAX)
+	/*if (value > BUTTON_ADC_MAX)
 	{
 		if (buttons.selector.state == Pressed)
 		{
@@ -293,7 +293,7 @@ void BUTTONS_ProcessADC_SelectorGroup(const uint8_t value)
 			buttons.selector.state = Pressed;
 			buttons.selector.time = 0;
 		}
-	}
+	}*/
 }
 
 

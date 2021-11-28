@@ -62,8 +62,7 @@ uint32_t SYSTEM_Load(void)
 uint8_t SYSTEM_IncreaseBrightness(void)
 {
 	system.settings.brightnessIndex++;
-	if (system.settings.brightnessIndex >= BRIGHTNESS_VALUES_COUNT)
-	{
+	if (system.settings.brightnessIndex >= BRIGHTNESS_VALUES_COUNT) {
 		system.settings.brightnessIndex = 0;
 	}
 	SYSTEM_Save();

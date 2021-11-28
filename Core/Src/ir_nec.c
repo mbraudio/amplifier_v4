@@ -180,6 +180,7 @@ void IR_Decode(void)
 			}
 		} break;
 
+		// Speakers
 		case IR_CODE_SPEAKERS_A:
 		{
 			if (ir.lastCommand != ir.commandToDecode)
@@ -229,9 +230,31 @@ void IR_Decode(void)
 			if (ir.lastCommand != ir.commandToDecode)
 			{
 				ir.ignoreTime = IR_IGNORE_TIME_INPUT;
-				system.states.mute = !system.states.mute;
+				uint8_t mute = !system.states.mute;
 				//LED_Set(LED_INPUT_SELECTOR, system.states.mute); //TODO: Missing MUTE notification here...
-				INPUT_Mute(system.states.mute);
+				INPUT_Mute(mute);
+				ir.lastCommand = ir.commandToDecode;
+			}
+		} break;
+
+		case IR_CODE_LOUDNESS:
+		{
+			if (ir.lastCommand != ir.commandToDecode)
+			{
+				ir.ignoreTime = IR_IGNORE_TIME_INPUT;
+				AMP_SetLoudness(!system.settings.loudness);
+				SYSTEM_Save();
+				ir.lastCommand = ir.commandToDecode;
+			}
+		} break;
+
+		case IR_CODE_DIRECT:
+		{
+			if (ir.lastCommand != ir.commandToDecode)
+			{
+				ir.ignoreTime = IR_IGNORE_TIME_INPUT;
+				AMP_SetDirect(!system.settings.direct);
+				SYSTEM_Save();
 				ir.lastCommand = ir.commandToDecode;
 			}
 		} break;
