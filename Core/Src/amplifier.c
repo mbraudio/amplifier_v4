@@ -48,9 +48,8 @@ void AMP_SetDirect(const uint8_t state)
 {
 	system.settings.direct = state;
 	LED_Set(LED_DIRECT, state);
-	HAL_GPIO_WritePin(TONE_ENABLE_GPIO_Port, TONE_ENABLE_Pin, (GPIO_PinState)system.settings.direct);
+	HAL_GPIO_WritePin(DIRECT_ENABLE_GPIO_Port, DIRECT_ENABLE_Pin, (GPIO_PinState)system.settings.direct);
 }
-
 
 // Loudness / Bass Boost
 void AMP_SetLoudness(const uint8_t state)
