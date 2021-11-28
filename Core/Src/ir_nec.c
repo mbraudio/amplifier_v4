@@ -123,12 +123,12 @@ void IR_Decode(void)
 			}
 		} break;
 
-		// Balance
+		// Bass
 		case IR_CODE_NAP_ON_OFF: {
 			if (ir.lastCommand != ir.commandToDecode)
 			{
 				ir.ignoreTime = IR_IGNORE_TIME_VOLUME;
-				POTENTIOMETERS_BalancePlus();
+				POTENTIOMETERS_BassPlus();
 				ir.lastCommand = ir.commandToDecode;
 			}
 		} break;
@@ -137,7 +137,7 @@ void IR_Decode(void)
 			if (ir.lastCommand != ir.commandToDecode)
 			{
 				ir.ignoreTime = IR_IGNORE_TIME_VOLUME;
-				POTENTIOMETERS_BalanceMinus();
+				POTENTIOMETERS_BassMinus();
 				ir.lastCommand = ir.commandToDecode;
 			}
 		} break;
@@ -161,12 +161,12 @@ void IR_Decode(void)
 			}
 		} break;
 
-		// Bass
+		// Balance
 		case IR_CODE_NAP_FUNC: {
 			if (ir.lastCommand != ir.commandToDecode)
 			{
 				ir.ignoreTime = IR_IGNORE_TIME_VOLUME;
-				POTENTIOMETERS_BassPlus();
+				POTENTIOMETERS_BalancePlus();
 				ir.lastCommand = ir.commandToDecode;
 			}
 		} break;
@@ -175,7 +175,7 @@ void IR_Decode(void)
 			if (ir.lastCommand != ir.commandToDecode)
 			{
 				ir.ignoreTime = IR_IGNORE_TIME_VOLUME;
-				POTENTIOMETERS_BassMinus();
+				POTENTIOMETERS_BalanceMinus();
 				ir.lastCommand = ir.commandToDecode;
 			}
 		} break;
