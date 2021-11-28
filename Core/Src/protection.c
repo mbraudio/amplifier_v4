@@ -5,63 +5,67 @@
  *      Author: Admin
  */
 #include "protection.h"
-//#include "amp.h" //TODO: Enable and implement real protections !!!
+#include "amplifier.h"
 #include "utilities.h"
-#include <string.h>
+#include "eeprom.h"
 #include "main.h"
+#include <string.h>
 
 // Errors
 #define ERROR_1_DC						1
-#define ERROR_2_OVERLOAD				2
-#define ERROR_3_OVERHEAT				3
-#define ERROR_4_FAULTY_VOLTAGE			4
+#define ERROR_2_OVERHEAT				2
+#define ERROR_3_VOLTAGE					3
 // Flags
 #define PROTECTION_CLEAR_FLAG			0xFF
-#define PROTECTION_ENABLED_FLAG_1		0xAA
-#define PROTECTION_ENABLED_FLAG_2		0x55
+#define PROTECTION_ENABLED_FLAG			0xAA
 #define PROTECTION_DELAY_SHORT			200
 #define PROTECTION_DELAY_LONG 			2000
+// EEPROM
+#define PROTECTION_SIZE					sizeof(Protection)
+#define PROTECTION_EEPROM_ADDRESS 		32
 
 Protection protection;
 
 inline void PROTECTION_Save(void)
 {
-	//FRAM_Write(FRAM_PROTECTION_INDEX, PROTECTION_SIZE, (uint8_t*)&protection);
+	protection.crc = UTILITIES_CalculateCrc((uint8_t*)&protection, (PROTECTION_SIZE - 1));
+	EEPROM_Write(PROTECTION_EEPROM_ADDRESS, PROTECTION_SIZE, (uint8_t*)&protection);
 }
 
-inline void PROTECTION_Load(void)
+inline uint32_t PROTECTION_Load(void)
 {
-	//FRAM_Read(FRAM_PROTECTION_INDEX, PROTECTION_SIZE, (uint8_t*)&protection);
+	uint8_t crc;
+	EEPROM_Read(PROTECTION_EEPROM_ADDRESS, PROTECTION_SIZE, (uint8_t*)&protection);
+	crc = UTILITIES_CalculateCrc((uint8_t*)&protection, (PROTECTION_SIZE - 1));
+	return (protection.crc == crc);
 }
 
 void PROTECTION_Reset(void)
 {
-	memset((uint8_t*)&protection, PROTECTION_CLEAR_FLAG, sizeof(Protection));
+	memset((uint8_t*)&protection, PROTECTION_CLEAR_FLAG, PROTECTION_SIZE);
 	PROTECTION_Save();
 }
 
 void PROTECTION_EnableDc(void)
 {
-	protection.dc1 = PROTECTION_ENABLED_FLAG_1;
-	protection.dc2 = PROTECTION_ENABLED_FLAG_2;
+	AMP_SetPowerPin(0);
+	protection.dc = PROTECTION_ENABLED_FLAG;
 	PROTECTION_Save();
-	//AMP_PowerOff(); //TODO: Enable...
 }
 /*
 void PROTECTION_EnableOverheat(void)
 {
+	AMP_SetPowerPin(0);
 	protection.overheat1 = PROTECTION_ENABLED_FLAG_1;
 	protection.overheat2 = PROTECTION_ENABLED_FLAG_2;
 	PROTECTION_Save();
-	//AMP_PowerOff(); //TODO: Enable...
 }
 */
 void PROTECTION_EnableVoltage(void)
 {
-	protection.voltage1 = PROTECTION_ENABLED_FLAG_1;
-	protection.voltage2 = PROTECTION_ENABLED_FLAG_2;
+	AMP_SetPowerPin(0);
+	protection.voltage = PROTECTION_ENABLED_FLAG;
 	PROTECTION_Save();
-	//AMP_PowerOff(); //TODO: Enable...
 }
 
 void PROTECTION_NotifyError(const uint32_t errorId)
@@ -86,19 +90,19 @@ void PROTECTION_LoadCheck(void)
 {
 	PROTECTION_Load();
 
-	if ((protection.dc1 == PROTECTION_ENABLED_FLAG_1) && (protection.dc2 == PROTECTION_ENABLED_FLAG_2))
+	if (protection.dc == PROTECTION_ENABLED_FLAG)
 	{
 		PROTECTION_NotifyError(ERROR_1_DC);
 	}
 
-	/*if ((protection.overheat1 == PROTECTION_ENABLED_FLAG_1) && (protection.overheat2 == PROTECTION_ENABLED_FLAG_2))
+	/*if (protection.overheat == PROTECTION_ENABLED_FLAG)
 	{
 		PROTECTION_NotifyError(ERROR_3_OVERHEAT);
 	}*/
 
-	if ((protection.voltage1 == PROTECTION_ENABLED_FLAG_1) && (protection.voltage2 == PROTECTION_ENABLED_FLAG_2))
+	if (protection.voltage == PROTECTION_ENABLED_FLAG)
 	{
-		PROTECTION_NotifyError(ERROR_4_FAULTY_VOLTAGE);
+		PROTECTION_NotifyError(ERROR_3_VOLTAGE);
 	}
 }
 
@@ -111,7 +115,6 @@ void PROTECTION_LiveCheck(void)
 	state = HAL_GPIO_ReadPin(DC_PROTECT_GPIO_Port, DC_PROTECT_Pin);
 	if (state == 0)
 	{
-		HAL_Delay(10);
 		state = HAL_GPIO_ReadPin(DC_PROTECT_GPIO_Port, DC_PROTECT_Pin);
 		if (state == 0)
 		{
@@ -119,11 +122,10 @@ void PROTECTION_LiveCheck(void)
 		}
 	}
 
-	// Thermal - PD4
+	// Thermal
 	/*state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
 	if (state == 0)
 	{
-		HAL_Delay(10);
 		state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
 		if (state == 0)
 		{
@@ -131,11 +133,10 @@ void PROTECTION_LiveCheck(void)
 		}
 	}*/
 
-	// Voltage - PD5
+	// Voltage
 	state = HAL_GPIO_ReadPin(V_PROTECT_GPIO_Port, V_PROTECT_Pin);
 	if (state == 0)
 	{
-		HAL_Delay(10);
 		state = HAL_GPIO_ReadPin(V_PROTECT_GPIO_Port, V_PROTECT_Pin);
 		if (state == 0)
 		{

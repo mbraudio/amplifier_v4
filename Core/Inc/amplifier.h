@@ -9,6 +9,10 @@
 #define INC_AMPLIFIER_H_
 
 #include <stdint.h>
+#include "stm32l0xx_hal.h"
+
+// Power
+void AMP_SetPowerPin(const GPIO_PinState state);
 
 // Mute
 void AMP_MuteToggle(void);
