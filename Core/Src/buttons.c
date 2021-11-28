@@ -274,6 +274,54 @@ void BUTTONS_ProcessADC_SelectorGroup(const uint8_t value)
 		return;
 	}
 
+	// SELECTOR
+	if (value < BUTTON_SELECTOR_ADC_HI)
+	{
+		switch (buttons.selector.state)
+		{
+			case Released:
+			{
+				buttons.selector.state = Triggered;
+				buttons.selector.time = buttons.timer;
+			} break;
+
+			case Triggered:
+			{
+				if (BUTTONS_PressValid(buttons.selector.time, BUTTON_PRESSED_TIME))
+				{
+					buttons.selector.state = Pressed;
+				}
+			} break;
+
+			case Pressed:
+			{
+				if (BUTTONS_PressValid(buttons.selector.time, BUTTON_HOLD_TIME))
+				{
+					buttons.selector.state = Hold;
+				}
+			} break;
+
+			case Hold:
+			{
+
+			} break;
+		}
+	}
+	else
+	{
+		if (buttons.selector.state == Pressed)
+		{
+			//LED_Set(LED_INPUT_SELECTOR, system.states.mute);
+			INPUT_Mute(!system.states.mute);
+			//BLUETOOTH_Send(COMMAND_TOGGLE_MUTE, system.states.mute); // TODO: Implement...
+		}
+		else if (buttons.selector.state == Hold)
+		{
+
+		}
+		buttons.selector.state = Released;
+	}
+
 	// Selector
 	/*if (value > BUTTON_ADC_MAX)
 	{
