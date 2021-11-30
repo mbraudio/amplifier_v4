@@ -9,6 +9,9 @@
 #define INC_AMPLIFIER_H_
 
 #include <stdint.h>
+#include "main.h"
+
+void AMP_SetPowerPin(const GPIO_PinState state);
 
 // Mute
 void AMP_MuteToggle(void);
@@ -24,6 +27,7 @@ void AMP_SetDirect(const uint8_t state);
 void AMP_SetLoudness(const uint8_t state);
 
 // Power
+void AMP_GoToPowerOff(void);
 void AMP_PowerOff(void);
 void AMP_PowerToggle(void);
 

@@ -151,6 +151,19 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		case ENCODER_B_PIN: {
 			ENCODER_Encode(GPIO_Pin);
 		} break;
+
+		// PROTECTION
+		case DC_PIN: {
+			if (system.power.state == On) {
+				PROTECTION_EnableDc();
+			}
+		} break;
+
+		case V_PIN: {
+			if (system.power.state == On) {
+				PROTECTION_EnableVoltage();
+			}
+		} break;
 	}
 }
 
@@ -850,7 +863,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : DC_PROTECT_Pin V_PROTECT_Pin */
   GPIO_InitStruct.Pin = DC_PROTECT_Pin|V_PROTECT_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
 

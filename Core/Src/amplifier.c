@@ -4,7 +4,7 @@
  *  Created on: Nov 15, 2021
  *      Author: Admin
  */
-#include <amplifier.h>
+#include "amplifier.h"
 #include "system.h"
 //#include "bluetooth.h"
 #include "led.h"
@@ -14,7 +14,7 @@
 #include "utilities.h"
 #include "potentiometer.h"
 #include "mcp23008.h"
-#include "main.h"
+
 
 void AMP_SetPowerPin(const GPIO_PinState state)
 {
@@ -57,6 +57,11 @@ void AMP_SetLoudness(const uint8_t state)
 	system.settings.loudness = state;
 	LED_Set(LED_LOUDNESS, state);
 	HAL_GPIO_WritePin(BASS_ENABLE_GPIO_Port, BASS_ENABLE_Pin, (GPIO_PinState)system.settings.loudness);
+}
+
+void AMP_GoToPowerOff(void)
+{
+	system.power.state = PoweringOff;
 }
 
 //TODO: Careful with delays here, more than 200ms in delays causes

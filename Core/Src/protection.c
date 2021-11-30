@@ -5,44 +5,62 @@
  *      Author: Admin
  */
 #include "protection.h"
-//#include "amp.h" //TODO: Enable and implement real protections !!!
+#include "amplifier.h"
 #include "utilities.h"
+#include "system.h"
+#include "eeprom.h"
 #include <string.h>
 #include "main.h"
 
 // Errors
-#define ERROR_1_DC						1
-#define ERROR_2_OVERLOAD				2
-#define ERROR_3_OVERHEAT				3
-#define ERROR_4_FAULTY_VOLTAGE			4
+#define ERROR_3_DC						3
+#define ERROR_4_OVERLOAD				4
+#define ERROR_5_VOLTAGE					5
 // Flags
 #define PROTECTION_CLEAR_FLAG			0xFF
 #define PROTECTION_ENABLED_FLAG			0xAA
 #define PROTECTION_DELAY_SHORT			200
-#define PROTECTION_DELAY_LONG 			2000
+#define PROTECTION_DELAY_LONG 			1200
+
+#define PROTECTION_SIZE					sizeof(Protection)
+#define PROTECTION_EEPROM_ADDRESS		32
 
 Protection protection;
 
 inline void PROTECTION_Save(void)
 {
-	//FRAM_Write(FRAM_PROTECTION_INDEX, PROTECTION_SIZE, (uint8_t*)&protection);
+	protection.crc = UTILITIES_CalculateCrc((uint8_t*)&protection, (PROTECTION_SIZE - 1));
+	EEPROM_Write(PROTECTION_EEPROM_ADDRESS, PROTECTION_SIZE, (uint8_t*)&protection);
 }
 
-inline void PROTECTION_Load(void)
+inline uint32_t PROTECTION_Load(void)
 {
-	//FRAM_Read(FRAM_PROTECTION_INDEX, PROTECTION_SIZE, (uint8_t*)&protection);
+	uint8_t crc;
+	EEPROM_Read(PROTECTION_EEPROM_ADDRESS, PROTECTION_SIZE, (uint8_t*)&protection);
+	crc = UTILITIES_CalculateCrc((uint8_t*)&protection, (PROTECTION_SIZE - 1));
+	return (protection.crc == crc);
 }
 
 void PROTECTION_Reset(void)
 {
-	memset((uint8_t*)&protection, PROTECTION_CLEAR_FLAG, sizeof(Protection));
+	memset((uint8_t*)&protection, PROTECTION_CLEAR_FLAG, (PROTECTION_SIZE - 1));
 	PROTECTION_Save();
 }
 
 void PROTECTION_EnableDc(void)
 {
-	protection.dc = PROTECTION_ENABLED_FLAG;
-	PROTECTION_Save();
+	// Immediately disconnect power to transformers
+	AMP_SetPowerPin(GPIO_PIN_RESET);
+
+	if (protection.dc != PROTECTION_ENABLED_FLAG) {
+		protection.dc = PROTECTION_ENABLED_FLAG;
+		PROTECTION_Save();
+	}
+
+	// Go to entire power down process
+	AMP_GoToPowerOff();
+
+	PROTECTION_NotifyError(ERROR_3_DC);
 }
 /*
 void PROTECTION_EnableOverheat(void)
@@ -52,8 +70,18 @@ void PROTECTION_EnableOverheat(void)
 */
 void PROTECTION_EnableVoltage(void)
 {
-	protection.voltage = PROTECTION_ENABLED_FLAG;
-	PROTECTION_Save();
+	// Immediately disconnect power to transformers
+	AMP_SetPowerPin(GPIO_PIN_RESET);
+
+	if (protection.voltage != PROTECTION_ENABLED_FLAG) {
+		protection.voltage = PROTECTION_ENABLED_FLAG;
+		PROTECTION_Save();
+	}
+
+	// Go to entire power down process
+	AMP_GoToPowerOff();
+
+	PROTECTION_NotifyError(ERROR_5_VOLTAGE);
 }
 
 void PROTECTION_NotifyError(const uint32_t errorId)
@@ -76,28 +104,30 @@ void PROTECTION_NotifyError(const uint32_t errorId)
 
 void PROTECTION_LoadCheck(void)
 {
-	PROTECTION_Load();
-
-	if (protection.dc == PROTECTION_ENABLED_FLAG)
-	{
-		PROTECTION_NotifyError(ERROR_1_DC);
+	uint32_t status = PROTECTION_Load();
+	if (!status) {
+		PROTECTION_Reset();
+		return;
 	}
 
-	/*if ((protection.overheat1 == PROTECTION_ENABLED_FLAG_1) && (protection.overheat2 == PROTECTION_ENABLED_FLAG_2))
+	//if (protection.dc == PROTECTION_ENABLED_FLAG)
 	{
-		PROTECTION_NotifyError(ERROR_3_OVERHEAT);
+		PROTECTION_EnableDc();
+	}
+
+	/*if (protection.overheat == PROTECTION_ENABLED_FLAG)
+	{
+		PROTECTION_NotifyError(ERROR_2_OVERHEAT);
 	}*/
 
 	if (protection.voltage == PROTECTION_ENABLED_FLAG)
 	{
-		PROTECTION_NotifyError(ERROR_4_FAULTY_VOLTAGE);
+		PROTECTION_EnableVoltage();
 	}
 }
 
 void PROTECTION_LiveCheck(void)
 {
-	// TODO: Enable this functionality...
-
 	// DC
 	GPIO_PinState state;
 	state = HAL_GPIO_ReadPin(DC_PROTECT_GPIO_Port, DC_PROTECT_Pin);
@@ -114,7 +144,6 @@ void PROTECTION_LiveCheck(void)
 	/*state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
 	if (state == 0)
 	{
-		HAL_Delay(10);
 		state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
 		if (state == 0)
 		{
