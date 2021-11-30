@@ -17,15 +17,23 @@
 #define ERROR_4_OVERLOAD				4
 #define ERROR_5_VOLTAGE					5
 // Flags
-#define PROTECTION_CLEAR_FLAG			0xFF
+#define PROTECTION_CLEAR_FLAG			0x00
 #define PROTECTION_ENABLED_FLAG			0xAA
 #define PROTECTION_DELAY_SHORT			200
 #define PROTECTION_DELAY_LONG 			1200
 
 #define PROTECTION_SIZE					sizeof(Protection)
-#define PROTECTION_EEPROM_ADDRESS		32
+#define PROTECTION_EEPROM_ADDRESS		64
 
 Protection protection;
+
+void PROTECTION_Initialize(void)
+{
+	protection.dc = 0;
+	protection.overheat = 0;
+	protection.voltage = 0;
+	protection.crc = 0;
+}
 
 inline void PROTECTION_Save(void)
 {
@@ -47,19 +55,36 @@ void PROTECTION_Reset(void)
 	PROTECTION_Save();
 }
 
+void PROTECTION_Process(void)
+{
+	if (system.states.protectionTriggeredDc)
+	{
+		system.states.protectionTriggeredDc = 0;
+		PROTECTION_EnableDc();
+	}
+
+	if (system.states.protectionTriggeredVoltage)
+	{
+		system.states.protectionTriggeredVoltage = 0;
+		PROTECTION_EnableVoltage();
+	}
+}
+
 void PROTECTION_EnableDc(void)
 {
-	// Immediately disconnect power to transformers
+	// Immediately disable power to transformers
 	AMP_SetPowerPin(GPIO_PIN_RESET);
 
+	// Save new protection state
 	if (protection.dc != PROTECTION_ENABLED_FLAG) {
 		protection.dc = PROTECTION_ENABLED_FLAG;
 		PROTECTION_Save();
 	}
 
-	// Go to entire power down process
+	// Go to entire power off process
 	AMP_GoToPowerOff();
 
+	// Notify error
 	PROTECTION_NotifyError(ERROR_3_DC);
 }
 /*
@@ -70,27 +95,29 @@ void PROTECTION_EnableOverheat(void)
 */
 void PROTECTION_EnableVoltage(void)
 {
-	// Immediately disconnect power to transformers
+	// Immediately disable power to transformers
 	AMP_SetPowerPin(GPIO_PIN_RESET);
 
+	// Save new protection state
 	if (protection.voltage != PROTECTION_ENABLED_FLAG) {
 		protection.voltage = PROTECTION_ENABLED_FLAG;
 		PROTECTION_Save();
 	}
 
-	// Go to entire power down process
+	// Go to entire power off process
 	AMP_GoToPowerOff();
 
+	// Notify error
 	PROTECTION_NotifyError(ERROR_5_VOLTAGE);
 }
 
 void PROTECTION_NotifyError(const uint32_t errorId)
 {
 	uint32_t i;
-	while (1)
-	{
-		for (i = 0; i < errorId; i++)
-		{
+	HAL_GPIO_WritePin(LED_STANDBY_GPIO_Port, LED_STANDBY_Pin, GPIO_PIN_SET);
+
+	while (1) {
+		for (i = 0; i < errorId; i++) {
 			// Reset Watchdog
 			//UTIL_ResetWatchdog();
 			HAL_GPIO_TogglePin(LED_STANDBY_GPIO_Port, LED_STANDBY_Pin);
@@ -110,15 +137,15 @@ void PROTECTION_LoadCheck(void)
 		return;
 	}
 
-	//if (protection.dc == PROTECTION_ENABLED_FLAG)
+	if (protection.dc == PROTECTION_ENABLED_FLAG)
 	{
 		PROTECTION_EnableDc();
 	}
 
-	/*if (protection.overheat == PROTECTION_ENABLED_FLAG)
-	{
-		PROTECTION_NotifyError(ERROR_2_OVERHEAT);
-	}*/
+	//if (protection.overheat == PROTECTION_ENABLED_FLAG)
+	//{
+	//	PROTECTION_NotifyError(ERROR_2_OVERHEAT);
+	//}
 
 	if (protection.voltage == PROTECTION_ENABLED_FLAG)
 	{

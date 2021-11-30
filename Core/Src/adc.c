@@ -1,4 +1,4 @@
-/*
+ /*
  * adc.c
  *
  *  Created on: Nov 14, 2021
@@ -19,7 +19,8 @@ void ADC_Initialize(void)
 
 inline void ADC_StoreValue(const uint32_t value)
 {
-	if (adc.rawDataIndex < ADC_NUMBER_OF_CHANNELS) {
+	if (adc.rawDataIndex < ADC_NUMBER_OF_CHANNELS)
+	{
 		adc.rawData[adc.rawDataIndex++] = value;
 	}
 }
@@ -27,8 +28,9 @@ inline void ADC_StoreValue(const uint32_t value)
 void ADC_Finalize(void)
 {
 	uint32_t i;
-	for (i = 0; i < ADC_NUMBER_OF_CHANNELS; i++) {
-		adc.data[i] = adc.rawData[i];
+	for (i = 0; i < ADC_NUMBER_OF_CHANNELS; i++)
+	{
+		adc.data[i] = (uint8_t)adc.rawData[i];
 	}
 	adc.rawDataIndex = 0;
 	adc.dataReady = 1;

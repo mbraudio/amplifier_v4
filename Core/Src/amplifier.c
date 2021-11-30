@@ -142,6 +142,9 @@ void AMP_ProcessPower(void)
 
 			case InitialPhase:
 			{
+				// Protection Check, EEPROM Load
+				PROTECTION_LoadCheck();
+
 				// Mute
 				INPUT_Mute(1);
 				// Delay
@@ -190,10 +193,6 @@ void AMP_ProcessPower(void)
 
 			case ProtectionPhase:
 			{
-				// Protection Phase
-				//PROTECTION_Reset();
-				// Protection Check - EEPROM Load
-				PROTECTION_LoadCheck();
 				// Live check
 				PROTECTION_LiveCheck();
 

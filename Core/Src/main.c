@@ -155,13 +155,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		// PROTECTION
 		case DC_PIN: {
 			if (system.power.state == On) {
-				PROTECTION_EnableDc();
+				system.states.protectionTriggeredDc = 1;
 			}
 		} break;
 
 		case V_PIN: {
 			if (system.power.state == On) {
-				PROTECTION_EnableVoltage();
+				system.states.protectionTriggeredVoltage = 1;
 			}
 		} break;
 	}
@@ -177,9 +177,6 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* phadc)
 	if (__HAL_ADC_GET_FLAG(phadc, ADC_FLAG_EOS))
 	{
 		ADC_Finalize();
-		BUTTONS_ProcessADC_MainGroup(adc.data[5]);
-		BUTTONS_ProcessADC_SelectorGroup(adc.data[6]);
-		POTENTIOMETERS_SetCurrent(adc.data[0], adc.data[1], adc.data[4], adc.data[3], adc.data[2]);
 	}
 
 	HAL_ADC_Start_IT(phadc);
@@ -226,14 +223,12 @@ int main(void)
   MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
 
-  // START TIMERS
-  HAL_TIM_Base_Start_IT(&htim7);
-  HAL_TIM_Base_Start_IT(&htim6);
-
   // INITIALIZE
   // SYSTEM
   SYSTEM_Initialize();
   SYSTEM_InitializeValues();
+  // PROTECTION
+  PROTECTION_Initialize();
   // LED
   LED_Initialize(&htim3);
   // BUZZER
@@ -252,6 +247,10 @@ int main(void)
   // MCP23008
   MCP23008_Init(&hi2c1);
 
+  // START TIMERS
+  HAL_TIM_Base_Start_IT(&htim7);
+  HAL_TIM_Base_Start_IT(&htim6);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -268,8 +267,18 @@ int main(void)
 
 	if (system.power.state == On)
 	{
+		PROTECTION_Process();
 		ENCODER_Process();
 		POTENTIOMETERS_Process();
+
+		if (adc.dataReady)
+		{
+			adc.dataReady = 0;
+			BUTTONS_ProcessADC_MainGroup(adc.data[5]);
+			BUTTONS_ProcessADC_SelectorGroup(adc.data[6]);
+			POTENTIOMETERS_SetCurrent(adc.data[0], adc.data[1], adc.data[4], adc.data[3], adc.data[2]);
+		}
+
 	    //CALIBRATOR_Process();
 	}
 
@@ -976,4 +985,3 @@ void assert_failed(uint8_t *file, uint32_t line)
 }
 #endif /* USE_FULL_ASSERT */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

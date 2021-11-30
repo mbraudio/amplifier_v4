@@ -9,8 +9,8 @@
 #include "utilities.h"
 //#include "bluetooth.h"
 
-#define SETTINGS_SIZE sizeof(Settings)
-#define SETTINGS_EEPROM_ADDRESS 0
+#define SETTINGS_SIZE				sizeof(Settings)
+#define SETTINGS_EEPROM_ADDRESS		0
 
 System system;
 SystemValues systemValues;
@@ -30,6 +30,8 @@ void SYSTEM_Initialize(void)
 	system.settings.volumeBlue = 10;
 	// States
 	system.states.mute = 0;
+	system.states.protectionTriggeredDc = 0;
+	system.states.protectionTriggeredVoltage = 0;
 	// Power
 	system.power.state = Off;
 	system.power.phase = Idle;

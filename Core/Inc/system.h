@@ -33,7 +33,9 @@ typedef struct
 
 typedef struct
 {
-	uint8_t		mute:1;
+	uint8_t		mute;
+	uint8_t		protectionTriggeredDc;
+	uint8_t		protectionTriggeredVoltage;
 } __attribute__((packed)) States;
 
 typedef enum

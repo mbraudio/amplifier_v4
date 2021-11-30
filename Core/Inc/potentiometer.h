@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include "system.h"
 
+#define NUMBER_OF_POTS		5 // 4 pots, volume is log and has 2 values
 #define POT_INDEX_VOLUME_0 	0
 #define POT_INDEX_VOLUME_1 	1
 #define POT_INDEX_BASS 		2
@@ -32,10 +33,10 @@ typedef struct
 
 typedef struct
 {
-	uint32_t	activeIR;
-	uint32_t	timer;
-	uint32_t	update;
-	Potentiometer pots[4];
+	uint32_t		activeIR;
+	uint32_t		timer;
+	uint32_t		update;
+	Potentiometer	pots[NUMBER_OF_POTS];
 } Potentiometers;
 
 extern Potentiometers potentiometers;

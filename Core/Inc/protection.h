@@ -16,16 +16,19 @@
 typedef struct
 {
 	uint8_t		dc;
+	uint8_t		dc2;
 	uint8_t		overheat;
 	uint8_t		voltage;
 	uint8_t 	crc;
-} __attribute__((packed)) Protection;
+} Protection;
 
 extern Protection protection;
 
+void PROTECTION_Initialize(void);
 void PROTECTION_Save(void);
 uint32_t PROTECTION_Load(void);
 void PROTECTION_Reset(void);
+void PROTECTION_Process(void);
 void PROTECTION_LoadCheck(void);
 void PROTECTION_LiveCheck(void);
 void PROTECTION_EnableDc(void);
