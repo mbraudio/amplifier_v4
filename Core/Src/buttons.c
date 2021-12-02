@@ -321,27 +321,6 @@ void BUTTONS_ProcessADC_SelectorGroup(const uint8_t value)
 		}
 		buttons.selector.state = Released;
 	}
-
-	// Selector
-	/*if (value > BUTTON_ADC_MAX)
-	{
-		if (buttons.selector.state == Pressed)
-		{
-			system.states.mute = !system.states.mute;
-			//LED_Set(LED_INPUT_SELECTOR, system.states.mute); // TODO: Make input mute visible on some aux or rgb leds...
-			INPUT_Mute(system.states.mute);
-			//BLUETOOTH_Send(COMMAND_TOGGLE_MUTE, system.states.mute); // TODO: Implement...
-			buttons.selector.state = Released;
-		}
-	}
-	else
-	{
-		if (value < BUTTON_SELECTOR_ADC_HI)
-		{
-			buttons.selector.state = Pressed;
-			buttons.selector.time = 0;
-		}
-	}*/
 }
 
 

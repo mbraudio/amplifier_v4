@@ -11,16 +11,16 @@
 #include <stdint.h>
 #include "system.h"
 
-#define NUMBER_OF_POTS		5 // 4 pots, volume is log and has 2 values
-#define POT_INDEX_VOLUME_0 	0
-#define POT_INDEX_VOLUME_1 	1
-#define POT_INDEX_BASS 		2
-#define POT_INDEX_TREBLE 	3
-#define POT_INDEX_BALANCE 	4
+#define NUMBER_OF_POTS		4
+#define POT_INDEX_VOLUME 	0
+#define POT_INDEX_BASS 		1
+#define POT_INDEX_TREBLE 	2
+#define POT_INDEX_BALANCE 	3
 
 typedef struct
 {
 	uint8_t 	current;
+	uint8_t 	currentInverse; // Only for logarithmic
 	uint8_t 	required;
 	uint8_t 	last;
 	uint32_t	active;

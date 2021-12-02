@@ -28,15 +28,16 @@ void POTENTIOMETERS_Initialize(void)
 	potentiometers.activeIR = 0;
 	potentiometers.update = 0;
 	potentiometers.timer = 0;
-	//POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_VOLUME], POTENTIOMETERS_VolumePlus, POTENTIOMETERS_VolumeMinus, POTENTIOMETERS_VolumeStop, 1, COMMAND_UPDATE_VOLUME_VALUE);
-	//POTENTIOMETER_Init(&motors.pots[POT_INDEX_BASS], MOTORS_BassPlus, MOTORS_BassMinus, MOTORS_BassStop, 0, COMMAND_UPDATE_BASS_VALUE);
-	//POTENTIOMETER_Init(&motors.pots[POT_INDEX_TREBLE], MOTORS_TreblePlus, MOTORS_TrebleMinus, MOTORS_TrebleStop, 0, COMMAND_UPDATE_TREBLE_VALUE);
-	//POTENTIOMETER_Init(&motors.pots[POT_INDEX_BALANCE], MOTORS_BalancePlus, MOTORS_BalanceMinus, MOTORS_BalanceStop, 0, COMMAND_UPDATE_BALANCE_VALUE);
+	//POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_VOLUME], POTENTIOMETERS_VolumePlus, POTENTIOMETERS_VolumeMinus, POTENTIOMETERS_Stop, 1, COMMAND_UPDATE_VOLUME_VALUE);
+	//POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_BASS], MOTORS_BassPlus, MOTORS_BassMinus, POTENTIOMETERS_Stop, 0, COMMAND_UPDATE_BASS_VALUE);
+	//POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_TREBLE], MOTORS_TreblePlus, MOTORS_TrebleMinus, POTENTIOMETERS_Stop, 0, COMMAND_UPDATE_TREBLE_VALUE);
+	//POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_BALANCE], MOTORS_BalancePlus, MOTORS_BalanceMinus, POTENTIOMETERS_Stop, 0, COMMAND_UPDATE_BALANCE_VALUE);
 }
 
 void POTENTIOMETER_Init(Potentiometer* pot, void(*plus)(void), void(*minus)(void), void(*stop)(void), const uint32_t logarithmic, const uint8_t command)
 {
 	pot->current = 0;
+	pot->currentInverse = 0;
 	pot->last = 0;
 	pot->required = 0;
 	pot->active = 0;
@@ -76,8 +77,8 @@ void POTENTIOMETERS_DisableUpdate(void)
 
 void POTENTIOMETERS_SetCurrent(const uint8_t volume0, const uint8_t volume1, const uint8_t bass, const uint8_t treble, const uint8_t balance)
 {
-	potentiometers.pots[POT_INDEX_VOLUME_0].current = volume0;
-	potentiometers.pots[POT_INDEX_VOLUME_1].current = volume1;
+	potentiometers.pots[POT_INDEX_VOLUME].current = volume0;
+	potentiometers.pots[POT_INDEX_VOLUME].currentInverse = volume1;
 	potentiometers.pots[POT_INDEX_BASS].current = bass;
 	potentiometers.pots[POT_INDEX_TREBLE].current = treble;
 	potentiometers.pots[POT_INDEX_BALANCE].current = balance;

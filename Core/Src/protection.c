@@ -9,8 +9,8 @@
 #include "utilities.h"
 #include "system.h"
 #include "eeprom.h"
-#include <string.h>
 #include "main.h"
+#include <string.h>
 
 // Errors
 #define ERROR_3_DC						3
@@ -119,12 +119,10 @@ void PROTECTION_EnableVoltage(void)
 
 void PROTECTION_NotifyError(const uint32_t errorId)
 {
-	uint32_t i;
 	HAL_GPIO_WritePin(LED_STANDBY_GPIO_Port, LED_STANDBY_Pin, GPIO_PIN_SET);
-
 	while (1)
 	{
-		for (i = 0; i < errorId; i++)
+		for (uint32_t i = 0; i < errorId; i++)
 		{
 			// Reset Watchdog
 			//UTIL_ResetWatchdog();
@@ -197,7 +195,6 @@ void PROTECTION_DirectCheck(void)
 			PROTECTION_EnableVoltage();
 		}
 	}
-
 }
 
 
