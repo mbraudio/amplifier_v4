@@ -127,15 +127,14 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 				if (BUTTONS_PressValid(buttons.power.time, BUTTON_LONG_HOLD_TIME))
 				{
-					uint32_t i = 4;
-					while (i--)
+					for (uint32_t i = 0; i < 4; i++)
 					{
 						LED_Standby(GPIO_PIN_SET);
 						HAL_Delay(200);
 						LED_Standby(GPIO_PIN_RESET);
 						HAL_Delay(200);
 					}
-					//PROTECTION_Reset();
+					PROTECTION_Reset();
 				}
 				else if (BUTTONS_PressValid(buttons.power.time, BUTTON_PRESSED_TIME))
 				{

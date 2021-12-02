@@ -18,7 +18,8 @@
 #define ERROR_5_VOLTAGE					5
 // Flags
 #define PROTECTION_CLEAR_FLAG			0x00
-#define PROTECTION_ENABLED_FLAG			0xAA
+#define PROTECTION_ENABLED_FLAG_1		0xAA
+#define PROTECTION_ENABLED_FLAG_2		0x55
 #define PROTECTION_DELAY_SHORT			200
 #define PROTECTION_DELAY_LONG 			1200
 
@@ -29,9 +30,12 @@ Protection protection;
 
 void PROTECTION_Initialize(void)
 {
-	protection.dc = 0;
-	protection.overheat = 0;
-	protection.voltage = 0;
+	protection.dc1 = 0;
+	protection.dc2 = 0;
+	protection.overheat1 = 0;
+	protection.overheat2 = 0;
+	protection.voltage1 = 0;
+	protection.voltage2 = 0;
 	protection.crc = 0;
 }
 
@@ -76,8 +80,9 @@ void PROTECTION_EnableDc(void)
 	AMP_SetPowerPin(GPIO_PIN_RESET);
 
 	// Save new protection state
-	if (protection.dc != PROTECTION_ENABLED_FLAG) {
-		protection.dc = PROTECTION_ENABLED_FLAG;
+	if ((protection.dc1 != PROTECTION_ENABLED_FLAG_1) || (protection.dc2 != PROTECTION_ENABLED_FLAG_2)) {
+		protection.dc1 = PROTECTION_ENABLED_FLAG_1;
+		protection.dc2 = PROTECTION_ENABLED_FLAG_2;
 		PROTECTION_Save();
 	}
 
@@ -99,8 +104,9 @@ void PROTECTION_EnableVoltage(void)
 	AMP_SetPowerPin(GPIO_PIN_RESET);
 
 	// Save new protection state
-	if (protection.voltage != PROTECTION_ENABLED_FLAG) {
-		protection.voltage = PROTECTION_ENABLED_FLAG;
+	if ((protection.voltage1 != PROTECTION_ENABLED_FLAG_1) || (protection.voltage2 != PROTECTION_ENABLED_FLAG_2)) {
+		protection.voltage1 = PROTECTION_ENABLED_FLAG_1;
+		protection.voltage2 = PROTECTION_ENABLED_FLAG_2;
 		PROTECTION_Save();
 	}
 
@@ -116,8 +122,10 @@ void PROTECTION_NotifyError(const uint32_t errorId)
 	uint32_t i;
 	HAL_GPIO_WritePin(LED_STANDBY_GPIO_Port, LED_STANDBY_Pin, GPIO_PIN_SET);
 
-	while (1) {
-		for (i = 0; i < errorId; i++) {
+	while (1)
+	{
+		for (i = 0; i < errorId; i++)
+		{
 			// Reset Watchdog
 			//UTIL_ResetWatchdog();
 			HAL_GPIO_TogglePin(LED_STANDBY_GPIO_Port, LED_STANDBY_Pin);
@@ -132,12 +140,13 @@ void PROTECTION_NotifyError(const uint32_t errorId)
 void PROTECTION_LoadCheck(void)
 {
 	uint32_t status = PROTECTION_Load();
-	if (!status) {
+	if (!status)
+	{
 		PROTECTION_Reset();
 		return;
 	}
 
-	if (protection.dc == PROTECTION_ENABLED_FLAG)
+	if ((protection.dc1 == PROTECTION_ENABLED_FLAG_1) && (protection.dc2 == PROTECTION_ENABLED_FLAG_2))
 	{
 		PROTECTION_EnableDc();
 	}
@@ -147,13 +156,13 @@ void PROTECTION_LoadCheck(void)
 	//	PROTECTION_NotifyError(ERROR_2_OVERHEAT);
 	//}
 
-	if (protection.voltage == PROTECTION_ENABLED_FLAG)
+	if ((protection.voltage1 == PROTECTION_ENABLED_FLAG_1) && (protection.voltage2 == PROTECTION_ENABLED_FLAG_2))
 	{
 		PROTECTION_EnableVoltage();
 	}
 }
 
-void PROTECTION_LiveCheck(void)
+void PROTECTION_DirectCheck(void)
 {
 	// DC
 	GPIO_PinState state;

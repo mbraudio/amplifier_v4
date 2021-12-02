@@ -15,10 +15,12 @@
 
 typedef struct
 {
-	uint8_t		dc;
+	uint8_t		dc1;
 	uint8_t		dc2;
-	uint8_t		overheat;
-	uint8_t		voltage;
+	uint8_t		overheat1;
+	uint8_t		overheat2;
+	uint8_t		voltage1;
+	uint8_t		voltage2;
 	uint8_t 	crc;
 } Protection;
 
@@ -30,7 +32,7 @@ uint32_t PROTECTION_Load(void);
 void PROTECTION_Reset(void);
 void PROTECTION_Process(void);
 void PROTECTION_LoadCheck(void);
-void PROTECTION_LiveCheck(void);
+void PROTECTION_DirectCheck(void);
 void PROTECTION_EnableDc(void);
 void PROTECTION_EnableOverload(void);
 //void PROTECTION_EnableOverheat(void);

@@ -145,6 +145,10 @@ void AMP_ProcessPower(void)
 				// Protection Check, EEPROM Load
 				PROTECTION_LoadCheck();
 
+				system.power.phase++;
+			} break;
+
+			case PowerOnPhase: {
 				// Mute
 				INPUT_Mute(1);
 				// Delay
@@ -161,11 +165,22 @@ void AMP_ProcessPower(void)
 				system.power.phase++;
 			} break;
 
+			case ProtectionPhase:
+			{
+				// Direct check 3 times
+				PROTECTION_DirectCheck();
+				HAL_Delay(100);
+				PROTECTION_DirectCheck();
+				HAL_Delay(100);
+				PROTECTION_DirectCheck();
+
+				system.power.phase++;
+			} break;
+
 			case LoadPhase:
 			{
 				// System Load
-				uint32_t status;
-				status = SYSTEM_Load();
+				uint32_t status = SYSTEM_Load();
 				if (!status)
 				{
 					SYSTEM_Initialize();
@@ -191,14 +206,6 @@ void AMP_ProcessPower(void)
 				system.power.phase++;
 			} break;
 
-			case ProtectionPhase:
-			{
-				// Live check
-				PROTECTION_LiveCheck();
-
-				system.power.phase++;
-			} break;
-
 			case InputPhase:
 			{
 				// Input Phase
@@ -209,7 +216,7 @@ void AMP_ProcessPower(void)
 				AMP_SetDirect(system.settings.direct);
 				// Loudness
 				AMP_SetLoudness(system.settings.loudness);
-				// MCP23008
+				// Setup MCP23008
 				MCP23008_Setup();
 
 				// Delay
@@ -240,6 +247,9 @@ void AMP_ProcessPower(void)
 				// Set led volume
 				//LED_SetVolume(system.settings.volumeRed, system.settings.volumeGreen, system.settings.volumeBlue);
 
+				// Enable motors update
+				POTENTIOMETERS_EnableUpdate();
+
 				// Unmute
 				INPUT_Mute(0);
 
@@ -248,8 +258,6 @@ void AMP_ProcessPower(void)
 
 				// Send System
 				//BLUETOOTH_SendSystem(); // TODO: Add this...
-				// Enable motors update
-				POTENTIOMETERS_EnableUpdate();
 			} break;
 		}
 	}

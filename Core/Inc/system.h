@@ -50,10 +50,11 @@ typedef enum
 {
 	Idle = 0,
 	InitialPhase,
+	PowerOnPhase,
+	ProtectionPhase,
 	LoadPhase,
 	LedPhase,
 	DelayPhase1,
-	ProtectionPhase,
 	InputPhase,
 	DelayPhase2,
 	SpeakersPhase,
