@@ -37,6 +37,9 @@ void PROTECTION_Initialize(void)
 	protection.voltage1 = 0;
 	protection.voltage2 = 0;
 	protection.crc = 0;
+
+	// TODO: Disable this here!
+	PROTECTION_Reset();
 }
 
 inline void PROTECTION_Save(void)

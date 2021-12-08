@@ -175,8 +175,8 @@ void Error_Handler(void);
 #define VOL_RESET_GPIO_Port GPIOD
 #define DIR_MISO_Pin GPIO_PIN_3
 #define DIR_MISO_GPIO_Port GPIOD
-#define DIR_MISOD4_Pin GPIO_PIN_4
-#define DIR_MISOD4_GPIO_Port GPIOD
+#define DIR_MOSI_Pin GPIO_PIN_4
+#define DIR_MOSI_GPIO_Port GPIOD
 #define WM_CS_Pin GPIO_PIN_5
 #define WM_CS_GPIO_Port GPIOD
 #define DIR_RESET_Pin GPIO_PIN_6

@@ -35,6 +35,7 @@
 #include "ir_nec.h"
 #include "amplifier.h"
 #include "mcp23008.h"
+#include "pcm9211.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -245,6 +246,10 @@ int main(void)
   IR_Initialize();
   // MCP23008
   MCP23008_Init(&hi2c1);
+  // DAC
+  // PCM9211
+  PCM9211_Initialize(&hspi2);
+
 
   // START TIMERS
   HAL_TIM_Base_Start_IT(&htim7);
@@ -549,8 +554,8 @@ static void MX_SPI2_Init(void)
   hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi2.Init.NSS = SPI_NSS_HARD_OUTPUT;
-  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi2.Init.NSS = SPI_NSS_SOFT;
+  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4;
   hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -840,8 +845,8 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, LED_SPEAKERS_B_Pin|LED_SPEAKERS_A_Pin|LED_DIRECT_Pin|POWER_ENABLE_Pin
-                          |GPIO_0_Pin|LED_POWER_Pin|VOL_RESET_Pin|WM_CS_Pin
-                          |DIR_RESET_Pin, GPIO_PIN_RESET);
+                          |GPIO_0_Pin|LED_POWER_Pin|DIR_CS_Pin|VOL_RESET_Pin
+                          |WM_CS_Pin|DIR_RESET_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : LED_AMP_DIRECT_Pin INPUT_DAC_Pin LED_AUX_Pin LED_RECORDER_Pin */
   GPIO_InitStruct.Pin = LED_AMP_DIRECT_Pin|INPUT_DAC_Pin|LED_AUX_Pin|LED_RECORDER_Pin;
@@ -899,11 +904,11 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED_SPEAKERS_B_Pin LED_SPEAKERS_A_Pin LED_DIRECT_Pin POWER_ENABLE_Pin
-                           GPIO_0_Pin LED_POWER_Pin VOL_RESET_Pin WM_CS_Pin
-                           DIR_RESET_Pin */
+                           GPIO_0_Pin LED_POWER_Pin DIR_CS_Pin VOL_RESET_Pin
+                           WM_CS_Pin DIR_RESET_Pin */
   GPIO_InitStruct.Pin = LED_SPEAKERS_B_Pin|LED_SPEAKERS_A_Pin|LED_DIRECT_Pin|POWER_ENABLE_Pin
-                          |GPIO_0_Pin|LED_POWER_Pin|VOL_RESET_Pin|WM_CS_Pin
-                          |DIR_RESET_Pin;
+                          |GPIO_0_Pin|LED_POWER_Pin|DIR_CS_Pin|VOL_RESET_Pin
+                          |WM_CS_Pin|DIR_RESET_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
