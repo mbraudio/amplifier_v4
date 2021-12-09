@@ -8,6 +8,7 @@
 
 SPI_HandleTypeDef* hspi;
 
+
 void WM874X_Initialize(SPI_HandleTypeDef* h)
 {
 	hspi = h;
@@ -19,7 +20,7 @@ void WM874X_Setup(void)
 	uint32_t status = 0;
 
 	status += WM874X_Write(WM874X_REG_06_FILTER_CONTROL, 0x00);
-	status += WM874X_Write(WM874X_REG_07_MODE_CONTROL_1, 0x40);
+	status += WM874X_Write(WM874X_REG_07_MODE_CONTROL_1, 0x00);
 
 	if (status)
 	{
@@ -35,5 +36,15 @@ uint32_t WM874X_Write(const uint8_t reg, const uint8_t data)
 	sts = HAL_SPI_Transmit(hspi, txData, 2, 100);
 	HAL_GPIO_WritePin(WM_CS_GPIO_Port, WM_CS_Pin, GPIO_PIN_SET);
 	return sts;
+}
+
+uint32_t WM874X_SetSampleRate(const WMSampleRate rate)
+{
+	WM874X_REGISTER_7 reg;
+	reg.mode = ModePCM;
+	reg.samplingRatio = SamplingRatioAuto;
+	reg.sampleRate = rate;
+	reg.mode8x = Mode8XDisabled;
+	return WM874X_Write(WM874X_REG_07_MODE_CONTROL_1, reg.value);
 }
 
