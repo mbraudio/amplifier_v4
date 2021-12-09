@@ -39,7 +39,7 @@ void PCM9211_Setup(void)
 	}
 }
 
-void PCM9211_Write(const uint32_t reg, const uint8_t data)
+void PCM9211_Write(const uint8_t reg, const uint8_t data)
 {
 	uint8_t txData[2] = { reg, data };
 	HAL_GPIO_WritePin(DIR_CS_GPIO_Port, DIR_CS_Pin, GPIO_PIN_RESET);
@@ -47,7 +47,7 @@ void PCM9211_Write(const uint32_t reg, const uint8_t data)
 	HAL_GPIO_WritePin(DIR_CS_GPIO_Port, DIR_CS_Pin, GPIO_PIN_SET);
 }
 
-uint8_t PCM9211_Read(const uint32_t reg)
+uint8_t PCM9211_Read(const uint8_t reg)
 {
 	uint8_t txData[2] = { (reg + 0x80), 0 };
 	uint8_t rxData[2] = { 0, 0 };
@@ -57,7 +57,7 @@ uint8_t PCM9211_Read(const uint32_t reg)
 	return rxData[1];
 }
 
-uint32_t PCM9211_WriteCheck(const uint32_t reg, const uint8_t data)
+uint32_t PCM9211_WriteCheck(const uint8_t reg, const uint8_t data)
 {
 	PCM9211_Write(reg, data);
 	uint8_t rxData = PCM9211_Read(reg);

@@ -10,6 +10,7 @@
 #include "system.h"
 #include "main.h"
 #include "pcm9211.h"
+#include "wm874x.h"
 
 Input input;
 
@@ -63,6 +64,7 @@ void INPUT_EnableDAC(void)
 		LED_Set(LED_INPUT_PHONO, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(DAC_ENABLE_GPIO_Port, DAC_ENABLE_Pin, GPIO_PIN_SET);
 		PCM9211_Setup();
+		WM874X_Setup();
 	} else {
 		LED_Set(LED_INPUT_PHONO, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(DAC_ENABLE_GPIO_Port, DAC_ENABLE_Pin, GPIO_PIN_RESET);

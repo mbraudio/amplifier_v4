@@ -36,6 +36,7 @@
 #include "amplifier.h"
 #include "mcp23008.h"
 #include "pcm9211.h"
+#include "wm874x.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -249,6 +250,8 @@ int main(void)
   // DAC
   // PCM9211
   PCM9211_Initialize(&hspi2);
+  // WM874X
+  WM874X_Initialize(&hspi2);
 
 
   // START TIMERS
