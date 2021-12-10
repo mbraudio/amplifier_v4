@@ -35,8 +35,7 @@
 #include "ir_nec.h"
 #include "amplifier.h"
 #include "mcp23008.h"
-#include "pcm9211.h"
-#include "wm874x.h"
+#include "dac.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -165,6 +164,19 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 				system.states.protectionTriggeredVoltage = 1;
 			}
 		} break;
+
+		// PCM9211
+		case PCM9211_ERROR_PIN: {
+			if (system.power.state == On) {
+				dac.error = 1;
+			}
+		} break;
+
+		case PCM9211_NPCM_PIN: {
+			if (system.power.state == On) {
+				dac.npcm = 1;
+			}
+		} break;
 	}
 }
 
@@ -248,11 +260,7 @@ int main(void)
   // MCP23008
   MCP23008_Init(&hi2c1);
   // DAC
-  // PCM9211
-  PCM9211_Initialize(&hspi2);
-  // WM874X
-  WM874X_Initialize(&hspi2);
-
+  DAC_Initialize(&hspi2);
 
   // START TIMERS
   HAL_TIM_Base_Start_IT(&htim7);
@@ -287,6 +295,8 @@ int main(void)
 		}
 
 	    //CALIBRATOR_Process();
+
+		DAC_Process();
 	}
 
 	AMP_ProcessPower();

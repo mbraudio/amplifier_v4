@@ -20,6 +20,8 @@
 #define WM874X_REG_09_SOFTWARE_RESET			0x09
 #define WM874X_REG_20_ADDITIONAL_CONTROL_1		0x20
 
+
+
 // REGISTER 6
 typedef enum {
 	FilterResponse1 = 0,
