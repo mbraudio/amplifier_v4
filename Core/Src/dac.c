@@ -17,9 +17,17 @@ void DAC_Initialize(SPI_HandleTypeDef* h)
 	dac.npcm = 0;
 }
 
+void DAC_Setup(void)
+{
+	PCM9211_Setup();
+	WM874X_Setup();
+	DAC_PCM9211_ErrorHandler();
+}
+
 void DAC_PCM9211_ErrorHandler(void)
 {
-	WMSampleRate rate = DAC_GetSampleRate();
+	WMSampleRate rate;
+	rate = DAC_GetSampleRate();
 	WM874X_SetSampleRate(rate);
 }
 

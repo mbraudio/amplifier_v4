@@ -14,6 +14,7 @@
 
 
 void DAC_Initialize(SPI_HandleTypeDef* h);
+void DAC_Setup(void);
 void DAC_PCM9211_ErrorHandler(void);
 void DAC_PCM9211_NpcmHandler(void);
 WMSampleRate DAC_GetSampleRate(void);
