@@ -26,9 +26,9 @@ void PCM9211_Setup(void)
 	//status += PCM9211_WriteCheck(PCM9211_REG_25_ERROR_CAUSE_SETTING, 0b00111000); // EFSCHG + EFSLMT + ENPCM
 	status += PCM9211_WriteCheck(PCM9211_REG_25_ERROR_CAUSE_SETTING, 0b00101000); // EFSCHG + ENPCM
 	//status += PCM9211_WriteCheck(PCM9211_REG_27_DIR_ACCEPTABLE_FS_RANGE_SETTING_AND_MASK, 0b00001111); // HILMT + LOLMT - limiting both
-	status += PCM9211_WriteCheck(PCM9211_REG_28_NON_PCM_DEFINITION_SETTING, 0b0010111);
-	status += PCM9211_WriteCheck(PCM9211_REG_2A_INT0_OUTPUT_CAUSE_MASK_SETTING, 0b01000000); // Mask all to INT0
-	status += PCM9211_WriteCheck(PCM9211_REG_2B_INT1_OUTPUT_CAUSE_MASK_SETTING, 0b10111111); // Mask all to INT1
+	status += PCM9211_WriteCheck(PCM9211_REG_28_NON_PCM_DEFINITION_SETTING, 0b00110111);
+	status += PCM9211_WriteCheck(PCM9211_REG_2A_INT0_OUTPUT_CAUSE_MASK_SETTING, 0b00000000); // Mask all to INT0
+	status += PCM9211_WriteCheck(PCM9211_REG_2B_INT1_OUTPUT_CAUSE_MASK_SETTING, 0b00000000); // Mask all to INT1
 	status += PCM9211_WriteCheck(PCM9211_REG_30_DIR_RECOVERED_SYSTEM_CLOCL_RATIO_SETTING, 0b00010010); // PLL SCK Dividing Ratio Automatic Control
 	status += PCM9211_WriteCheck(PCM9211_REG_34_DIR_INPUT_BIPHASE_SOURCE_SELECT_COAX_AMP_CONTROL, 0b11000010); // Power down Coax amps, RXIN2 as input selected
 	status += PCM9211_WriteCheck(PCM9211_REG_35_RECOUT0_OUTPUT_BIPHASE_SOURCE_SELECT, 0b00010010); // MPO0 mute
@@ -65,5 +65,18 @@ uint32_t PCM9211_WriteCheck(const uint8_t reg, const uint8_t data)
 	PCM9211_Write(reg, data);
 	uint8_t rxData = PCM9211_Read(reg);
 	return (rxData != data);
+}
+
+void PCM9211_Mute(const uint32_t mute)
+{
+	/*uint8_t data = PCM9211_Read(PCM9211_REG_6A_MAIN_OUTPUT_AND_AOXOUT_PORT_DATA_MUTE_CONTROL);
+	if (mute) {
+		data |= 1 << 0;
+		data |= 1 << 1;
+	} else {
+		data &= ~(1 << 0);
+		data &= ~(1 << 1);
+	}
+	PCM9211_Write(PCM9211_REG_6A_MAIN_OUTPUT_AND_AOXOUT_PORT_DATA_MUTE_CONTROL, data);*/
 }
 

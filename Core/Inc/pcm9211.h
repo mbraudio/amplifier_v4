@@ -19,5 +19,6 @@ void PCM9211_Setup(void);
 void PCM9211_Write(const uint8_t reg, const uint8_t data);
 uint8_t PCM9211_Read(const uint8_t reg);
 uint32_t PCM9211_WriteCheck(const uint8_t reg, const uint8_t data);
+void PCM9211_Mute(const uint32_t mute);
 
 #endif /* INC_PCM9211_H_ */
