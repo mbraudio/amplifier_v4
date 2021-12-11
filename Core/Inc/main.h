@@ -181,11 +181,12 @@ void Error_Handler(void);
 #define WM_CS_GPIO_Port GPIOD
 #define DIR_RESET_Pin GPIO_PIN_6
 #define DIR_RESET_GPIO_Port GPIOD
-#define DIR_ERR_Pin GPIO_PIN_7
-#define DIR_ERR_GPIO_Port GPIOD
-#define DIR_ERR_EXTI_IRQn EXTI4_15_IRQn
+#define DIR_ERROR_Pin GPIO_PIN_7
+#define DIR_ERROR_GPIO_Port GPIOD
+#define DIR_ERROR_EXTI_IRQn EXTI4_15_IRQn
 #define DIR_NPCM_Pin GPIO_PIN_3
 #define DIR_NPCM_GPIO_Port GPIOB
+#define DIR_NPCM_EXTI_IRQn EXTI2_3_IRQn
 #define LED_SACD_Pin GPIO_PIN_4
 #define LED_SACD_GPIO_Port GPIOB
 #define LED_NETWORK_Pin GPIO_PIN_5

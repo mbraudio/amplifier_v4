@@ -24,7 +24,7 @@ void DAC_Setup(void)
 	DAC_PCM9211_ErrorHandler();
 }
 
-void DAC_ResetWmSampleRate(void)
+void DAC_ResetWM874xSampleRate(void)
 {
 	WMSampleRate rate;
 	rate = DAC_GetSampleRate();
@@ -33,40 +33,26 @@ void DAC_ResetWmSampleRate(void)
 
 void DAC_PCM9211_ErrorHandler(void)
 {
-	HAL_Delay(20);
-	uint8_t data = PCM9211_Read(PCM9211_REG_2C_INT0_OUTPUT_REGISTER);
-	uint8_t data0 = PCM9211_Read(PCM9211_REG_2C_INT0_OUTPUT_REGISTER);
-	uint8_t data1 = PCM9211_Read(PCM9211_REG_2D_INT1_OUTPUT_REGISTER);
-	if (data & PCM9211_INT0_OERROR0_MASK)
+	uint8_t error = PCM9211_Read(PCM9211_REG_2C_INT0_OUTPUT_REGISTER);
+	if ((error & PCM9211_INT0_OERROR_MASK) && (error & PCM9211_INT0_OFSCHG_MASK))
 	{
-		if ((data & PCM9211_INT0_ONPCM_MASK) || (data & PCM9211_INT0_ODTSCD_MASK))
-		{
-			// MUTE
-			PCM9211_Mute(1);
-		}
-		else
-		{
-			// UNMUTE
-			PCM9211_Mute(0);
-		}
-
-		if (data & PCM9211_INT0_OFSCHG_MASK)
-		{
-			DAC_ResetWmSampleRate();
-		}
+		DAC_ResetWM874xSampleRate();
 	}
-
-	// 0x2C registar se full čudno ponaša !!!
-
-	// Na DTS(AC3 sa filmom) input se dobije 0x8E
-	// Treba napraviti ako se dobije DTS i NPCM da se WM ili PCM MUTA !!!
-	// PCM registar 0x6A - ima mute pa provjeri kako radi !!! PCM9211 dokument strana 97 !!!
-	// Staviti mute ako je DTS ili NPCM detektiran...
 }
 
+static uint32_t cnt0 = 0;
+static uint32_t cnt1 = 0;
 void DAC_PCM9211_NpcmHandler(void)
 {
-	// THIS just never gets triggered...
+	uint8_t npcm = PCM9211_Read(PCM9211_REG_2D_INT1_OUTPUT_REGISTER);
+	if (npcm & PCM9211_INT1_ONPCM_MASK)
+	{
+		cnt1++;
+	}
+	else
+	{
+		cnt0++;
+	}
 }
 
 WMSampleRate DAC_GetSampleRate(void)

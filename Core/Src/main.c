@@ -106,7 +106,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	switch (GPIO_Pin) {
+	switch (GPIO_Pin)
+	{
 		// IR
 		case IR_PIN: {
 			IR_Encode();
@@ -166,17 +167,18 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		} break;
 
 		// PCM9211
+		case PCM9211_NPCM_PIN: {
+			if (system.power.state == On) {
+				dac.npcm = 1;
+			}
+		} break;
+
 		case PCM9211_ERROR_PIN: {
 			if (system.power.state == On) {
 				dac.error = 1;
 			}
 		} break;
 
-		case PCM9211_NPCM_PIN: {
-			if (system.power.state == On) {
-				dac.npcm = 1;
-			}
-		} break;
 	}
 }
 
@@ -945,21 +947,24 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(SEC_POWER_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : DIR_ERR_Pin */
-  GPIO_InitStruct.Pin = DIR_ERR_Pin;
+  /*Configure GPIO pin : DIR_ERROR_Pin */
+  GPIO_InitStruct.Pin = DIR_ERROR_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(DIR_ERR_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(DIR_ERROR_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : DIR_NPCM_Pin */
   GPIO_InitStruct.Pin = DIR_NPCM_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(DIR_NPCM_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI2_3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI2_3_IRQn);
 
   HAL_NVIC_SetPriority(EXTI4_15_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);
