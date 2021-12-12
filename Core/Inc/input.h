@@ -22,7 +22,8 @@ typedef struct
 typedef struct
 {
 	InputData	inputs[INPUT_MAX_SELECTION];
-	uint32_t 	timer;
+	uint32_t 	npcmTimer;
+	uint32_t 	muteTimer;
 } Input;
 
 extern Input input;

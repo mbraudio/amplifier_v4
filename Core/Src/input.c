@@ -54,17 +54,27 @@ void INPUT_Initialize(void)
 	input.inputs[4].value = 4;
 	input.inputs[4].digital = 0;
 
-	input.timer = 0;
+	input.npcmTimer = 0;
+	input.muteTimer = 0;
 }
 
 void INPUT_Process(void)
 {
 	if (system.states.dacNpcmMute)
 	{
-		if (input.timer >= INPUT_LED_MUTE_TOGGLE_TIME) // INPUT_LED_MUTE_TOGGLE_TIME * 10ms = XXXms
+		if (input.npcmTimer >= INPUT_LED_MUTE_TOGGLE_TIME) // INPUT_LED_MUTE_TOGGLE_TIME * 10ms = XXXms
 		{
-			input.timer = 0;
+			input.npcmTimer = 0;
 			LED_Toggle(LED_INPUT_PHONO);
+		}
+	}
+
+	if (system.states.mute)
+	{
+		if (input.muteTimer >= INPUT_LED_MUTE_TOGGLE_TIME) // INPUT_LED_MUTE_TOGGLE_TIME * 10ms = XXXms
+		{
+			input.muteTimer = 0;
+			LED_Toggle(input.inputs[system.settings.input].led);
 		}
 	}
 }
@@ -185,6 +195,7 @@ void INPUT_Mute(const uint32_t status)
 {
 	const GPIO_PinState value = status ? GPIO_PIN_RESET : GPIO_PIN_SET;
 	HAL_GPIO_WritePin(MUTE_DISABLE_GPIO_Port, MUTE_DISABLE_Pin, value);
+	LED_Set(input.inputs[system.settings.input].led, GPIO_PIN_SET);
 	SYSTEM_Mute((uint8_t)status);
 }
 

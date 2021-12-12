@@ -96,7 +96,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		buttons.timer++;
 		encoder.timer++;
 		potentiometers.timer++;
-		input.timer++;
+		input.npcmTimer++;
+		input.muteTimer++;
 		HEARTBEAT_Process();
 	}
 	else if (htim == &htim7)
