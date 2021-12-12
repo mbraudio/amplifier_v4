@@ -40,18 +40,20 @@ void DAC_PCM9211_ErrorHandler(void)
 	}
 }
 
-static uint32_t cnt0 = 0;
-static uint32_t cnt1 = 0;
 void DAC_PCM9211_NpcmHandler(void)
 {
 	uint8_t npcm = PCM9211_Read(PCM9211_REG_2D_INT1_OUTPUT_REGISTER);
-	if (npcm & PCM9211_INT1_ONPCM_MASK)
+	uint32_t enabled = npcm & PCM9211_INT1_ONPCM_MASK;
+	if (HAL_GPIO_ReadPin(DIR_NPCM_GPIO_Port, DIR_NPCM_Pin) == GPIO_PIN_SET)
 	{
-		cnt1++;
+		if (enabled)
+		{
+			WM874X_Mute(1);
+		}
 	}
 	else
 	{
-		cnt0++;
+		WM874X_Mute(0);
 	}
 }
 

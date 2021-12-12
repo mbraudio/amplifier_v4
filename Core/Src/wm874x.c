@@ -48,3 +48,9 @@ uint32_t WM874X_SetSampleRate(const WMSampleRate rate)
 	return WM874X_Write(WM874X_REG_07_MODE_CONTROL_1, reg.value);
 }
 
+void WM874X_Mute(const uint32_t enable)
+{
+	uint8_t data = enable ? 0x08 : 0x00;
+	WM874X_Write(WM874X_REG_04_VOLUME_CONTROL, data);
+}
+

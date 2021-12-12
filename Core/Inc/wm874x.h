@@ -11,3 +11,5 @@ void WM874X_Initialize(SPI_HandleTypeDef* h);
 void WM874X_Setup(void);
 uint32_t WM874X_Write(const uint8_t reg, const uint8_t data);
 uint32_t WM874X_SetSampleRate(const WMSampleRate rate);
+void WM874X_Mute(const uint32_t enable);
+
