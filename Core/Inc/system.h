@@ -34,6 +34,7 @@ typedef struct
 typedef struct
 {
 	uint8_t		mute;
+	uint8_t		dacNpcmMute;
 	uint8_t		protectionTriggeredDc;
 	uint8_t		protectionTriggeredVoltage;
 } __attribute__((packed)) States;

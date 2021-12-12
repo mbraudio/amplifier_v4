@@ -11,6 +11,8 @@
 #include "main.h"
 #include "dac.h"
 
+#define INPUT_LED_MUTE_TOGGLE_TIME		50
+
 Input input;
 
 void INPUT_Set(const InputData* data);
@@ -51,6 +53,20 @@ void INPUT_Initialize(void)
 	input.inputs[4].led = LED_INPUT_RECORDER;
 	input.inputs[4].value = 4;
 	input.inputs[4].digital = 0;
+
+	input.timer = 0;
+}
+
+void INPUT_Process(void)
+{
+	if (system.states.dacNpcmMute)
+	{
+		if (input.timer >= INPUT_LED_MUTE_TOGGLE_TIME) // INPUT_LED_MUTE_TOGGLE_TIME * 10ms = XXXms
+		{
+			input.timer = 0;
+			LED_Toggle(LED_INPUT_PHONO);
+		}
+	}
 }
 
 void INPUT_EnableDAC(void)
@@ -59,11 +75,15 @@ void INPUT_EnableDAC(void)
 	 * - turn on PHONO LED (WHITE LED)
 	 * - enable DAC power
 	*/
-	if (input.inputs[system.settings.input].digital) {
+	if (input.inputs[system.settings.input].digital)
+	{
 		LED_Set(LED_INPUT_PHONO, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(DAC_ENABLE_GPIO_Port, DAC_ENABLE_Pin, GPIO_PIN_SET);
 		DAC_Setup();
-	} else {
+	}
+	else
+	{
+		INPUT_DisableDacNpcmMute();
 		LED_Set(LED_INPUT_PHONO, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(DAC_ENABLE_GPIO_Port, DAC_ENABLE_Pin, GPIO_PIN_RESET);
 	}
@@ -166,6 +186,11 @@ void INPUT_Mute(const uint32_t status)
 	const GPIO_PinState value = status ? GPIO_PIN_RESET : GPIO_PIN_SET;
 	HAL_GPIO_WritePin(MUTE_DISABLE_GPIO_Port, MUTE_DISABLE_Pin, value);
 	SYSTEM_Mute((uint8_t)status);
+}
+
+void INPUT_DisableDacNpcmMute(void)
+{
+	system.states.dacNpcmMute = 0;
 }
 
 

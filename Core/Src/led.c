@@ -101,6 +101,12 @@ void LED_Set(const uint32_t led, const GPIO_PinState state)
 	HAL_GPIO_WritePin(data->gpio, data->pin, state);
 }
 
+void LED_Toggle(const uint32_t led)
+{
+	LedData* data = &ledData[led];
+	HAL_GPIO_TogglePin(data->gpio, data->pin);
+}
+
 /*
 void LED_SetVolume(const uint16_t red, const uint16_t green, const uint16_t blue)
 {

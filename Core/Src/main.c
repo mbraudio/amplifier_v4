@@ -96,6 +96,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		buttons.timer++;
 		encoder.timer++;
 		potentiometers.timer++;
+		input.timer++;
 		HEARTBEAT_Process();
 	}
 	else if (htim == &htim7)
@@ -299,6 +300,7 @@ int main(void)
 	    //CALIBRATOR_Process();
 
 		DAC_Process();
+		INPUT_Process();
 	}
 
 	AMP_ProcessPower();

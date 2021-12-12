@@ -22,9 +22,13 @@ typedef struct
 typedef struct
 {
 	InputData	inputs[INPUT_MAX_SELECTION];
+	uint32_t 	timer;
 } Input;
 
+extern Input input;
+
 void INPUT_Initialize(void);
+void INPUT_Process(void);
 void INPUT_Activate(void);
 void INPUT_Changed(const int32_t direction);
 void INPUT_Confirmed(void);
@@ -33,5 +37,6 @@ void INPUT_InputsOff(void);
 void INPUT_AllOff(void);
 
 void INPUT_Mute(const uint32_t status);
+void INPUT_DisableDacNpcmMute(void);
 
 #endif /* INC_INPUT_H_ */

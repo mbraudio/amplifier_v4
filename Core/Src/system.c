@@ -30,6 +30,7 @@ void SYSTEM_Initialize(void)
 	system.settings.volumeBlue = 10;
 	// States
 	system.states.mute = 0;
+	system.states.dacNpcmMute = 0;
 	system.states.protectionTriggeredDc = 0;
 	system.states.protectionTriggeredVoltage = 0;
 	// Power

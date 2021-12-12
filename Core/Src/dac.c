@@ -5,6 +5,7 @@
  *      Author: Admin
  */
 #include "dac.h"
+#include "system.h"
 #include "main.h"
 
 DAC dac;
@@ -48,11 +49,13 @@ void DAC_PCM9211_NpcmHandler(void)
 	{
 		if (enabled)
 		{
+			system.states.dacNpcmMute = 1;
 			WM874X_Mute(1);
 		}
 	}
 	else
 	{
+		system.states.dacNpcmMute = 0;
 		WM874X_Mute(0);
 	}
 }
