@@ -195,7 +195,10 @@ void INPUT_Mute(const uint32_t status)
 {
 	const GPIO_PinState value = status ? GPIO_PIN_RESET : GPIO_PIN_SET;
 	HAL_GPIO_WritePin(MUTE_DISABLE_GPIO_Port, MUTE_DISABLE_Pin, value);
-	LED_Set(input.inputs[system.settings.input].led, GPIO_PIN_SET);
+	if (!status)
+	{
+		LED_Set(input.inputs[system.settings.input].led, GPIO_PIN_SET);
+	}
 	SYSTEM_Mute((uint8_t)status);
 }
 
