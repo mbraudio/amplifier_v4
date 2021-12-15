@@ -9,14 +9,16 @@
 #define INC_INPUT_H_
 
 #include <stdint.h>
+#include "main.h"
 
 #define INPUT_MAX_SELECTION		5
 
 typedef struct
 {
-	uint16_t led;
-	uint8_t  value;
-	uint8_t  digital;
+	uint16_t 		led;
+	GPIO_TypeDef* 	port;
+	uint16_t		pin;
+	uint8_t  		digital;
 } InputData;
 
 typedef struct
@@ -38,6 +40,5 @@ void INPUT_InputsOff(void);
 void INPUT_AllOff(void);
 
 void INPUT_Mute(const uint32_t status);
-void INPUT_DisableDacNpcmMute(void);
 
 #endif /* INC_INPUT_H_ */

@@ -30,7 +30,7 @@ void SYSTEM_Initialize(void)
 	system.settings.volumeBlue = 10;
 	// States
 	system.states.mute = 0;
-	system.states.dacNpcmMute = 0;
+	system.states.npcmMute = 0;
 	system.states.protectionTriggeredDc = 0;
 	system.states.protectionTriggeredVoltage = 0;
 	// Power
@@ -80,6 +80,11 @@ inline uint8_t SYSTEM_GetBrightness(void)
 inline void SYSTEM_Mute(const uint8_t value)
 {
 	system.states.mute = value;
+}
+
+inline void SYSTEM_NpcmMute(const uint8_t value)
+{
+	system.states.npcmMute = value;
 }
 
 /*

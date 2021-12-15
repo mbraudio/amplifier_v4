@@ -33,26 +33,38 @@ void INPUT_Set(const InputData* data);
 
 void INPUT_Initialize(void)
 {
+	InputData* id;
+
 	// Set values
-	input.inputs[0].led = LED_INPUT_SACD;
-	input.inputs[0].value = 0;
-	input.inputs[0].digital = 1;
+	id = &input.inputs[0];
+	id->led = LED_INPUT_SACD;
+	id->port = INPUT_DAC_GPIO_Port;
+	id->pin = INPUT_DAC_Pin;
+	id->digital = PCM9211_INPUT_RXIN_2;
 
-	input.inputs[1].led = LED_INPUT_NETWORK;
-	input.inputs[1].value = 1;
-	input.inputs[1].digital = 0;
+	id = &input.inputs[1];
+	id->led = LED_INPUT_NETWORK;
+	id->port = INPUT_1_GPIO_Port;
+	id->pin = INPUT_1_Pin;
+	id->digital = 0;
 
-	input.inputs[2].led = LED_INPUT_TUNER;
-	input.inputs[2].value = 2;
-	input.inputs[2].digital = 1;
+	id = &input.inputs[2];
+	id->led = LED_INPUT_TUNER;
+	id->port = INPUT_DAC_GPIO_Port;
+	id->pin = INPUT_DAC_Pin;
+	id->digital = PCM9211_INPUT_RXIN_4;
 
-	input.inputs[3].led = LED_INPUT_AUX;
-	input.inputs[3].value = 3;
-	input.inputs[3].digital = 0;
+	id = &input.inputs[3];
+	id->led = LED_INPUT_AUX;
+	id->port = INPUT_0_GPIO_Port;
+	id->pin = INPUT_0_Pin;
+	id->digital = 0;
 
-	input.inputs[4].led = LED_INPUT_RECORDER;
-	input.inputs[4].value = 4;
-	input.inputs[4].digital = 0;
+	id = &input.inputs[4];
+	id->led = LED_INPUT_RECORDER;
+	id->port = INPUT_2_GPIO_Port;
+	id->pin = INPUT_2_Pin;
+	id->digital = 0;
 
 	input.npcmTimer = 0;
 	input.muteTimer = 0;
@@ -60,15 +72,6 @@ void INPUT_Initialize(void)
 
 void INPUT_Process(void)
 {
-	if (system.states.dacNpcmMute)
-	{
-		if (input.npcmTimer >= INPUT_LED_MUTE_TOGGLE_TIME) // INPUT_LED_MUTE_TOGGLE_TIME * 10ms = XXXms
-		{
-			input.npcmTimer = 0;
-			LED_Toggle(LED_INPUT_PHONO);
-		}
-	}
-
 	if (system.states.mute)
 	{
 		if (input.muteTimer >= INPUT_LED_MUTE_TOGGLE_TIME) // INPUT_LED_MUTE_TOGGLE_TIME * 10ms = XXXms
@@ -77,33 +80,22 @@ void INPUT_Process(void)
 			LED_Toggle(input.inputs[system.settings.input].led);
 		}
 	}
-}
 
-void INPUT_EnableDAC(void)
-{
-	/* For digital input
-	 * - turn on PHONO LED (WHITE LED)
-	 * - enable DAC power
-	*/
-	if (input.inputs[system.settings.input].digital)
+	if (system.states.npcmMute)
 	{
-		LED_Set(LED_INPUT_PHONO, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(DAC_ENABLE_GPIO_Port, DAC_ENABLE_Pin, GPIO_PIN_SET);
-		DAC_Setup();
-	}
-	else
-	{
-		INPUT_DisableDacNpcmMute();
-		LED_Set(LED_INPUT_PHONO, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(DAC_ENABLE_GPIO_Port, DAC_ENABLE_Pin, GPIO_PIN_RESET);
+		if (input.npcmTimer >= INPUT_LED_MUTE_TOGGLE_TIME) // INPUT_LED_MUTE_TOGGLE_TIME * 10ms = XXXms
+		{
+			input.npcmTimer = 0;
+			LED_Toggle(LED_INPUT_PHONO);
+		}
 	}
 }
 
 void INPUT_Activate(void)
 {
-	LED_Set(input.inputs[system.settings.input].led, GPIO_PIN_SET);
-	INPUT_EnableDAC();
-	INPUT_Set(&input.inputs[system.settings.input]);
+	InputData* data = &input.inputs[system.settings.input];
+	LED_Set(data->led, GPIO_PIN_SET);
+	INPUT_Set(data);
 }
 
 void INPUT_Changed(const int32_t direction)
@@ -125,8 +117,8 @@ void INPUT_Changed(const int32_t direction)
 
 void INPUT_Confirmed(void)
 {
-	INPUT_EnableDAC();
-	INPUT_Set(&input.inputs[system.settings.input]);
+	InputData* data = &input.inputs[system.settings.input];
+	INPUT_Set(data);
 	//BLUETOOTH_Send(COMMAND_CHANGE_INPUT, system.settings.input);
 	SYSTEM_Save();
 }
@@ -144,10 +136,12 @@ void INPUT_SetDirect(const uint8_t newIndex)
 
 void INPUT_InputsOff(void)
 {
-	HAL_GPIO_WritePin(INPUT_0_GPIO_Port, INPUT_0_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(INPUT_1_GPIO_Port, INPUT_1_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(INPUT_2_GPIO_Port, INPUT_2_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(INPUT_DAC_GPIO_Port, INPUT_DAC_Pin, GPIO_PIN_RESET);
+	uint32_t i;
+	for (i = 0; i < INPUT_MAX_SELECTION; i++)
+	{
+		InputData* id = &input.inputs[i];
+		HAL_GPIO_WritePin(id->port, id->pin, GPIO_PIN_RESET);
+	}
 }
 
 void INPUT_AllOff(void)
@@ -160,34 +154,26 @@ void INPUT_Set(const InputData* data)
 {
 	INPUT_InputsOff();
 
-	//HAL_Delay(100);
-
-	switch (data->value) {
-		case 0: {
-			// SACD - DIGITAL - OPTICAL 0
-			HAL_GPIO_WritePin(INPUT_DAC_GPIO_Port, INPUT_DAC_Pin, GPIO_PIN_SET);
-		} break;
-
-		case 1: {
-			// NETWORK - ANALOG
-			HAL_GPIO_WritePin(INPUT_1_GPIO_Port, INPUT_1_Pin, GPIO_PIN_SET);
-		} break;
-
-		case 2: {
-			// TUNER - DIGITAL - OPTICAL 1
-			HAL_GPIO_WritePin(INPUT_DAC_GPIO_Port, INPUT_DAC_Pin, GPIO_PIN_SET);
-		} break;
-
-		case 3: {
-			// AUX - ANALOG
-			HAL_GPIO_WritePin(INPUT_0_GPIO_Port, INPUT_0_Pin, GPIO_PIN_SET);
-		} break;
-
-		case 4: {
-			// RECORDER - ANALOG
-			HAL_GPIO_WritePin(INPUT_2_GPIO_Port, INPUT_2_Pin, GPIO_PIN_SET);
-		} break;
+	/* For digital input
+	 * - turn on PHONO LED (WHITE LED)
+	 * - enable DAC power
+	*/
+	if (data->digital)
+	{
+		LED_Set(LED_INPUT_PHONO, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(DAC_ENABLE_GPIO_Port, DAC_ENABLE_Pin, GPIO_PIN_SET);
+		DAC_Setup(data->digital);
+		DAC_ResetWM874xSampleRate();
+		DAC_PCM9211_NpcmHandler();
 	}
+	else
+	{
+		SYSTEM_NpcmMute(0);
+		LED_Set(LED_INPUT_PHONO, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(DAC_ENABLE_GPIO_Port, DAC_ENABLE_Pin, GPIO_PIN_RESET);
+	}
+
+	HAL_GPIO_WritePin(data->port, data->pin, GPIO_PIN_SET);
 }
 
 // MUTE is by default ENABLED. To disable it, set MUTE_DISABLE_Pin to SET!
@@ -201,11 +187,5 @@ void INPUT_Mute(const uint32_t status)
 	}
 	SYSTEM_Mute((uint8_t)status);
 }
-
-void INPUT_DisableDacNpcmMute(void)
-{
-	system.states.dacNpcmMute = 0;
-}
-
 
 

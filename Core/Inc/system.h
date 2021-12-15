@@ -34,7 +34,7 @@ typedef struct
 typedef struct
 {
 	uint8_t		mute;
-	uint8_t		dacNpcmMute;
+	uint8_t		npcmMute;
 	uint8_t		protectionTriggeredDc;
 	uint8_t		protectionTriggeredVoltage;
 } __attribute__((packed)) States;
@@ -91,7 +91,7 @@ uint32_t SYSTEM_Load(void);
 uint8_t SYSTEM_IncreaseBrightness(void);
 uint8_t SYSTEM_GetBrightness(void);
 void SYSTEM_Mute(const uint8_t value);
-
+void SYSTEM_NpcmMute(const uint8_t value);
 //uint16_t SYSTEM_Serialize(uint8_t* buffer);
 
 

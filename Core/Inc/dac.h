@@ -14,7 +14,8 @@
 
 
 void DAC_Initialize(SPI_HandleTypeDef* h);
-void DAC_Setup(void);
+void DAC_Setup(const uint8_t input);
+void DAC_ResetWM874xSampleRate(void);
 void DAC_PCM9211_ErrorHandler(void);
 void DAC_PCM9211_NpcmHandler(void);
 WMSampleRate DAC_GetSampleRate(void);

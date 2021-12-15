@@ -18,11 +18,10 @@ void DAC_Initialize(SPI_HandleTypeDef* h)
 	dac.npcm = 0;
 }
 
-void DAC_Setup(void)
+void DAC_Setup(const uint8_t input)
 {
-	PCM9211_Setup();
+	PCM9211_Setup(input);
 	WM874X_Setup();
-	DAC_PCM9211_ErrorHandler();
 }
 
 void DAC_ResetWM874xSampleRate(void)
@@ -49,13 +48,13 @@ void DAC_PCM9211_NpcmHandler(void)
 	{
 		if (enabled)
 		{
-			system.states.dacNpcmMute = 1;
+			SYSTEM_NpcmMute(1);
 			WM874X_Mute(1);
 		}
 	}
 	else
 	{
-		system.states.dacNpcmMute = 0;
+		SYSTEM_NpcmMute(0);
 		WM874X_Mute(0);
 	}
 }
