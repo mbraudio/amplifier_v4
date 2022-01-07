@@ -270,6 +270,8 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim7);
   HAL_TIM_Base_Start_IT(&htim6);
 
+  HAL_GPIO_WritePin(BT_ENABLE_GPIO_Port, BT_ENABLE_Pin, GPIO_PIN_RESET);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
