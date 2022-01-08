@@ -36,6 +36,7 @@
 #include "amplifier.h"
 #include "mcp23008.h"
 #include "dac.h"
+#include "tmp100.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -98,6 +99,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		potentiometers.timer++;
 		input.npcmTimer++;
 		input.muteTimer++;
+		temperature.timer++;
 		HEARTBEAT_Process();
 	}
 	else if (htim == &htim7)
@@ -265,6 +267,8 @@ int main(void)
   MCP23008_Init(&hi2c1);
   // DAC
   DAC_Initialize(&hspi2);
+  // TMP100
+  TMP100_Init(&hi2c2);
 
   // START TIMERS
   HAL_TIM_Base_Start_IT(&htim7);
@@ -307,6 +311,8 @@ int main(void)
 	}
 
 	AMP_ProcessPower();
+
+	TMP100_Process();
 
     /* USER CODE END WHILE */
 
