@@ -36,8 +36,9 @@ void POTENTIOMETERS_Initialize(void)
 void POTENTIOMETER_Init(Potentiometer* pot, void(*plus)(void), void(*minus)(void), void(*stop)(void), const uint32_t logarithmic, const uint8_t command)
 {
 	pot->current = 0;
-	pot->currentInverse = 0;
+	pot->currentReverse = 0;
 	pot->last = 0;
+	pot->lastReverse = 0;
 	pot->required = 0;
 	pot->active = 0;
 	pot->command = command;
@@ -77,7 +78,7 @@ void POTENTIOMETERS_DisableUpdate(void)
 void POTENTIOMETERS_SetCurrent(const uint8_t volume0, const uint8_t volume1, const uint8_t bass, const uint8_t treble, const uint8_t balance)
 {
 	potentiometers.pots[POT_INDEX_VOLUME].current = volume0;
-	potentiometers.pots[POT_INDEX_VOLUME].currentInverse = volume1;
+	potentiometers.pots[POT_INDEX_VOLUME].currentReverse = volume1;
 	potentiometers.pots[POT_INDEX_BASS].current = bass;
 	potentiometers.pots[POT_INDEX_TREBLE].current = treble;
 	potentiometers.pots[POT_INDEX_BALANCE].current = balance;
@@ -112,10 +113,11 @@ void POTENTIOMETERS_Process(void)
 		for (i = 0; i < POT_SIZE; i++)
 		{
 			Potentiometer* pot = &potentiometers.pots[i];
-			if (pot->last != pot->current)
+			if ((pot->last != pot->current) || (pot->logarithmic && (pot->lastReverse != pot->currentReverse)))
 			{
 				pot->last = pot->current;
-				BLUETOOTH_Send2(pot->command, pot->logarithmic ? POTENTIOMETERS_GetIndexFromValue(pot->last) : pot->last, (uint8_t)pot->active);
+				pot->lastReverse = pot->currentReverse;
+				BLUETOOTH_Send2(pot->command, pot->logarithmic ? POTENTIOMETERS_GetIndexFromValue(pot) : pot->last, (uint8_t)pot->active);
 			}
 		}
 
@@ -139,12 +141,13 @@ void POTENTIOMETERS_Process(void)
 	}
 }
 
-uint8_t POTENTIOMETERS_GetIndexFromValue(const uint8_t value)
+uint8_t POTENTIOMETERS_GetIndexFromValue(Potentiometer* pot)
 {
+	// TODO: Needs data from inverse side... Logarithmic pot has 2 reversed adc channels!
 	uint32_t i;
 	for (i = 0; i < INDEXES; i++)
 	{
-		if (value <= adcValues[i])
+		if (pot->last <= adcValues[i])
 		{
 			return i;
 		}

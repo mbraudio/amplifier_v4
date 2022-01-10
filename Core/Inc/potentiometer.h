@@ -20,9 +20,10 @@
 typedef struct
 {
 	uint8_t 	current;
-	uint8_t 	currentInverse; // Only for logarithmic
+	uint8_t 	currentReverse; // Only for logarithmic
 	uint8_t 	required;
 	uint8_t 	last;
+	uint8_t		lastReverse;
 	uint32_t	active;
 	uint8_t    	command;
 	uint32_t    logarithmic;
@@ -71,7 +72,7 @@ void POTENTIOMETERS_BalanceMinus(void);
 void POTENTIOMETERS_SetCurrent(const uint8_t volume0, const uint8_t volume1, const uint8_t bass, const uint8_t treble, const uint8_t balance);
 void POTENTIOMETERS_Process(void);
 uint8_t POTENTIOMETERS_GetValueFromIndex(const uint8_t index);
-uint8_t POTENTIOMETERS_GetIndexFromValue(const uint8_t value);
+uint8_t POTENTIOMETERS_GetIndexFromValue(Potentiometer* pot);
 
 
 #endif /* INC_POTENTIOMETER_H_ */
