@@ -155,10 +155,6 @@ void Error_Handler(void);
 #define BT_TX_GPIO_Port GPIOA
 #define BT_RX_Pin GPIO_PIN_10
 #define BT_RX_GPIO_Port GPIOA
-#define BT_CTS_Pin GPIO_PIN_11
-#define BT_CTS_GPIO_Port GPIOA
-#define BT_RTS_Pin GPIO_PIN_12
-#define BT_RTS_GPIO_Port GPIOA
 #define LED_HEARTBEAT_Pin GPIO_PIN_15
 #define LED_HEARTBEAT_GPIO_Port GPIOA
 #define BASS_ENABLE_Pin GPIO_PIN_10

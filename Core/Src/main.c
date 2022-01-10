@@ -37,6 +37,7 @@
 #include "mcp23008.h"
 #include "dac.h"
 #include "tmp100.h"
+#include "uart.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -90,6 +91,21 @@ static void MX_TIM7_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	UART_Store();
+	HAL_UART_Receive_IT(&huart1, uartHandler.rxByte, UART_RX_SIZE);
+}
+
+void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
+{
+	/*HAL_UART_DeInit(&huart1);
+	HAL_Delay(10);
+	HAL_UART_Init(&huart1);*/
+	uartHandler.rxDataReady = 0;
+	uartHandler.rxIndex = 0;
+}
+
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim == &htim6)
@@ -269,6 +285,9 @@ int main(void)
   DAC_Initialize(&hspi2);
   // TMP100
   TMP100_Init(&hi2c2);
+  // UART
+  UART_Init(&huart1);
+  HAL_UART_Receive_IT(&huart1, uartHandler.rxByte, UART_RX_SIZE);
 
   // START TIMERS
   HAL_TIM_Base_Start_IT(&htim7);
@@ -284,11 +303,11 @@ int main(void)
   {
 	IR_Process();
 
-	/*if (uartHandler.rxDataReady)
+	if (uartHandler.rxDataReady)
 	{
 		UART_Process();
 		uartHandler.rxDataReady = 0;
-	}*/
+	}
 
 	if (system.power.state == On)
 	{
@@ -819,7 +838,7 @@ static void MX_USART1_UART_Init(void)
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
   huart1.Init.Mode = UART_MODE_TX_RX;
-  huart1.Init.HwFlowCtl = UART_HWCONTROL_RTS_CTS;
+  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart1.Init.OverSampling = UART_OVERSAMPLING_16;
   huart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
   huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;

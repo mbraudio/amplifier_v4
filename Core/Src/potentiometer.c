@@ -8,7 +8,7 @@
 #include "main.h"
 #include "adc.h"
 #include "mcp23008.h"
-//#include "bluetooth.h"
+#include "bluetooth.h"
 
 #define POTENTIOMETERS_UPDATE_TIMEOUT 10 // POTENTIOMETERS_UPDATE_TIMEOUT * 10ms = X ms
 
@@ -86,6 +86,8 @@ void POTENTIOMETERS_SetCurrent(const uint8_t volume0, const uint8_t volume1, con
 
 void POTENTIOMETERS_Process(void)
 {
+	/*
+
 	uint32_t i;
 	for (i = 0; i < POT_SIZE; i++)
 	{
@@ -116,8 +118,7 @@ void POTENTIOMETERS_Process(void)
 			if (pot->last != pot->current)
 			{
 				pot->last = pot->current;
-				// TODO: BT code missing...
-				//BLUETOOTH_Send2(pot->command, pot->logarithmic ? MOTORS_GetIndexFromValue(pot->last) : pot->last, (uint8_t)pot->active);
+				BLUETOOTH_Send2(pot->command, pot->logarithmic ? POTENTIOMETERS_GetIndexFromValue(pot->last) : pot->last, (uint8_t)pot->active);
 			}
 		}
 
@@ -137,8 +138,8 @@ void POTENTIOMETERS_Process(void)
 		}
 		*/
 
-		potentiometers.timer = 0;
-	}
+		//potentiometers.timer = 0; // TODO: I ovo vrati...
+	//}
 }
 
 uint8_t POTENTIOMETERS_GetIndexFromValue(const uint8_t value)

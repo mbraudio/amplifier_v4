@@ -7,7 +7,7 @@
 #include "system.h"
 #include "eeprom.h"
 #include "utilities.h"
-//#include "bluetooth.h"
+#include "bluetooth.h"
 
 #define SETTINGS_SIZE				sizeof(Settings)
 #define SETTINGS_EEPROM_ADDRESS		0
@@ -87,7 +87,6 @@ inline void SYSTEM_NpcmMute(const uint8_t value)
 	system.states.npcmMute = value;
 }
 
-/*
 uint16_t SYSTEM_Serialize(uint8_t* buffer)
 {
 	uint16_t count = 0;
@@ -120,6 +119,5 @@ uint16_t SYSTEM_Serialize(uint8_t* buffer)
 	buffer[count++] = crc;
 	return count;
 }
-*/
 
 

@@ -6,7 +6,6 @@
  */
 #include "amplifier.h"
 #include "system.h"
-//#include "bluetooth.h"
 #include "led.h"
 #include "input.h"
 #include "protection.h"
@@ -14,6 +13,7 @@
 #include "utilities.h"
 #include "potentiometer.h"
 #include "mcp23008.h"
+#include "bluetooth.h"
 
 
 void AMP_SetPowerPin(const GPIO_PinState state)
@@ -96,7 +96,7 @@ void AMP_PowerOff(void)
 	// Disable pots update
 	POTENTIOMETERS_DisableUpdate();
 	// Send system
-	//BLUETOOTH_SendSystem(); //TODO: Add this...
+	BLUETOOTH_SendSystem();
 }
 
 void AMP_PowerToggle(void)
@@ -257,7 +257,7 @@ void AMP_ProcessPower(void)
 				system.power.state = On;
 
 				// Send System
-				//BLUETOOTH_SendSystem(); // TODO: Add this...
+				BLUETOOTH_SendSystem();
 			} break;
 		}
 	}

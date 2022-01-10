@@ -92,7 +92,7 @@ uint8_t SYSTEM_IncreaseBrightness(void);
 uint8_t SYSTEM_GetBrightness(void);
 void SYSTEM_Mute(const uint8_t value);
 void SYSTEM_NpcmMute(const uint8_t value);
-//uint16_t SYSTEM_Serialize(uint8_t* buffer);
+uint16_t SYSTEM_Serialize(uint8_t* buffer);
 
 
 #endif /* INC_SYSTEM_H_ */

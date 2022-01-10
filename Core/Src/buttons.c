@@ -7,7 +7,7 @@
 #include <amplifier.h>
 #include "buttons.h"
 #include "led.h"
-//#include "bluetooth.h"
+#include "bluetooth.h"
 #include "system.h"
 #include "input.h"
 #include "stm32l0xx.h"
@@ -112,7 +112,7 @@ void BUTTONS_ProcessADC_MainGroup(const uint8_t value)
 		if (buttons.direct.state == Pressed)
 		{
 			AMP_SetDirect(!system.settings.direct);
-			//BLUETOOTH_Send(COMMAND_TOGGLE_DIRECT, system.settings.direct); // TODO: Implement...
+			BLUETOOTH_Send(COMMAND_TOGGLE_DIRECT, system.settings.direct);
 			SYSTEM_Save();
 		}
 		else if (buttons.direct.state == Hold)
@@ -160,7 +160,7 @@ void BUTTONS_ProcessADC_MainGroup(const uint8_t value)
 		if (buttons.speakersA.state == Pressed)
 		{
 			AMP_SetSpeakersA(!system.settings.speakersA);
-			//BLUETOOTH_Send(COMMAND_TOGGLE_SPEAKER_A, system.settings.speakersA); // TODO: Implement...
+			BLUETOOTH_Send(COMMAND_TOGGLE_SPEAKER_A, system.settings.speakersA);
 			SYSTEM_Save();
 		}
 		else if (buttons.speakersA.state == Hold)
@@ -208,7 +208,7 @@ void BUTTONS_ProcessADC_MainGroup(const uint8_t value)
 		if (buttons.speakersB.state == Pressed)
 		{
 			AMP_SetSpeakersB(!system.settings.speakersB);
-			//BLUETOOTH_Send(COMMAND_TOGGLE_SPEAKER_B, system.settings.speakersB); // TODO: Implement...
+			BLUETOOTH_Send(COMMAND_TOGGLE_SPEAKER_B, system.settings.speakersB);
 			SYSTEM_Save();
 		}
 		else if (buttons.speakersB.state == Hold)
@@ -256,7 +256,7 @@ void BUTTONS_ProcessADC_MainGroup(const uint8_t value)
 		if (buttons.loudness.state == Pressed)
 		{
 			AMP_SetLoudness(!system.settings.loudness);
-			//BLUETOOTH_Send(COMMAND_TOGGLE_LOUDNESS, system.settings.loudness); // TODO: Implement...
+			BLUETOOTH_Send(COMMAND_TOGGLE_LOUDNESS, system.settings.loudness);
 			SYSTEM_Save();
 		}
 		else if (buttons.loudness.state == Hold)
@@ -313,7 +313,7 @@ void BUTTONS_ProcessADC_SelectorGroup(const uint8_t value)
 		{
 			//LED_Set(LED_INPUT_SELECTOR, system.states.mute);
 			INPUT_Mute(!system.states.mute);
-			//BLUETOOTH_Send(COMMAND_TOGGLE_MUTE, system.states.mute); // TODO: Implement...
+			BLUETOOTH_Send(COMMAND_TOGGLE_MUTE, system.states.mute);
 		}
 		else if (buttons.selector.state == Hold)
 		{
