@@ -234,6 +234,7 @@ void IR_Decode(void)
 				//LED_Set(LED_INPUT_SELECTOR, system.states.mute); //TODO: Missing MUTE notification here...
 				INPUT_Mute(mute);
 				ir.lastCommand = ir.commandToDecode;
+				//BLUETOOTH_Send(COMMAND_TOGGLE_MUTE, system.states.mute);
 			}
 		} break;
 

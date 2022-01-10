@@ -22,16 +22,15 @@ const uint8_t adcValues[INDEXES] = { 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 5, 5, 6, 6, 7
 
 void POTENTIOMETER_Init(Potentiometer* pot, void(*plus)(void), void(*minus)(void), void(*stop)(void), const uint32_t logarithmic, const uint8_t command);
 
-// TODO: Needs Bluetooth and correct pot rotation implementation !!!
 void POTENTIOMETERS_Initialize(void)
 {
 	potentiometers.activeIR = 0;
 	potentiometers.update = 0;
 	potentiometers.timer = 0;
-	//POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_VOLUME], POTENTIOMETERS_VolumePlus, POTENTIOMETERS_VolumeMinus, POTENTIOMETERS_Stop, 1, COMMAND_UPDATE_VOLUME_VALUE);
-	//POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_BASS], MOTORS_BassPlus, MOTORS_BassMinus, POTENTIOMETERS_Stop, 0, COMMAND_UPDATE_BASS_VALUE);
-	//POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_TREBLE], MOTORS_TreblePlus, MOTORS_TrebleMinus, POTENTIOMETERS_Stop, 0, COMMAND_UPDATE_TREBLE_VALUE);
-	//POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_BALANCE], MOTORS_BalancePlus, MOTORS_BalanceMinus, POTENTIOMETERS_Stop, 0, COMMAND_UPDATE_BALANCE_VALUE);
+	POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_VOLUME], POTENTIOMETERS_VolumePlus, POTENTIOMETERS_VolumeMinus, POTENTIOMETERS_Stop, 1, COMMAND_UPDATE_VOLUME_VALUE);
+	POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_BASS], POTENTIOMETERS_BassPlus, POTENTIOMETERS_BassMinus, POTENTIOMETERS_Stop, 0, COMMAND_UPDATE_BASS_VALUE);
+	POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_TREBLE], POTENTIOMETERS_TreblePlus, POTENTIOMETERS_TrebleMinus, POTENTIOMETERS_Stop, 0, COMMAND_UPDATE_TREBLE_VALUE);
+	POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_BALANCE], POTENTIOMETERS_BalancePlus, POTENTIOMETERS_BalanceMinus, POTENTIOMETERS_Stop, 0, COMMAND_UPDATE_BALANCE_VALUE);
 }
 
 void POTENTIOMETER_Init(Potentiometer* pot, void(*plus)(void), void(*minus)(void), void(*stop)(void), const uint32_t logarithmic, const uint8_t command)
@@ -86,8 +85,6 @@ void POTENTIOMETERS_SetCurrent(const uint8_t volume0, const uint8_t volume1, con
 
 void POTENTIOMETERS_Process(void)
 {
-	/*
-
 	uint32_t i;
 	for (i = 0; i < POT_SIZE; i++)
 	{
@@ -138,8 +135,8 @@ void POTENTIOMETERS_Process(void)
 		}
 		*/
 
-		//potentiometers.timer = 0; // TODO: I ovo vrati...
-	//}
+		potentiometers.timer = 0;
+	}
 }
 
 uint8_t POTENTIOMETERS_GetIndexFromValue(const uint8_t value)
@@ -168,7 +165,7 @@ void POTENTIOMETERS_Stop(void)
 void POTENTIOMETERS_StopIr(void)
 {
 	potentiometers.activeIR = 0;
-	POTENTIOMETERS_Stop();
+	MCP23008_Stop();
 }
 
 // VOLUME
