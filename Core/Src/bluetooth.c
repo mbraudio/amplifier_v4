@@ -11,7 +11,7 @@
 #include "input.h"
 #include "system.h"
 #include "potentiometer.h"
-//#include "calibrator.h"
+#include "calibrator.h"
 
 void BLUETOOTH_Process(const uint8_t* data, const uint32_t size)
 {
@@ -123,7 +123,7 @@ void BLUETOOTH_Process(const uint8_t* data, const uint32_t size)
 
 		case COMMAND_CALIBRATE:
 		{
-			//CALIBRATOR_Start(data[1], data[2]);
+			CALIBRATOR_Start(data[1], data[2]);
 		} break;
 	}
 }

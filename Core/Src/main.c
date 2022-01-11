@@ -38,6 +38,7 @@
 #include "dac.h"
 #include "tmp100.h"
 #include "uart.h"
+#include "calibrator.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -288,6 +289,8 @@ int main(void)
   // UART
   UART_Init(&huart1);
   HAL_UART_Receive_IT(&huart1, uartHandler.rxByte, UART_RX_SIZE);
+  // CALIBRATOR
+  CALIBRATOR_Initialize();
 
   // START TIMERS
   HAL_TIM_Base_Start_IT(&htim7);
@@ -323,7 +326,7 @@ int main(void)
 			POTENTIOMETERS_SetCurrent(adc.data[0], adc.data[1], adc.data[4], adc.data[3], adc.data[2]);
 		}
 
-	    //CALIBRATOR_Process();
+	    CALIBRATOR_Process();
 
 		DAC_Process();
 		INPUT_Process();
