@@ -17,14 +17,18 @@ void MCP23008_Stop(void);
 
 void MCP23008_VolumePlus(void);
 void MCP23008_VolumeMinus(void);
+void MCP23008_VolumeStop(void);
 
 void MCP23008_BalancePlus(void);
 void MCP23008_BalanceMinus(void);
+void MCP23008_BalanceStop(void);
 
 void MCP23008_TreblePlus(void);
 void MCP23008_TrebleMinus(void);
+void MCP23008_TrebleStop(void);
 
 void MCP23008_BassPlus(void);
 void MCP23008_BassMinus(void);
+void MCP23008_BassStop(void);
 
 #endif /* INC_MCP23008_H_ */

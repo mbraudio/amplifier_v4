@@ -28,15 +28,16 @@ void POTENTIOMETERS_Initialize(void)
 	potentiometers.activeIR = 0;
 	potentiometers.update = 0;
 	potentiometers.timer = 0;
-	POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_VOLUME], POTENTIOMETERS_VolumePlus, POTENTIOMETERS_VolumeMinus, POTENTIOMETERS_Stop, 1, COMMAND_UPDATE_VOLUME_VALUE);
-	POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_BASS], POTENTIOMETERS_BassPlus, POTENTIOMETERS_BassMinus, POTENTIOMETERS_Stop, 0, COMMAND_UPDATE_BASS_VALUE);
-	POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_TREBLE], POTENTIOMETERS_TreblePlus, POTENTIOMETERS_TrebleMinus, POTENTIOMETERS_Stop, 0, COMMAND_UPDATE_TREBLE_VALUE);
-	POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_BALANCE], POTENTIOMETERS_BalancePlus, POTENTIOMETERS_BalanceMinus, POTENTIOMETERS_Stop, 0, COMMAND_UPDATE_BALANCE_VALUE);
+	POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_VOLUME], POTENTIOMETERS_VolumePlus, POTENTIOMETERS_VolumeMinus, POTENTIOMETERS_VolumeStop, 1, COMMAND_UPDATE_VOLUME_VALUE);
+	POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_BASS], POTENTIOMETERS_BassPlus, POTENTIOMETERS_BassMinus, POTENTIOMETERS_BassStop, 0, COMMAND_UPDATE_BASS_VALUE);
+	POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_TREBLE], POTENTIOMETERS_TreblePlus, POTENTIOMETERS_TrebleMinus, POTENTIOMETERS_TrebleStop, 0, COMMAND_UPDATE_TREBLE_VALUE);
+	POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_BALANCE], POTENTIOMETERS_BalancePlus, POTENTIOMETERS_BalanceMinus, POTENTIOMETERS_BalanceStop, 0, COMMAND_UPDATE_BALANCE_VALUE);
 }
 
 void POTENTIOMETER_Init(Potentiometer* pot, void(*plus)(void), void(*minus)(void), void(*stop)(void), const uint32_t logarithmic, const uint8_t command)
 {
 	pot->current = 0;
+	pot->actual = 0;
 	pot->currentReverse = 0;
 	pot->last = 0;
 	pot->lastReverse = 0;
@@ -98,6 +99,7 @@ void POTENTIOMETERS_SetValue(const uint32_t index, const uint8_t value)
 	}
 
 	pot->current = sum / POT_MAX_VALUES;
+	pot->actual = value;
 }
 
 void POTENTIOMETERS_SetCurrent(const uint8_t volume0, const uint8_t volume1, const uint8_t bass, const uint8_t treble, const uint8_t balance)
@@ -117,11 +119,11 @@ void POTENTIOMETERS_Process(void)
 		Potentiometer* pot = &potentiometers.pots[i];
 		if (pot->active)
 		{
-			if (pot->required > pot->current)
+			if (pot->required > pot->actual)
 			{
 				pot->plusFunction();
 			}
-			else if (pot->required < pot->current)
+			else if (pot->required < pot->actual)
 			{
 				pot->minusFunction();
 			}
@@ -148,12 +150,15 @@ void POTENTIOMETERS_Process(void)
 			}
 			else
 			{
-				pot->lastCount++;
-				if (pot->active && (pot->lastCount > POT_LAST_COUNT_MAX))
+				if (pot->active)
 				{
-					pot->stopFunction();
-					pot->active = 0;
-					pot->lastCount = 0;
+					pot->lastCount++;
+					if (pot->lastCount > POT_LAST_COUNT_MAX)
+					{
+						pot->stopFunction();
+						pot->active = 0;
+						pot->lastCount = 0;
+					}
 				}
 			}
 		}
@@ -214,6 +219,11 @@ void POTENTIOMETERS_VolumeMinusIr(void)
 	POTENTIOMETERS_VolumeMinus();
 }
 
+void POTENTIOMETERS_VolumeStop(void)
+{
+	MCP23008_VolumeStop();
+}
+
 // BASS
 void POTENTIOMETERS_BassPlus(void)
 {
@@ -225,6 +235,11 @@ void POTENTIOMETERS_BassMinus(void)
 {
 	potentiometers.activeIR = 1;
 	MCP23008_BassMinus();
+}
+
+void POTENTIOMETERS_BassStop(void)
+{
+	MCP23008_BassStop();
 }
 
 // TREBLE
@@ -240,6 +255,11 @@ void POTENTIOMETERS_TrebleMinus(void)
 	MCP23008_TrebleMinus();
 }
 
+void POTENTIOMETERS_TrebleStop(void)
+{
+	MCP23008_TrebleStop();
+}
+
 // BALANCE
 void POTENTIOMETERS_BalancePlus(void)
 {
@@ -251,4 +271,9 @@ void POTENTIOMETERS_BalanceMinus(void)
 {
 	potentiometers.activeIR = 1;
 	MCP23008_BalanceMinus();
+}
+
+void POTENTIOMETERS_BalanceStop(void)
+{
+	MCP23008_BalanceStop();
 }
