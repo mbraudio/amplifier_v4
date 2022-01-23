@@ -48,12 +48,10 @@ void POTENTIOMETER_Init(Potentiometer* pot, void(*plus)(void), void(*minus)(void
 	pot->minusFunction = minus;
 	pot->stopFunction = stop;
 	pot->lastCount = 0;
-	pot->value0 = 0;
-	pot->value1 = 0;
-	pot->value2 = 0;
-	pot->value3 = 0;
-	pot->value4 = 0;
-	pot->value5 = 0;
+	for (uint32_t i = 0; i < POT_MAX_VALUES; i++)
+	{
+		pot->values[i] = 0;
+	}
 }
 
 void POTENTIOMETERS_Start(const uint8_t potIndex, const uint8_t index)
@@ -85,15 +83,21 @@ void POTENTIOMETERS_DisableUpdate(void)
 
 void POTENTIOMETERS_SetValue(const uint32_t index, const uint8_t value)
 {
+	uint32_t sum = 0;
+	uint32_t i;
+
 	Potentiometer* pot = &potentiometers.pots[index];
-	pot->value0 = pot->value1;
-	pot->value1 = pot->value2;
-	pot->value2 = pot->value3;
-	pot->value3 = pot->value4;
-	pot->value4 = pot->value5;
-	pot->value5 = value;
-	uint32_t sum = pot->value0 + pot->value1 + pot->value2 + pot->value3 + pot->value4 + pot->value5;
-	pot->current = sum / 6;
+
+	for (i = 0; i < POT_MAX_VALUES - 1; i++) {
+		pot->values[i] = pot->values[i + 1];
+	}
+	pot->values[POT_MAX_VALUES - 1] = value;
+
+	for (i = 0; i < POT_MAX_VALUES; i++) {
+		sum += pot->values[i];
+	}
+
+	pot->current = sum / POT_MAX_VALUES;
 }
 
 void POTENTIOMETERS_SetCurrent(const uint8_t volume0, const uint8_t volume1, const uint8_t bass, const uint8_t treble, const uint8_t balance)

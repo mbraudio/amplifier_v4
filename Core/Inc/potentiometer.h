@@ -17,16 +17,12 @@
 #define POT_INDEX_TREBLE 	2
 #define POT_INDEX_BALANCE 	3
 
-#define POT_LAST_COUNT_MAX 	6
+#define POT_LAST_COUNT_MAX  6
+#define POT_MAX_VALUES 		8
 
 typedef struct
 {
-	uint8_t		value0;
-	uint8_t		value1;
-	uint8_t		value2;
-	uint8_t		value3;
-	uint8_t		value4;
-	uint8_t		value5;
+	uint8_t		values[POT_MAX_VALUES];
 	uint8_t 	current;
 	uint8_t 	currentReverse; // Only for logarithmic
 	uint8_t 	required;
