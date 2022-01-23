@@ -21,6 +21,12 @@
 
 typedef struct
 {
+	uint8_t		value0;
+	uint8_t		value1;
+	uint8_t		value2;
+	uint8_t		value3;
+	uint8_t		value4;
+	uint8_t		value5;
 	uint8_t 	current;
 	uint8_t 	currentReverse; // Only for logarithmic
 	uint8_t 	required;
@@ -40,6 +46,7 @@ typedef struct
 	uint32_t		activeIR;
 	uint32_t		timer;
 	uint32_t		update;
+	uint32_t		updateIndex;
 	Potentiometer	pots[NUMBER_OF_POTS];
 } Potentiometers;
 

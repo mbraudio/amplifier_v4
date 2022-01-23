@@ -48,6 +48,12 @@ void POTENTIOMETER_Init(Potentiometer* pot, void(*plus)(void), void(*minus)(void
 	pot->minusFunction = minus;
 	pot->stopFunction = stop;
 	pot->lastCount = 0;
+	pot->value0 = 0;
+	pot->value1 = 0;
+	pot->value2 = 0;
+	pot->value3 = 0;
+	pot->value4 = 0;
+	pot->value5 = 0;
 }
 
 void POTENTIOMETERS_Start(const uint8_t potIndex, const uint8_t index)
@@ -77,13 +83,26 @@ void POTENTIOMETERS_DisableUpdate(void)
 	potentiometers.update = 0;
 }
 
+void POTENTIOMETERS_SetValue(const uint32_t index, const uint8_t value)
+{
+	Potentiometer* pot = &potentiometers.pots[index];
+	pot->value0 = pot->value1;
+	pot->value1 = pot->value2;
+	pot->value2 = pot->value3;
+	pot->value3 = pot->value4;
+	pot->value4 = pot->value5;
+	pot->value5 = value;
+	uint32_t sum = pot->value0 + pot->value1 + pot->value2 + pot->value3 + pot->value4 + pot->value5;
+	pot->current = sum / 6;
+}
+
 void POTENTIOMETERS_SetCurrent(const uint8_t volume0, const uint8_t volume1, const uint8_t bass, const uint8_t treble, const uint8_t balance)
 {
-	potentiometers.pots[POT_INDEX_VOLUME].current = volume0;
+	POTENTIOMETERS_SetValue(POT_INDEX_VOLUME, volume0);
 	potentiometers.pots[POT_INDEX_VOLUME].currentReverse = volume1;
-	potentiometers.pots[POT_INDEX_BASS].current = bass;
-	potentiometers.pots[POT_INDEX_TREBLE].current = treble;
-	potentiometers.pots[POT_INDEX_BALANCE].current = balance;
+	POTENTIOMETERS_SetValue(POT_INDEX_BASS, bass);
+	POTENTIOMETERS_SetValue(POT_INDEX_TREBLE, treble);
+	POTENTIOMETERS_SetValue(POT_INDEX_BALANCE, balance);
 }
 
 void POTENTIOMETERS_Process(void)
