@@ -17,6 +17,8 @@
 #define POT_INDEX_TREBLE 	2
 #define POT_INDEX_BALANCE 	3
 
+#define POT_LAST_COUNT_MAX 	6
+
 typedef struct
 {
 	uint8_t 	current;
@@ -27,6 +29,7 @@ typedef struct
 	uint32_t	active;
 	uint8_t    	command;
 	uint32_t    logarithmic;
+	uint8_t		lastCount;
 	void(*plusFunction)(void);
 	void(*minusFunction)(void);
 	void(*stopFunction)(void);

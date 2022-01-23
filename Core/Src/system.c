@@ -25,9 +25,6 @@ void SYSTEM_Initialize(void)
 	system.settings.speakersB = 0;
 	system.settings.input = 0;
 	system.settings.brightnessIndex = 1;
-	system.settings.volumeRed = 0;
-	system.settings.volumeGreen = 0;
-	system.settings.volumeBlue = 10;
 	// States
 	system.states.mute = 0;
 	system.states.npcmMute = 0;
@@ -106,12 +103,6 @@ uint16_t SYSTEM_Serialize(uint8_t* buffer)
 	crc += system.settings.input;
 	buffer[count++] = system.settings.brightnessIndex;
 	crc += system.settings.brightnessIndex;
-	buffer[count++] = system.settings.volumeRed;
-	crc += system.settings.volumeRed;
-	buffer[count++] = system.settings.volumeGreen;
-	crc += system.settings.volumeGreen;
-	buffer[count++] = system.settings.volumeBlue;
-	crc += system.settings.volumeBlue;
 	buffer[count++] = system.power.state;
 	crc += system.power.state;
 	buffer[count++] = system.states.mute;

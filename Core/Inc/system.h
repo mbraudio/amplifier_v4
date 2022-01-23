@@ -24,9 +24,6 @@ typedef struct
 	uint8_t		speakersA:1;
 	uint8_t		speakersB:1;
 	uint8_t 	input:3;
-	uint8_t 	volumeRed;
-	uint8_t 	volumeGreen;
-	uint8_t 	volumeBlue;
 	uint8_t 	brightnessIndex;
 	uint8_t		crc;
 } __attribute__((packed)) Settings;

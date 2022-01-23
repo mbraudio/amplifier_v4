@@ -19,6 +19,8 @@ Potentiometers potentiometers;
 const uint8_t adcNormal[INDEXES] = { 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 7, 7, 7, 8, 8, 9, 9, 10, 10, 11, 12, 13, 13, 14, 15, 16, 16, 17, 18, 19, 20, 21, 22, 22, 23, 24, 25, 26, 27, 28, 28, 29, 30, 31, 32, 32, 33, 34, 35, 36, 36, 37, 38, 38, 39, 40, 41, 41, 42, 43, 44, 44, 45, 46, 47, 47, 48, 49, 50, 51, 51, 52, 53, 54, 55, 56, 58, 59, 61, 62, 64, 65, 67, 69, 71, 73, 74, 76, 79, 81, 84, 87, 89, 92, 95, 99, 102, 106, 109, 113, 117, 121, 123, 128, 131, 135, 139, 143, 147, 151, 155, 160, 164, 170, 175, 179, 184, 191, 197, 204, 210, 217, 224, 233, 245, 253, 255, 255, 0,  };
 //const uint8_t adcReversed[INDEXES] = { 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 254, 253, 252, 249, 248, 247, 245, 244, 243, 241, 240, 239, 237, 236, 234, 232, 231, 229, 227, 226, 225, 223, 221, 220, 219, 217, 216, 215, 213, 211, 210, 209, 207, 207, 205, 204, 202, 201, 200, 199, 197, 196, 195, 193, 192, 191, 190, 188, 187, 186, 185, 184, 182, 181, 180, 179, 178, 177, 175, 174, 173, 171, 169, 167, 164, 162, 160, 157, 155, 152, 150, 148, 142, 140, 137, 134, 131, 128, 124, 121, 118, 115, 112, 108, 104, 101, 97, 94, 91, 87, 84, 81, 78, 75, 72, 69, 65, 63, 59, 57, 53, 50, 46, 43, 40, 37, 33, 30, 26, 22, 18, 14, 9, 7, 0,  };
 
+
+
 void POTENTIOMETER_Init(Potentiometer* pot, void(*plus)(void), void(*minus)(void), void(*stop)(void), const uint32_t logarithmic, const uint8_t command);
 
 void POTENTIOMETERS_Initialize(void)
@@ -45,6 +47,7 @@ void POTENTIOMETER_Init(Potentiometer* pot, void(*plus)(void), void(*minus)(void
 	pot->plusFunction = plus;
 	pot->minusFunction = minus;
 	pot->stopFunction = stop;
+	pot->lastCount = 0;
 }
 
 void POTENTIOMETERS_Start(const uint8_t potIndex, const uint8_t index)
@@ -112,11 +115,23 @@ void POTENTIOMETERS_Process(void)
 		for (i = 0; i < POT_SIZE; i++)
 		{
 			Potentiometer* pot = &potentiometers.pots[i];
-			if ((pot->last != pot->current) || (pot->logarithmic && (pot->lastReverse != pot->currentReverse)))
+			//if ((pot->last != pot->current) || (pot->logarithmic && (pot->lastReverse != pot->currentReverse)))
+			if (pot->last != pot->current)
 			{
 				pot->last = pot->current;
-				pot->lastReverse = pot->currentReverse;
+				pot->lastCount = 0;
+				//pot->lastReverse = pot->currentReverse;
 				BLUETOOTH_Send2(pot->command, pot->logarithmic ? POTENTIOMETERS_GetIndexFromValue(pot) : pot->last, (uint8_t)pot->active);
+			}
+			else
+			{
+				pot->lastCount++;
+				if (pot->active && (pot->lastCount > POT_LAST_COUNT_MAX))
+				{
+					pot->stopFunction();
+					pot->active = 0;
+					pot->lastCount = 0;
+				}
 			}
 		}
 
