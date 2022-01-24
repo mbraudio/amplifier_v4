@@ -99,13 +99,13 @@ uint16_t SYSTEM_Serialize(uint8_t* buffer)
 	crc += system.settings.speakersA;
 	buffer[count++] = system.settings.speakersB; // 5
 	crc += system.settings.speakersB;
-	buffer[count++] = system.settings.input;
+	buffer[count++] = system.settings.input; // 6
 	crc += system.settings.input;
-	buffer[count++] = system.settings.brightnessIndex;
+	buffer[count++] = system.settings.brightnessIndex; // 7
 	crc += system.settings.brightnessIndex;
-	buffer[count++] = system.power.state;
+	buffer[count++] = system.power.state; // 8
 	crc += system.power.state;
-	buffer[count++] = system.states.mute;
+	buffer[count++] = system.states.mute; // 9
 	crc += system.states.mute;
 	buffer[count++] = crc;
 	return count;

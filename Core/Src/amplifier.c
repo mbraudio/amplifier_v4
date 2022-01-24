@@ -238,12 +238,6 @@ void AMP_ProcessPower(void)
 
 			case FinalPhase:
 			{
-				// Set led volume
-				//LED_SetVolume(system.settings.volumeRed, system.settings.volumeGreen, system.settings.volumeBlue);
-
-				// Enable motors update
-				POTENTIOMETERS_EnableUpdate();
-
 				// Unmute
 				INPUT_Mute(0);
 
@@ -252,6 +246,11 @@ void AMP_ProcessPower(void)
 
 				// Send System
 				BLUETOOTH_SendSystem();
+
+				HAL_Delay(20);
+
+				// Enable motors update
+				POTENTIOMETERS_EnableUpdate();
 			} break;
 		}
 	}
