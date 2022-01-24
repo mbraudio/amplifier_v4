@@ -42,7 +42,7 @@ void BLUETOOTH_Process(const uint8_t* data, const uint32_t size)
 
 		case COMMAND_TOGGLE_MUTE:
 		{
-			AMP_MuteToggle();
+			INPUT_Mute(data[1]);
 			BLUETOOTH_Send(command, system.states.mute);
 		} break;
 

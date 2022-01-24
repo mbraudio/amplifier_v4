@@ -70,7 +70,7 @@ void POTENTIOMETERS_EnableUpdate(void)
 	uint32_t i;
 	for (i = 0; i < POT_SIZE; i++)
 	{
-		potentiometers.pots[i].last = 0;
+		potentiometers.pots[i].last = 0xFFFFFFFF;
 	}
 
 	// Enable or disable updates

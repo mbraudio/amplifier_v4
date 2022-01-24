@@ -13,9 +13,6 @@
 
 void AMP_SetPowerPin(const GPIO_PinState state);
 
-// Mute
-void AMP_MuteToggle(void);
-
 // Speakers
 void AMP_SetSpeakersA(const uint8_t state);
 void AMP_SetSpeakersB(const uint8_t state);

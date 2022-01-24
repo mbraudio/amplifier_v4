@@ -21,12 +21,6 @@ void AMP_SetPowerPin(const GPIO_PinState state)
 	HAL_GPIO_WritePin(POWER_ENABLE_GPIO_Port, POWER_ENABLE_Pin, state);
 }
 
-void AMP_MuteToggle(void)
-{
-	INPUT_Mute(!system.states.mute);
-	//LED_Set(LED_INPUT_SELECTOR, system.states.mute);
-}
-
 // Speakers A
 void AMP_SetSpeakersA(const uint8_t state)
 {

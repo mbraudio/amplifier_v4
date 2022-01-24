@@ -24,10 +24,10 @@ typedef struct
 {
 	uint8_t		values[POT_MAX_VALUES];
 	uint8_t 	actual;
-	uint8_t 	current;
+	uint32_t 	current;
 	uint8_t 	currentReverse; // Only for logarithmic
 	uint8_t 	required;
-	uint8_t 	last;
+	uint32_t 	last;
 	uint8_t		lastReverse;
 	uint32_t	active;
 	uint8_t    	command;
