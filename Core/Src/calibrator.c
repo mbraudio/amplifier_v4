@@ -39,7 +39,7 @@ void CALIBRATOR_Process(void)
 			if (adc.dataReady)
 			{
 				calibrationManager.data[calibrationManager.current++] = adc.data[calibrationManager.channel];
-				POTENTIOMETERS_VolumeMinus();
+				POTENTIOMETERS_VolumePlus();
 				HAL_Delay(calibrationManager.delay);
 				POTENTIOMETERS_Stop();
 			}

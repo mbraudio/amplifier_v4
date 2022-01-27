@@ -44,6 +44,7 @@ void LED_Set(const uint32_t led, const GPIO_PinState state);
 void LED_Toggle(const uint32_t led);
 void LED_Standby(const GPIO_PinState state);
 //void LED_SetVolume(const uint16_t red, const uint16_t green, const uint16_t blue);
+void LED_SetVolumePotentiometerLed(const uint8_t brightness);
 void LED_AllOff(void);
 
 #endif /* INC_LED_H_ */

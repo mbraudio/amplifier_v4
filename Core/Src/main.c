@@ -298,6 +298,8 @@ int main(void)
 
   HAL_GPIO_WritePin(BT_ENABLE_GPIO_Port, BT_ENABLE_Pin, GPIO_PIN_RESET); // BT ENABLED !!!
 
+  //LED_SetVolumePotentiometerLed(127);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -330,11 +332,11 @@ int main(void)
 
 		DAC_Process();
 		INPUT_Process();
+
+		TMP100_Process();
 	}
 
 	AMP_ProcessPower();
-
-	TMP100_Process();
 
     /* USER CODE END WHILE */
 
@@ -697,7 +699,7 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 2;
+  htim3.Init.Prescaler = 128;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim3.Init.Period = 255;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -724,7 +726,7 @@ static void MX_TIM3_Init(void)
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
   sConfigOC.Pulse = 127;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  sConfigOC.OCFastMode = TIM_OCFAST_ENABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
   {
     Error_Handler();

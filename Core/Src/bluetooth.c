@@ -106,19 +106,15 @@ void BLUETOOTH_Process(const uint8_t* data, const uint32_t size)
 			POTENTIOMETERS_Start(POT_INDEX_BALANCE, data[1]);
 		} break;
 
+		case COMMAND_UPDATE_TEMPERATURE:
+		{
+
+		} break;
+
 		case COMMAND_BRIGHTNESS_INDEX:
 		{
 			system.settings.brightnessIndex = data[1];
 			LED_SetBrightness(systemValues.brightness[system.settings.brightnessIndex]);
-		} break;
-
-		case COMMAND_VOLUME_LED_VALUES:
-		{
-			/*system.settings.volumeRed = data[1];
-			system.settings.volumeGreen = data[2];
-			system.settings.volumeBlue = data[3];
-			LED_SetVolume(system.settings.volumeRed, system.settings.volumeGreen, system.settings.volumeBlue);
-			SYSTEM_Save();*/
 		} break;
 
 		case COMMAND_CALIBRATE:

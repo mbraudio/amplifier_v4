@@ -5,8 +5,10 @@
  *      Author: Admin
  */
 #include "tmp100.h"
+#include "bluetooth.h"
 
 #define TMP100_TIMEOUT 100
+#define TMP100_READ_TIME 200 // x 10ms = XXX
 
 I2C_HandleTypeDef* thi2c;
 Temperature temperature;
@@ -50,9 +52,10 @@ void TMP100_ReadTemperatures(void)
 
 void TMP100_Process(void)
 {
-	if (temperature.timer > 1)
+	if (temperature.timer > TMP100_READ_TIME)
 	{
 		temperature.timer = 0;
 		TMP100_ReadTemperatures();
+		BLUETOOTH_Send2(COMMAND_UPDATE_TEMPERATURE, temperature.rightChannel, temperature.leftChannel);
 	}
 }
