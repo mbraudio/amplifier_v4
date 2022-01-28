@@ -8,7 +8,7 @@
 #include "bluetooth.h"
 
 #define TMP100_TIMEOUT 100
-#define TMP100_READ_TIME 200 // x 10ms = XXX
+#define TMP100_READ_TIME 300 // x 10ms = XXX
 
 I2C_HandleTypeDef* thi2c;
 Temperature temperature;
