@@ -53,6 +53,14 @@ void AMP_SetLoudness(const uint8_t state)
 	HAL_GPIO_WritePin(BASS_ENABLE_GPIO_Port, BASS_ENABLE_Pin, (GPIO_PinState)system.settings.loudness);
 }
 
+// VOLUME LED
+void AMP_EnableVolumeLed(const uint8_t state)
+{
+	SYSTEM_EnableVolumeLed(state);
+	LED_SetVolumeLed(systemValues.brightness[system.settings.brightnessIndex], system.settings.volumeLed);
+}
+
+// POWER
 void AMP_GoToPowerOff(void)
 {
 	system.power.state = PoweringOff;
@@ -186,7 +194,9 @@ void AMP_ProcessPower(void)
 
 			case LedPhase:
 			{
-				LED_SetBrightness(systemValues.brightness[system.settings.brightnessIndex]);
+				uint8_t brightness = systemValues.brightness[system.settings.brightnessIndex];
+				LED_SetBrightness(brightness);
+				LED_SetVolumeLed(brightness, system.settings.volumeLed);
 				LED_Set(LED_POWER, GPIO_PIN_SET);
 				HAL_Delay(200);
 

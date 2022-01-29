@@ -98,7 +98,9 @@ void IR_Decode(void)
 			if (ir.lastCommand != ir.commandToDecode)
 			{
 				ir.ignoreTime = IR_IGNORE_TIME_DIMMER;
-				LED_SetBrightness(SYSTEM_IncreaseBrightness());
+				uint8_t brightness = SYSTEM_IncreaseBrightness();
+				LED_SetBrightness(brightness);
+				LED_SetVolumeLed(brightness, system.settings.volumeLed);
 				ir.lastCommand = ir.commandToDecode;
 			}
 		} break;

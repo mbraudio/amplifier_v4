@@ -70,6 +70,7 @@ void LED_Initialize(TIM_HandleTypeDef* h)
 
 	LED_AllOff();
 	LED_SetBrightness(LED_DEFAULT_BRIGHTNESS);
+	LED_SetVolumeLed(LED_DEFAULT_BRIGHTNESS, 0);
 }
 
 void LED_SetBrightness(const uint8_t brightness)
@@ -88,8 +89,6 @@ void LED_SetBrightness(const uint8_t brightness)
 	}
 
 	HAL_TIM_PWM_Start(bhtim, TIM_CHANNEL_1);
-
-	LED_SetVolumePotentiometerLed(brightness);
 }
 
 inline void LED_Standby(const GPIO_PinState state)
@@ -109,13 +108,21 @@ void LED_Toggle(const uint32_t led)
 	HAL_GPIO_TogglePin(data->gpio, data->pin);
 }
 
-void LED_SetVolumePotentiometerLed(const uint8_t brightness)
+void LED_SetVolumeLed(const uint8_t brightness, const uint8_t state)
 {
 	TIM_OC_InitTypeDef config = {0};
 	config.OCMode = TIM_OCMODE_PWM1;
-	config.Pulse = (uint32_t)brightness;
 	config.OCPolarity = TIM_OCPOLARITY_HIGH;
 	config.OCFastMode = TIM_OCFAST_DISABLE;
+
+	if (state)
+	{
+		config.Pulse = (uint32_t)brightness;
+	}
+	else
+	{
+		config.Pulse = 0;
+	}
 
 	HAL_TIM_PWM_Stop(bhtim, TIM_CHANNEL_2);
 
@@ -124,9 +131,15 @@ void LED_SetVolumePotentiometerLed(const uint8_t brightness)
 		Error_Handler();
 	}
 
-	HAL_TIM_PWM_Start(bhtim, TIM_CHANNEL_2);
-
-	HAL_GPIO_WritePin(LED_VOLUME_GPIO_Port, LED_VOLUME_Pin, GPIO_PIN_SET);
+	if (state)
+	{
+		HAL_TIM_PWM_Start(bhtim, TIM_CHANNEL_2);
+		HAL_GPIO_WritePin(LED_VOLUME_GPIO_Port, LED_VOLUME_Pin, GPIO_PIN_SET);
+	}
+	else
+	{
+		HAL_GPIO_WritePin(LED_VOLUME_GPIO_Port, LED_VOLUME_Pin, GPIO_PIN_RESET);
+	}
 }
 
 /*

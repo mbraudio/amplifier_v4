@@ -25,6 +25,7 @@ typedef struct
 	uint8_t		speakersB:1;
 	uint8_t 	input:3;
 	uint8_t 	brightnessIndex;
+	uint8_t 	volumeLed;
 	uint8_t		crc;
 } __attribute__((packed)) Settings;
 
@@ -87,6 +88,7 @@ uint32_t SYSTEM_Load(void);
 
 uint8_t SYSTEM_IncreaseBrightness(void);
 uint8_t SYSTEM_GetBrightness(void);
+void SYSTEM_EnableVolumeLed(const uint8_t state);
 void SYSTEM_Mute(const uint8_t value);
 void SYSTEM_NpcmMute(const uint8_t value);
 uint16_t SYSTEM_Serialize(uint8_t* buffer);

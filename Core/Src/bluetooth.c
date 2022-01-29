@@ -114,7 +114,16 @@ void BLUETOOTH_Process(const uint8_t* data, const uint32_t size)
 		case COMMAND_BRIGHTNESS_INDEX:
 		{
 			system.settings.brightnessIndex = data[1];
-			LED_SetBrightness(systemValues.brightness[system.settings.brightnessIndex]);
+			uint8_t brightness = systemValues.brightness[system.settings.brightnessIndex];
+			LED_SetBrightness(brightness);
+			LED_SetVolumeLed(brightness, system.settings.volumeLed);
+		} break;
+
+		case COMMAND_ENABLE_VOLUME_LED:
+		{
+			AMP_EnableVolumeLed(data[1]);
+			SYSTEM_Save();
+			BLUETOOTH_Send(command, system.settings.volumeLed);
 		} break;
 
 		case COMMAND_CALIBRATE:
