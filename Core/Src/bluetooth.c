@@ -119,7 +119,7 @@ void BLUETOOTH_Process(const uint8_t* data, const uint32_t size)
 			LED_SetVolumeKnobLed(brightness, system.settings.volumeKnobLed);
 		} break;
 
-		case COMMAND_ENABLE_VOLUME_LED:
+		case COMMAND_SET_VOLUME_KNOB_LED:
 		{
 			AMP_SetVolumeKnobLed(data[1]);
 			BLUETOOTH_Send(command, system.settings.volumeKnobLed);
