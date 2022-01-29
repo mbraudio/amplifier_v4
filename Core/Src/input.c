@@ -181,10 +181,19 @@ void INPUT_Mute(const uint32_t status)
 {
 	const GPIO_PinState value = status ? GPIO_PIN_RESET : GPIO_PIN_SET;
 	HAL_GPIO_WritePin(MUTE_DISABLE_GPIO_Port, MUTE_DISABLE_Pin, value);
-	if (!status)
+	if (status)
 	{
-		LED_Set(input.inputs[system.settings.input].led, GPIO_PIN_SET);
+		// On active mute disable volume knob led
+		LED_SetVolumeKnobLed(0, 0);
 	}
+	else
+	{
+		// When un-muting turn the correct input led back on (due mute timer and led off-on toggle)
+		LED_Set(input.inputs[system.settings.input].led, GPIO_PIN_SET);
+		// Also enable volume knob led if it was originally enabled
+		LED_SetVolumeKnobLed(systemValues.brightness[system.settings.brightnessIndex], system.settings.volumeKnobLed);
+	}
+
 	SYSTEM_Mute((uint8_t)status);
 }
 

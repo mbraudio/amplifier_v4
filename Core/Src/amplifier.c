@@ -53,11 +53,12 @@ void AMP_SetLoudness(const uint8_t state)
 	HAL_GPIO_WritePin(BASS_ENABLE_GPIO_Port, BASS_ENABLE_Pin, (GPIO_PinState)system.settings.loudness);
 }
 
-// VOLUME LED
-void AMP_EnableVolumeLed(const uint8_t state)
+// VOLUME KNOB LED
+void AMP_SetVolumeKnobLed(const uint8_t state)
 {
-	SYSTEM_EnableVolumeLed(state);
-	LED_SetVolumeLed(systemValues.brightness[system.settings.brightnessIndex], system.settings.volumeLed);
+	SYSTEM_SetVolumeKnobLed(state);
+	LED_SetVolumeKnobLed(systemValues.brightness[system.settings.brightnessIndex], system.settings.volumeKnobLed);
+	SYSTEM_Save();
 }
 
 // POWER
@@ -196,7 +197,7 @@ void AMP_ProcessPower(void)
 			{
 				uint8_t brightness = systemValues.brightness[system.settings.brightnessIndex];
 				LED_SetBrightness(brightness);
-				LED_SetVolumeLed(brightness, system.settings.volumeLed);
+				LED_SetVolumeKnobLed(brightness, system.settings.volumeKnobLed);
 				LED_Set(LED_POWER, GPIO_PIN_SET);
 				HAL_Delay(200);
 

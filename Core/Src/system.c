@@ -25,7 +25,7 @@ void SYSTEM_Initialize(void)
 	system.settings.speakersB = 0;
 	system.settings.input = 0;
 	system.settings.brightnessIndex = 1;
-	system.settings.volumeLed = 1;
+	system.settings.volumeKnobLed = 1;
 	// States
 	system.states.mute = 0;
 	system.states.npcmMute = 0;
@@ -39,10 +39,10 @@ void SYSTEM_Initialize(void)
 void SYSTEM_InitializeValues(void)
 {
 	systemValues.brightness[0] = 8;
-	systemValues.brightness[1] = 24;
-	systemValues.brightness[2] = 55;
-	systemValues.brightness[3] = 100;
-	systemValues.brightness[4] = 200;
+	systemValues.brightness[1] = 16;
+	systemValues.brightness[2] = 45;
+	systemValues.brightness[3] = 90;
+	systemValues.brightness[4] = 140;
 }
 
 void SYSTEM_Save(void)
@@ -75,9 +75,9 @@ inline uint8_t SYSTEM_GetBrightness(void)
 	return systemValues.brightness[system.settings.brightnessIndex];
 }
 
-inline void SYSTEM_EnableVolumeLed(const uint8_t state)
+inline void SYSTEM_SetVolumeKnobLed(const uint8_t state)
 {
-	system.settings.volumeLed = state;
+	system.settings.volumeKnobLed = state;
 }
 
 inline void SYSTEM_Mute(const uint8_t value)
@@ -109,8 +109,8 @@ uint16_t SYSTEM_Serialize(uint8_t* buffer)
 	crc += system.settings.input;
 	buffer[count++] = system.settings.brightnessIndex; // 7
 	crc += system.settings.brightnessIndex;
-	buffer[count++] = system.settings.volumeLed; // 8
-	crc += system.settings.volumeLed;
+	buffer[count++] = system.settings.volumeKnobLed; // 8
+	crc += system.settings.volumeKnobLed;
 	buffer[count++] = system.power.state; // 9
 	crc += system.power.state;
 	buffer[count++] = system.states.mute; // 10

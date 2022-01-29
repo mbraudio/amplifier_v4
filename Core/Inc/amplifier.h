@@ -23,7 +23,7 @@ void AMP_SetDirect(const uint8_t state);
 // Loudness
 void AMP_SetLoudness(const uint8_t state);
 // Volume LED
-void AMP_EnableVolumeLed(const uint8_t state);
+void AMP_SetVolumeKnobLed(const uint8_t state);
 
 // Power
 void AMP_GoToPowerOff(void);

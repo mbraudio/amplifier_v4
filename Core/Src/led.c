@@ -70,7 +70,7 @@ void LED_Initialize(TIM_HandleTypeDef* h)
 
 	LED_AllOff();
 	LED_SetBrightness(LED_DEFAULT_BRIGHTNESS);
-	LED_SetVolumeLed(LED_DEFAULT_BRIGHTNESS, 0);
+	LED_SetVolumeKnobLed(LED_DEFAULT_BRIGHTNESS, 0);
 }
 
 void LED_SetBrightness(const uint8_t brightness)
@@ -108,7 +108,7 @@ void LED_Toggle(const uint32_t led)
 	HAL_GPIO_TogglePin(data->gpio, data->pin);
 }
 
-void LED_SetVolumeLed(const uint8_t brightness, const uint8_t state)
+void LED_SetVolumeKnobLed(const uint8_t brightness, const uint8_t state)
 {
 	TIM_OC_InitTypeDef config = {0};
 	config.OCMode = TIM_OCMODE_PWM1;

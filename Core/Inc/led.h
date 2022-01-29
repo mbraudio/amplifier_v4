@@ -43,7 +43,7 @@ void LED_SetBrightness(const uint8_t brightness);
 void LED_Set(const uint32_t led, const GPIO_PinState state);
 void LED_Toggle(const uint32_t led);
 void LED_Standby(const GPIO_PinState state);
-void LED_SetVolumeLed(const uint8_t brightness, const uint8_t state);
+void LED_SetVolumeKnobLed(const uint8_t brightness, const uint8_t state);
 void LED_AllOff(void);
 
 #endif /* INC_LED_H_ */

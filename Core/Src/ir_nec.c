@@ -73,6 +73,7 @@ void IR_Encode(void)
 	ir.counter = 0;
 }
 
+// Hmmmm, maybe I should optimize all those ifs !?
 void IR_Decode(void)
 {
 	if ((system.power.state != On) && (ir.commandToDecode != IR_CODE_ON_STANDBY))
@@ -100,7 +101,7 @@ void IR_Decode(void)
 				ir.ignoreTime = IR_IGNORE_TIME_DIMMER;
 				uint8_t brightness = SYSTEM_IncreaseBrightness();
 				LED_SetBrightness(brightness);
-				LED_SetVolumeLed(brightness, system.settings.volumeLed);
+				LED_SetVolumeKnobLed(brightness, system.settings.volumeKnobLed);
 				ir.lastCommand = ir.commandToDecode;
 			}
 		} break;
@@ -257,6 +258,15 @@ void IR_Decode(void)
 				ir.ignoreTime = IR_IGNORE_TIME_INPUT;
 				AMP_SetDirect(!system.settings.direct);
 				SYSTEM_Save();
+				ir.lastCommand = ir.commandToDecode;
+			}
+		} break;
+
+		case IR_CODE_OPTION:
+		{
+			if (ir.lastCommand != ir.commandToDecode)
+			{
+				AMP_SetVolumeKnobLed(!system.settings.volumeKnobLed);
 				ir.lastCommand = ir.commandToDecode;
 			}
 		} break;
