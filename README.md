@@ -1,5 +1,5 @@
 # amplifier_v4
-This is a 4th version of a project done in STM32CubeIDE.
+This is a 4th version of a project done in STM32CubeIDE for controlling the entire integrated amplifier.
 MCU is STM32L071VBT, 100 pin version.
 
 Project includes everything that is needed to control the integrated amplifier:
