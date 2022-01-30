@@ -13,6 +13,7 @@ Project includes everything that is needed to control the integrated amplifier:
 - temperature monitoring and protection from overheating
 - ir remote control functionality
 - Bluetooth Low Energy (nRF52) communication over UART
+- DAC setup and control (PCM9211, WM8742)
 
 Project is in alpha stage and is fully functional.
 
