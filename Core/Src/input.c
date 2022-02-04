@@ -185,6 +185,8 @@ void INPUT_Mute(const uint32_t status)
 	{
 		// On active mute disable volume knob led
 		LED_SetVolumeKnobLed(0, 0);
+		// Turn off PHONO led on mute
+		LED_Set(LED_INPUT_PHONO, GPIO_PIN_RESET);
 	}
 	else
 	{
@@ -192,6 +194,11 @@ void INPUT_Mute(const uint32_t status)
 		LED_Set(input.inputs[system.settings.input].led, GPIO_PIN_SET);
 		// Also enable volume knob led if it was originally enabled
 		LED_SetVolumeKnobLed(systemValues.brightness[system.settings.brightnessIndex], system.settings.volumeKnobLed);
+		// Turn PHONO led back on if input is digital
+		if (input.inputs[system.settings.input].digital)
+		{
+			LED_Set(LED_INPUT_PHONO, GPIO_PIN_SET);
+		}
 	}
 
 	SYSTEM_Mute((uint8_t)status);
