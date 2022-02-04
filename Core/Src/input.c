@@ -6,10 +6,10 @@
  */
 #include "input.h"
 #include "led.h"
-//#include "bluetooth.h"
 #include "system.h"
 #include "main.h"
 #include "dac.h"
+#include "bluetooth.h"
 
 #define INPUT_LED_MUTE_TOGGLE_TIME		50
 
@@ -119,7 +119,7 @@ void INPUT_Confirmed(void)
 {
 	InputData* data = &input.inputs[system.settings.input];
 	INPUT_Set(data);
-	//BLUETOOTH_Send(COMMAND_CHANGE_INPUT, system.settings.input);
+	BLUETOOTH_Send2(COMMAND_CHANGE_INPUT, system.settings.input, data->digital);
 	SYSTEM_Save();
 }
 
