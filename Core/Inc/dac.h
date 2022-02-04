@@ -25,6 +25,8 @@ void DAC_Process(void);
 typedef struct {
 	uint32_t error;
 	uint32_t npcm;
+	uint8_t  input;
+	uint8_t  exactRate;
 } DAC;
 
 extern DAC dac;

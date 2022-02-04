@@ -6,6 +6,7 @@
  */
 #include "system.h"
 #include "eeprom.h"
+#include "dac.h"
 #include "utilities.h"
 #include "bluetooth.h"
 
@@ -115,6 +116,10 @@ uint16_t SYSTEM_Serialize(uint8_t* buffer)
 	crc += system.power.state;
 	buffer[count++] = system.states.mute; // 10
 	crc += system.states.mute;
+	buffer[count++] = dac.input; // 11
+	crc += dac.input;
+	buffer[count++] = dac.exactRate; // 12
+	crc += dac.exactRate;
 	buffer[count++] = crc;
 	return count;
 }

@@ -7,6 +7,7 @@
 #include "dac.h"
 #include "system.h"
 #include "main.h"
+#include "bluetooth.h"
 
 DAC dac;
 
@@ -16,10 +17,13 @@ void DAC_Initialize(SPI_HandleTypeDef* h)
 	WM874X_Initialize(h);
 	dac.error = 0;
 	dac.npcm = 0;
+	dac.input = 0;
+	dac.exactRate = PCM9211_FREQUENCY_48kHz;
 }
 
 void DAC_Setup(const uint8_t input)
 {
+	dac.input = input;
 	PCM9211_Setup(input);
 	WM874X_Setup();
 }
@@ -68,8 +72,10 @@ WMSampleRate DAC_GetSampleRate(void)
 		result = PCM9211_Read(PCM9211_REG_38_PORT_FS_CALCULATOR_RESULT_OUTPUT);
 	} while (result & 0x80);
 
+	dac.exactRate = result & 0x0F;
+
 	// Find frequency and set WM874X sample rate
-	switch (result & 0x0F)
+	switch (dac.exactRate)
 	{
 		case PCM9211_FREQUENCY_8kHz:
 		case PCM9211_FREQUENCY_11kHz:
@@ -105,6 +111,8 @@ void DAC_Process(void)
 	{
 		dac.error = 0;
 		DAC_PCM9211_ErrorHandler();
+		// Send input and exact sample rate
+		BLUETOOTH_Send2(COMMAND_UPDATE_DAC_DATA, dac.input, dac.exactRate);
 	}
 
 	if (dac.npcm)
