@@ -289,7 +289,7 @@ int main(void)
   // UART
   UART_Init(&huart1);
   HAL_UART_Receive_IT(&huart1, uartHandler.rxByte, UART_RX_SIZE);
-  // CALIBRATOR
+  // CALIBRATOR (Needs to initialize only for pot calibrations.)
   CALIBRATOR_Initialize();
 
   // START TIMERS
@@ -328,7 +328,7 @@ int main(void)
 			POTENTIOMETERS_SetCurrent(adc.data[0], adc.data[1], adc.data[4], adc.data[3], adc.data[2]);
 		}
 
-	    CALIBRATOR_Process();
+	    CALIBRATOR_Process(); // (Needs to run only for pot calibrations.)
 
 		DAC_Process();
 		INPUT_Process();
