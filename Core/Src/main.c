@@ -1021,6 +1021,10 @@ void Error_Handler(void)
   __disable_irq();
   while (1)
   {
+	  LED_Standby(GPIO_PIN_SET);
+	  HAL_Delay(1000);
+	  LED_Standby(GPIO_PIN_RESET);
+	  HAL_Delay(1000);
   }
   /* USER CODE END Error_Handler_Debug */
 }
