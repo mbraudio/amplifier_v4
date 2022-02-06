@@ -118,8 +118,10 @@ uint16_t SYSTEM_Serialize(uint8_t* buffer)
 	crc += system.states.mute;
 	buffer[count++] = dac.input; // 11
 	crc += dac.input;
-	buffer[count++] = dac.exactRate; // 12
-	crc += dac.exactRate;
+	buffer[count++] = dac.exactSampleRate; // 12
+	crc += dac.exactSampleRate;
+	buffer[count++] = dac.bitRate; // 13
+	crc += dac.bitRate;
 	buffer[count++] = crc;
 	return count;
 }

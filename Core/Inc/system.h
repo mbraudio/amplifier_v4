@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-#define SYSTEM_VALUE_COUNT		18 // 1 command + 12 Settings + 2 States + 1 crc = 16, set for 2 more
+#define SYSTEM_VALUE_COUNT		18 // 1 command + 13 Settings + 2 States + 1 crc = 17, set as +1 => 18
 #define BRIGHTNESS_VALUES_COUNT 5
 
 // Power - external interrupt pin

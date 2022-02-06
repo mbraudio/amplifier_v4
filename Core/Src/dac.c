@@ -18,7 +18,8 @@ void DAC_Initialize(SPI_HandleTypeDef* h)
 	dac.error = 0;
 	dac.npcm = 0;
 	dac.input = 0;
-	dac.exactRate = PCM9211_FREQUENCY_48kHz;
+	dac.exactSampleRate = PCM9211_FREQUENCY_48kHz;
+	dac.bitRate = b24i2s;
 }
 
 void DAC_Setup(const uint8_t input)
@@ -41,6 +42,7 @@ void DAC_PCM9211_ErrorHandler(void)
 	if ((error & PCM9211_INT0_OERROR_MASK) && (error & PCM9211_INT0_OFSCHG_MASK))
 	{
 		DAC_ResetWM874xSampleRate();
+		DAC_GetBitRate();
 	}
 }
 
@@ -72,10 +74,10 @@ WMSampleRate DAC_GetSampleRate(void)
 		result = PCM9211_Read(PCM9211_REG_38_PORT_FS_CALCULATOR_RESULT_OUTPUT);
 	} while (result & 0x80);
 
-	dac.exactRate = result & 0x0F;
+	dac.exactSampleRate = result & 0x0F;
 
 	// Find frequency and set WM874X sample rate
-	switch (dac.exactRate)
+	switch (dac.exactSampleRate)
 	{
 		case PCM9211_FREQUENCY_8kHz:
 		case PCM9211_FREQUENCY_11kHz:
@@ -105,14 +107,30 @@ WMSampleRate DAC_GetSampleRate(void)
 	return SampleRateLow48kHz;
 }
 
+PCM9211BitRate DAC_GetBitRate(void)
+{
+	uint8_t result = 0;
+
+	result = PCM9211_Read(PCM9211_REG_2F_DIR_OUTPUT_DATA_FORMAT);
+	switch (result) {
+		case PCM9211_DIR_DATA_FORMAT_24BIT_RIGHT_JUSTIFIED: { dac.bitRate = b24rj; }
+		case PCM9211_DIR_DATA_FORMAT_16BIT_RIGHT_JUSTIFIED: { dac.bitRate = b16rj; }
+		case PCM9211_DIR_DATA_FORMAT_24BIT_I2S: 			{ dac.bitRate = b24i2s; }
+		case PCM9211_DIR_DATA_FORMAT_24BIT_LEFT_JUSTIFIED: 	{ dac.bitRate = b24lj; }
+		default: { dac.bitRate = b24i2s; }
+	}
+
+	return dac.bitRate;
+}
+
 void DAC_Process(void)
 {
 	if (dac.error)
 	{
 		dac.error = 0;
 		DAC_PCM9211_ErrorHandler();
-		// Send input and exact sample rate
-		BLUETOOTH_Send2(COMMAND_UPDATE_DAC_DATA, dac.input, dac.exactRate);
+		// Send DAC data
+		BLUETOOTH_Send3(COMMAND_UPDATE_DAC_DATA, dac.input, dac.exactSampleRate, dac.bitRate);
 	}
 
 	if (dac.npcm)

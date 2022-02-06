@@ -158,6 +158,13 @@ void BLUETOOTH_Send2(const uint8_t command, const uint8_t value0, const uint8_t 
 	UART_Send(data, 4);
 }
 
+void BLUETOOTH_Send3(const uint8_t command, const uint8_t value0, const uint8_t value1, const uint8_t value2)
+{
+	uint8_t crc = command + value0 + value1 + value2;
+	uint8_t data[5] = { command, value0, value1, value2, crc };
+	UART_Send(data, 5);
+}
+
 void BLUETOOTH_SendData(const uint8_t* data, const uint8_t length)
 {
 	UART_Send(data, length);

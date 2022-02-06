@@ -19,6 +19,7 @@ void DAC_ResetWM874xSampleRate(void);
 void DAC_PCM9211_ErrorHandler(void);
 void DAC_PCM9211_NpcmHandler(void);
 WMSampleRate DAC_GetSampleRate(void);
+PCM9211BitRate DAC_GetBitRate(void);
 void DAC_Process(void);
 
 
@@ -26,7 +27,8 @@ typedef struct {
 	uint32_t error;
 	uint32_t npcm;
 	uint8_t  input;
-	uint8_t  exactRate;
+	uint8_t  exactSampleRate;
+	PCM9211BitRate  bitRate;
 } DAC;
 
 extern DAC dac;

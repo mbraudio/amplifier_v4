@@ -164,6 +164,7 @@ void INPUT_Set(const InputData* data)
 		HAL_GPIO_WritePin(DAC_ENABLE_GPIO_Port, DAC_ENABLE_Pin, GPIO_PIN_SET);
 		DAC_Setup(data->digital);
 		DAC_ResetWM874xSampleRate();
+		DAC_GetBitRate();
 		DAC_PCM9211_NpcmHandler();
 	}
 	else
