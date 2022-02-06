@@ -24,6 +24,8 @@ void AMP_SetDirect(const uint8_t state);
 void AMP_SetLoudness(const uint8_t state);
 // Volume LED
 void AMP_SetVolumeKnobLed(const uint8_t state);
+// DAC Filter
+void AMP_SetDacFilter(const uint8_t filter);
 
 // Power
 void AMP_GoToPowerOff(void);

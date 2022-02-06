@@ -125,6 +125,10 @@ void BLUETOOTH_Process(const uint8_t* data, const uint32_t size)
 			BLUETOOTH_Send(command, system.settings.volumeKnobLed);
 		} break;
 
+		case COMMAND_UPDATE_DAC_FILTER: {
+			AMP_SetDacFilter(data[1]);
+		} break;
+
 		case COMMAND_CALIBRATE:
 		{
 			CALIBRATOR_Start(data[1], data[2]);

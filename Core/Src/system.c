@@ -27,6 +27,7 @@ void SYSTEM_Initialize(void)
 	system.settings.input = 0;
 	system.settings.brightnessIndex = 1;
 	system.settings.volumeKnobLed = 1;
+	system.settings.dacFilter = 0;
 	// States
 	system.states.mute = 0;
 	system.states.npcmMute = 0;
@@ -122,6 +123,8 @@ uint16_t SYSTEM_Serialize(uint8_t* buffer)
 	crc += dac.exactSampleRate;
 	buffer[count++] = dac.bitRate; // 13
 	crc += dac.bitRate;
+	buffer[count++] = system.settings.dacFilter; // 14
+	crc += system.settings.dacFilter;
 	buffer[count++] = crc;
 	return count;
 }

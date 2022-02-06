@@ -13,6 +13,7 @@
 #include "utilities.h"
 #include "potentiometer.h"
 #include "mcp23008.h"
+#include "wm874x.h"
 #include "bluetooth.h"
 
 
@@ -58,6 +59,14 @@ void AMP_SetVolumeKnobLed(const uint8_t state)
 {
 	SYSTEM_SetVolumeKnobLed(state);
 	LED_SetVolumeKnobLed(systemValues.brightness[system.settings.brightnessIndex], system.settings.volumeKnobLed);
+	SYSTEM_Save();
+}
+
+// DAC Filter
+void AMP_SetDacFilter(const uint8_t filter)
+{
+	system.settings.dacFilter = filter;
+	WM874X_Setup();
 	SYSTEM_Save();
 }
 

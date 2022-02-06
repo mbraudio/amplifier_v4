@@ -5,6 +5,7 @@
  *      Author: Admin
  */
 #include "wm874x.h"
+#include "system.h"
 
 SPI_HandleTypeDef* hspi;
 
@@ -19,8 +20,8 @@ void WM874X_Setup(void)
 {
 	uint32_t status = 0;
 
-	status += WM874X_Write(WM874X_REG_06_FILTER_CONTROL, 0x00);
-	status += WM874X_Write(WM874X_REG_07_MODE_CONTROL_1, 0x00);
+	status += WM874X_Write(WM874X_REG_06_FILTER_CONTROL, system.settings.dacFilter);
+	//status += WM874X_Write(WM874X_REG_07_MODE_CONTROL_1, 0x00);
 
 	if (status)
 	{

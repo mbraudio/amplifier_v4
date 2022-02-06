@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-#define SYSTEM_VALUE_COUNT		18 // 1 command + 13 Settings + 2 States + 1 crc = 17, set as +1 => 18
+#define SYSTEM_VALUE_COUNT		20 // 1 command + 14 Settings + 2 States + 1 crc = 18, set as +2 => 20
 #define BRIGHTNESS_VALUES_COUNT 5
 
 // Power - external interrupt pin
@@ -25,7 +25,8 @@ typedef struct
 	uint8_t		speakersB:1;
 	uint8_t 	input:3;
 	uint8_t 	brightnessIndex;
-	uint8_t 	volumeKnobLed;
+	uint8_t 	volumeKnobLed:1;
+	uint8_t 	dacFilter;
 	uint8_t		crc;
 } __attribute__((packed)) Settings;
 
