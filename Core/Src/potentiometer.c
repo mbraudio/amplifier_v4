@@ -13,6 +13,7 @@
 #define POTENTIOMETERS_UPDATE_TIMEOUT 10 // POTENTIOMETERS_UPDATE_TIMEOUT * 10ms = X ms
 
 #define POT_SIZE 4
+#define POT_BT_SIZE (POT_SIZE * 2) + 2
 
 #define INDEXES 150
 Potentiometers potentiometers;
@@ -36,6 +37,7 @@ void POTENTIOMETERS_Initialize(void)
 	potentiometers.activeIR = 0;
 	potentiometers.update = 0;
 	potentiometers.timer = 0;
+	potentiometers.send = 0;
 	POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_VOLUME], POTENTIOMETERS_VolumePlus, POTENTIOMETERS_VolumeMinus, POTENTIOMETERS_VolumeStop, 1, COMMAND_UPDATE_VOLUME_VALUE);
 	POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_BASS], POTENTIOMETERS_BassPlus, POTENTIOMETERS_BassMinus, POTENTIOMETERS_BassStop, 0, COMMAND_UPDATE_BASS_VALUE);
 	POTENTIOMETER_Init(&potentiometers.pots[POT_INDEX_TREBLE], POTENTIOMETERS_TreblePlus, POTENTIOMETERS_TrebleMinus, POTENTIOMETERS_TrebleStop, 0, COMMAND_UPDATE_TREBLE_VALUE);
@@ -97,12 +99,14 @@ void POTENTIOMETERS_SetValue(const uint32_t index, const uint8_t value)
 
 	Potentiometer* pot = &potentiometers.pots[index];
 
-	for (i = 0; i < POT_MAX_VALUES - 1; i++) {
+	for (i = 0; i < POT_MAX_VALUES - 1; i++)
+	{
 		pot->values[i] = pot->values[i + 1];
 	}
 	pot->values[POT_MAX_VALUES - 1] = value;
 
-	for (i = 0; i < POT_MAX_VALUES; i++) {
+	for (i = 0; i < POT_MAX_VALUES; i++)
+	{
 		sum += pot->values[i];
 	}
 
@@ -145,6 +149,9 @@ void POTENTIOMETERS_Process(void)
 
 	if (potentiometers.update && (potentiometers.timer >= POTENTIOMETERS_UPDATE_TIMEOUT))
 	{
+		uint8_t rx[POT_BT_SIZE];
+		uint32_t index;
+
 		for (i = 0; i < POT_SIZE; i++)
 		{
 			Potentiometer* pot = &potentiometers.pots[i];
@@ -153,8 +160,8 @@ void POTENTIOMETERS_Process(void)
 			{
 				pot->last = pot->current;
 				pot->lastCount = 0;
+				potentiometers.send = 1;
 				//pot->lastReverse = pot->currentReverse;
-				BLUETOOTH_Send2(pot->command, pot->logarithmic ? POTENTIOMETERS_GetIndexFromValue(pot) : pot->last, (uint8_t)pot->active);
 			}
 			else
 			{
@@ -169,6 +176,18 @@ void POTENTIOMETERS_Process(void)
 					}
 				}
 			}
+
+			index = (i * 2) + 1;
+			rx[index] = pot->logarithmic ? POTENTIOMETERS_GetIndexFromValue(pot) : pot->last;
+			rx[index + 1] = pot->active;
+		}
+
+		if (potentiometers.send)
+		{
+			potentiometers.send = 0;
+			rx[0] = COMMAND_UPDATE_POTENTIOMETERS;
+			rx[POT_BT_SIZE - 1] = BLUETOOTH_CalculateCrc(rx, POT_BT_SIZE - 1);
+			BLUETOOTH_SendData(rx, POT_BT_SIZE);
 		}
 
 		potentiometers.timer = 0;

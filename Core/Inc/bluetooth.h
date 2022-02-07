@@ -24,11 +24,12 @@
 #define COMMAND_UPDATE_BASS_VALUE			11
 #define COMMAND_UPDATE_TREBLE_VALUE			12
 #define COMMAND_UPDATE_BALANCE_VALUE		13
-#define COMMAND_UPDATE_TEMPERATURE			14
-#define COMMAND_BRIGHTNESS_INDEX			15
-#define COMMAND_SET_VOLUME_KNOB_LED		    16
-#define COMMAND_UPDATE_DAC_DATA      		17
-#define COMMAND_UPDATE_DAC_FILTER      		18
+#define COMMAND_UPDATE_POTENTIOMETERS		14
+#define COMMAND_UPDATE_TEMPERATURE			15
+#define COMMAND_BRIGHTNESS_INDEX			16
+#define COMMAND_SET_VOLUME_KNOB_LED		    17
+#define COMMAND_UPDATE_DAC_DATA      		18
+#define COMMAND_UPDATE_DAC_FILTER      		19
 
 #define COMMAND_CALIBRATE 				 	100
 #define COMMAND_SEND_CALIBRATION_DATA_1  	101
@@ -36,7 +37,8 @@
 
 
 void BLUETOOTH_Process(const uint8_t* data, const uint32_t size);
-uint32_t BLUETOOTH_CalculateCrc(const uint8_t* data, const uint32_t size);
+uint32_t BLUETOOTH_CheckCrc(const uint8_t* data, const uint32_t size);
+uint8_t BLUETOOTH_CalculateCrc(const uint8_t* data, const uint32_t size);
 void BLUETOOTH_Send(const uint8_t command, const uint8_t value);
 void BLUETOOTH_Send2(const uint8_t command, const uint8_t value0, const uint8_t value1);
 void BLUETOOTH_Send3(const uint8_t command, const uint8_t value0, const uint8_t value1, const uint8_t value2);

@@ -45,6 +45,7 @@ typedef struct
 	uint32_t		update;
 	uint32_t		updateIndex;
 	Potentiometer	pots[NUMBER_OF_POTS];
+	uint32_t		send;
 } Potentiometers;
 
 extern Potentiometers potentiometers;
