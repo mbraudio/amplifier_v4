@@ -20,15 +20,16 @@
 #define POT_LAST_COUNT_MAX  12
 #define POT_MAX_VALUES 		10
 
+#define POT_SIZE 			4
+#define POT_DATA_SIZE 		(POT_SIZE * 2) + 2
+
 typedef struct
 {
 	uint8_t		values[POT_MAX_VALUES];
 	uint8_t 	actual;
 	uint32_t 	current;
-	uint8_t 	currentReverse; // Only for logarithmic
 	uint8_t 	required;
 	uint32_t 	last;
-	uint8_t		lastReverse;
 	uint32_t	active;
 	uint8_t    	command;
 	uint32_t    logarithmic;
@@ -45,6 +46,7 @@ typedef struct
 	uint32_t		update;
 	uint32_t		updateIndex;
 	Potentiometer	pots[NUMBER_OF_POTS];
+	uint8_t			data[POT_DATA_SIZE];
 	uint32_t		send;
 } Potentiometers;
 
