@@ -23,6 +23,11 @@
 // BITS: OS/ALERT | R1 | R0 | F1 | F0 | POL | TM | SD
 #define TMP100_DEFAULT_CONFIGURATION	0b01100000 // 12bit conversion
 
+// Temperature for protection trigger and release. Temp. protection is self releasing!
+#define PROTECTION_TEMPERATURE_ON	55 // On this temperature turn on protection
+#define PROTECTION_TEMPERATURE_OFF	50 // On this temperature release protection
+
+
 void TMP100_Init(I2C_HandleTypeDef* h);
 void TMP100_WriteConfiguration(const uint8_t address);
 int16_t TMP100_ReadTemperature(const uint8_t address);

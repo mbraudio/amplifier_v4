@@ -37,6 +37,7 @@ typedef struct
 	uint8_t		npcmMute;
 	uint8_t		protectionTriggeredDc;
 	uint8_t		protectionTriggeredVoltage;
+	uint8_t		protectionTriggeredTemperature;
 } __attribute__((packed)) States;
 
 typedef enum

@@ -10,12 +10,13 @@
 #include "system.h"
 #include "eeprom.h"
 #include "main.h"
+#include "tmp100.h"
 #include <string.h>
 
 // Errors
 #define ERROR_3_DC						3
-#define ERROR_4_OVERLOAD				4
-#define ERROR_5_VOLTAGE					5
+#define ERROR_4_VOLTAGE					4
+#define ERROR_5_TEMPERATURE				5
 // Flags
 #define PROTECTION_CLEAR_FLAG			0x00
 #define PROTECTION_ENABLED_FLAG_1		0xAA
@@ -32,8 +33,8 @@ void PROTECTION_Initialize(void)
 {
 	protection.dc1 = 0;
 	protection.dc2 = 0;
-	protection.overheat1 = 0;
-	protection.overheat2 = 0;
+	protection.temperature1 = 0;
+	protection.temperature2 = 0;
 	protection.voltage1 = 0;
 	protection.voltage2 = 0;
 	protection.crc = 0;
@@ -75,6 +76,12 @@ void PROTECTION_Process(void)
 		system.states.protectionTriggeredVoltage = 0;
 		PROTECTION_EnableVoltage();
 	}
+
+	if (system.states.protectionTriggeredTemperature)
+	{
+		system.states.protectionTriggeredTemperature = 0;
+		PROTECTION_EnableTemperature();
+	}
 }
 
 void PROTECTION_EnableDc(void)
@@ -83,7 +90,8 @@ void PROTECTION_EnableDc(void)
 	AMP_SetPowerPin(GPIO_PIN_RESET);
 
 	// Save new protection state
-	if ((protection.dc1 != PROTECTION_ENABLED_FLAG_1) || (protection.dc2 != PROTECTION_ENABLED_FLAG_2)) {
+	if ((protection.dc1 != PROTECTION_ENABLED_FLAG_1) || (protection.dc2 != PROTECTION_ENABLED_FLAG_2))
+	{
 		protection.dc1 = PROTECTION_ENABLED_FLAG_1;
 		protection.dc2 = PROTECTION_ENABLED_FLAG_2;
 		PROTECTION_Save();
@@ -95,19 +103,15 @@ void PROTECTION_EnableDc(void)
 	// Notify error
 	PROTECTION_NotifyError(ERROR_3_DC);
 }
-/*
-void PROTECTION_EnableOverheat(void)
-{
-	protection.overheat = PROTECTION_ENABLED_FLAG;
-}
-*/
+
 void PROTECTION_EnableVoltage(void)
 {
 	// Immediately disable power to transformers
 	AMP_SetPowerPin(GPIO_PIN_RESET);
 
 	// Save new protection state
-	if ((protection.voltage1 != PROTECTION_ENABLED_FLAG_1) || (protection.voltage2 != PROTECTION_ENABLED_FLAG_2)) {
+	if ((protection.voltage1 != PROTECTION_ENABLED_FLAG_1) || (protection.voltage2 != PROTECTION_ENABLED_FLAG_2))
+	{
 		protection.voltage1 = PROTECTION_ENABLED_FLAG_1;
 		protection.voltage2 = PROTECTION_ENABLED_FLAG_2;
 		PROTECTION_Save();
@@ -117,7 +121,38 @@ void PROTECTION_EnableVoltage(void)
 	AMP_GoToPowerOff();
 
 	// Notify error
-	PROTECTION_NotifyError(ERROR_5_VOLTAGE);
+	PROTECTION_NotifyError(ERROR_4_VOLTAGE);
+}
+
+void PROTECTION_EnableTemperature(void)
+{
+	// Immediately disable power to transformers
+	AMP_SetPowerPin(GPIO_PIN_RESET);
+
+	// Save new protection state
+	if ((protection.temperature1 != PROTECTION_ENABLED_FLAG_1) || (protection.temperature2 != PROTECTION_ENABLED_FLAG_2))
+	{
+		protection.temperature1 = PROTECTION_ENABLED_FLAG_1;
+		protection.temperature2 = PROTECTION_ENABLED_FLAG_2;
+		PROTECTION_Save();
+	}
+
+	// Go to entire power off process
+	AMP_GoToPowerOff();
+
+	// Notify error
+	PROTECTION_NotifyError(ERROR_5_TEMPERATURE);
+}
+
+void PROTECTION_DisableTemperature(void)
+{
+	// Save new protection state
+	if ((protection.temperature1 != PROTECTION_CLEAR_FLAG) || (protection.temperature2 != PROTECTION_CLEAR_FLAG))
+	{
+		protection.temperature1 = PROTECTION_CLEAR_FLAG;
+		protection.temperature2 = PROTECTION_CLEAR_FLAG;
+		PROTECTION_Save();
+	}
 }
 
 void PROTECTION_NotifyError(const uint32_t errorId)
@@ -152,14 +187,22 @@ void PROTECTION_LoadCheck(void)
 		PROTECTION_EnableDc();
 	}
 
-	//if (protection.overheat == PROTECTION_ENABLED_FLAG)
-	//{
-	//	PROTECTION_NotifyError(ERROR_2_OVERHEAT);
-	//}
-
 	if ((protection.voltage1 == PROTECTION_ENABLED_FLAG_1) && (protection.voltage2 == PROTECTION_ENABLED_FLAG_2))
 	{
 		PROTECTION_EnableVoltage();
+	}
+
+	if ((protection.temperature1 == PROTECTION_ENABLED_FLAG_1) && (protection.temperature2 == PROTECTION_ENABLED_FLAG_2))
+	{
+		TMP100_ReadTemperatures();
+		if ((temperature.rightChannel >= PROTECTION_TEMPERATURE_ON) || (temperature.leftChannel >= PROTECTION_TEMPERATURE_ON))
+		{
+			PROTECTION_EnableTemperature();
+		}
+		else if ((temperature.rightChannel <= PROTECTION_TEMPERATURE_OFF) && (temperature.leftChannel <= PROTECTION_TEMPERATURE_OFF))
+		{
+			PROTECTION_DisableTemperature();
+		}
 	}
 }
 
@@ -168,35 +211,30 @@ void PROTECTION_DirectCheck(void)
 	// DC
 	GPIO_PinState state;
 	state = HAL_GPIO_ReadPin(DC_PROTECT_GPIO_Port, DC_PROTECT_Pin);
-	if (state == 0)
+	if (state == GPIO_PIN_RESET)
 	{
 		state = HAL_GPIO_ReadPin(DC_PROTECT_GPIO_Port, DC_PROTECT_Pin);
-		if (state == 0)
+		if (state == GPIO_PIN_RESET)
 		{
 			PROTECTION_EnableDc();
 		}
 	}
 
-	// Thermal
-	/*state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
-	if (state == 0)
-	{
-		state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
-		if (state == 0)
-		{
-			PROTECTION_EnableOverheat();
-		}
-	}*/
-
 	// Voltage
 	state = HAL_GPIO_ReadPin(V_PROTECT_GPIO_Port, V_PROTECT_Pin);
-	if (state == 0)
+	if (state == GPIO_PIN_RESET)
 	{
 		state = HAL_GPIO_ReadPin(V_PROTECT_GPIO_Port, V_PROTECT_Pin);
-		if (state == 0)
+		if (state == GPIO_PIN_RESET)
 		{
 			PROTECTION_EnableVoltage();
 		}
+	}
+
+	// Temperature
+	if ((temperature.rightChannel >= PROTECTION_TEMPERATURE_ON) || (temperature.leftChannel >= PROTECTION_TEMPERATURE_ON))
+	{
+		PROTECTION_EnableTemperature();
 	}
 }
 
