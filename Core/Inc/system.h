@@ -84,6 +84,7 @@ extern System system;
 extern SystemValues systemValues;
 
 void SYSTEM_Initialize(void);
+void SYSTEM_InitializePower(void);
 void SYSTEM_InitializeValues(void);
 void SYSTEM_Save(void);
 uint32_t SYSTEM_Load(void);

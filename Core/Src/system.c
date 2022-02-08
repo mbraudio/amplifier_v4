@@ -34,6 +34,10 @@ void SYSTEM_Initialize(void)
 	system.states.npcmMute = 0;
 	system.states.protectionTriggeredDc = 0;
 	system.states.protectionTriggeredVoltage = 0;
+}
+
+void SYSTEM_InitializePower(void)
+{
 	// Power
 	system.power.state = Off;
 	system.power.phase = Idle;

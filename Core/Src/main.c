@@ -262,6 +262,7 @@ int main(void)
   // INITIALIZE
   // SYSTEM
   SYSTEM_Initialize();
+  SYSTEM_InitializePower();
   SYSTEM_InitializeValues();
   // PROTECTION
   PROTECTION_Initialize();
