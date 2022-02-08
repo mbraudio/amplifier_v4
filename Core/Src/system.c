@@ -28,6 +28,7 @@ void SYSTEM_Initialize(void)
 	system.settings.brightnessIndex = 1;
 	system.settings.volumeKnobLed = 1;
 	system.settings.dacFilter = 0;
+	system.settings.bluetoothEnabled = 0;
 	// States
 	system.states.mute = 0;
 	system.states.npcmMute = 0;

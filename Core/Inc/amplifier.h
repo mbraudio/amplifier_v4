@@ -26,6 +26,8 @@ void AMP_SetLoudness(const uint8_t state);
 void AMP_SetVolumeKnobLed(const uint8_t state);
 // DAC Filter
 void AMP_SetDacFilter(const uint8_t filter);
+// Bluetooth
+void AMP_EnableBluetooth(const uint8_t state);
 
 // Power
 void AMP_GoToPowerOff(void);

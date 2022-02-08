@@ -6,7 +6,7 @@
  */
 #include "utilities.h"
 
-uint8_t UTILITIES_CalculateCrc(uint8_t* buffer, const uint32_t size)
+uint8_t UTILITIES_CalculateCrc(const uint8_t* buffer, const uint32_t size)
 {
 	uint32_t i;
 	uint8_t crc;

@@ -70,6 +70,22 @@ void AMP_SetDacFilter(const uint8_t filter)
 	SYSTEM_Save();
 }
 
+// Bluetooth
+void AMP_EnableBluetooth(const uint8_t state)
+{
+	system.settings.bluetoothEnabled = state;
+	if (system.settings.bluetoothEnabled)
+	{
+		HAL_GPIO_WritePin(BT_ENABLE_GPIO_Port, BT_ENABLE_Pin, GPIO_PIN_RESET);
+		LED_Set(LED_APD_BLUETOOTH, GPIO_PIN_SET);
+	}
+	else
+	{
+		HAL_GPIO_WritePin(BT_ENABLE_GPIO_Port, BT_ENABLE_Pin, GPIO_PIN_SET);
+		LED_Set(LED_APD_BLUETOOTH, GPIO_PIN_RESET);
+	}
+}
+
 // POWER
 void AMP_GoToPowerOff(void)
 {
@@ -209,6 +225,9 @@ void AMP_ProcessPower(void)
 				LED_SetVolumeKnobLed(brightness, system.settings.volumeKnobLed);
 				LED_Set(LED_POWER, GPIO_PIN_SET);
 				HAL_Delay(200);
+
+				// Bluetooth enable/disable
+				AMP_EnableBluetooth(system.settings.bluetoothEnabled);
 
 				system.power.phase++;
 			} break;

@@ -11,6 +11,7 @@
 #include "input.h"
 #include "system.h"
 #include "potentiometer.h"
+#include "utilities.h"
 #include "calibrator.h"
 
 void BLUETOOTH_Process(const uint8_t* data, const uint32_t size)
@@ -139,18 +140,8 @@ void BLUETOOTH_Process(const uint8_t* data, const uint32_t size)
 uint32_t BLUETOOTH_CheckCrc(const uint8_t* data, const uint32_t size)
 {
 	uint32_t length = size - 1;
-	uint8_t crc = BLUETOOTH_CalculateCrc(data, length);
+	uint8_t crc = UTILITIES_CalculateCrc(data, length);
 	return (crc == data[length]);
-}
-
-uint8_t BLUETOOTH_CalculateCrc(const uint8_t* data, const uint32_t size)
-{
-	uint8_t crc = 0;
-	uint32_t i;
-	for (i = 0; i < size; i++) {
-		crc += data[i];
-	}
-	return crc;
 }
 
 void BLUETOOTH_Send(const uint8_t command, const uint8_t value)

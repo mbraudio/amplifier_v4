@@ -317,7 +317,9 @@ void BUTTONS_ProcessADC_SelectorGroup(const uint8_t value)
 		}
 		else if (buttons.selector.state == Hold)
 		{
-			HAL_GPIO_TogglePin(BT_ENABLE_GPIO_Port, BT_ENABLE_Pin);
+			// Toggle BT on/off
+			AMP_EnableBluetooth(!system.settings.bluetoothEnabled);
+			SYSTEM_Save();
 		}
 		buttons.selector.state = Released;
 	}

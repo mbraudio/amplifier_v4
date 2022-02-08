@@ -9,6 +9,7 @@
 #include "adc.h"
 #include "mcp23008.h"
 #include "bluetooth.h"
+#include "utilities.h"
 
 #define POTENTIOMETERS_UPDATE_TIMEOUT 25 // POTENTIOMETERS_UPDATE_TIMEOUT * 10ms = X ms
 
@@ -172,7 +173,7 @@ void POTENTIOMETERS_Process(void)
 		{
 			potentiometers.send = 0;
 			potentiometers.data[0] = COMMAND_UPDATE_POTENTIOMETERS;
-			potentiometers.data[POT_DATA_SIZE - 1] = BLUETOOTH_CalculateCrc(potentiometers.data, POT_DATA_SIZE - 1);
+			potentiometers.data[POT_DATA_SIZE - 1] = UTILITIES_CalculateCrc(potentiometers.data, POT_DATA_SIZE - 1);
 			BLUETOOTH_SendData(potentiometers.data, POT_DATA_SIZE);
 		}
 
