@@ -39,7 +39,7 @@ void PROTECTION_Initialize(void)
 	protection.voltage2 = 0;
 	protection.crc = 0;
 
-	// TODO: Disable this here!
+	// TODO: Disable this for real world usage!
 	PROTECTION_Reset();
 }
 
@@ -195,13 +195,13 @@ void PROTECTION_LoadCheck(void)
 	if ((protection.temperature1 == PROTECTION_ENABLED_FLAG_1) && (protection.temperature2 == PROTECTION_ENABLED_FLAG_2))
 	{
 		TMP100_ReadTemperatures();
-		if ((temperature.rightChannel >= PROTECTION_TEMPERATURE_ON) || (temperature.leftChannel >= PROTECTION_TEMPERATURE_ON))
-		{
-			PROTECTION_EnableTemperature();
-		}
-		else if ((temperature.rightChannel <= PROTECTION_TEMPERATURE_OFF) && (temperature.leftChannel <= PROTECTION_TEMPERATURE_OFF))
+		if ((temperature.rightChannel <= PROTECTION_TEMPERATURE_OFF) && (temperature.leftChannel <= PROTECTION_TEMPERATURE_OFF))
 		{
 			PROTECTION_DisableTemperature();
+		}
+		else
+		{
+			PROTECTION_EnableTemperature();
 		}
 	}
 }
