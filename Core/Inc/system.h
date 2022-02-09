@@ -57,6 +57,7 @@ typedef enum
 	LoadPhase,
 	LedPhase,
 	DelayPhase1,
+	BluetoothPhase,
 	InputPhase,
 	DelayPhase2,
 	SpeakersPhase,

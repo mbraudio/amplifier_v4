@@ -226,15 +226,19 @@ void AMP_ProcessPower(void)
 				LED_Set(LED_POWER, GPIO_PIN_SET);
 				HAL_Delay(200);
 
-				// Bluetooth enable/disable
-				AMP_EnableBluetooth(system.settings.bluetoothEnabled);
-
 				system.power.phase++;
 			} break;
 
 			case DelayPhase1:
 			{
 				HAL_Delay(400);
+
+				system.power.phase++;
+			} break;
+
+			case BluetoothPhase:
+			{
+				AMP_EnableBluetooth(system.settings.bluetoothEnabled);
 
 				system.power.phase++;
 			} break;
@@ -280,13 +284,15 @@ void AMP_ProcessPower(void)
 				// Unmute
 				INPUT_Mute(0);
 
+				// Set Power Phase to IDLE and Power State to ON
 				system.power.phase = Idle;
 				system.power.state = On;
 
 				// Send System
 				BLUETOOTH_SendSystem();
 
-				HAL_Delay(20);
+				// Small delay
+				HAL_Delay(100);
 
 				// Enable motors update
 				POTENTIOMETERS_EnableUpdate();

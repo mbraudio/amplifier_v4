@@ -73,6 +73,9 @@ void POTENTIOMETERS_EnableUpdate(void)
 		potentiometers.pots[i].last = 0xFFFFFFFF;
 	}
 
+	// Set timer to 0
+	potentiometers.timer = 0;
+
 	// Enable updates
 	potentiometers.update = 1;
 }
