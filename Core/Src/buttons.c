@@ -27,7 +27,7 @@
 #define BUTTON_LOUDNESS_ADC_HI			161
 // Buttons - Group 2
 // Selector: 0
-#define BUTTON_SELECTOR_ADC_HI			10
+#define BUTTON_SELECTOR_ADC_HI			31//10
 // Max value is 256
 #define BUTTON_ADC_MAX					220
 
