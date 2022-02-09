@@ -159,7 +159,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 					}
 					PROTECTION_Reset();
 				}
-				else if (BUTTONS_PressValid(buttons.power.time, BUTTON_PRESSED_TIME))
+				if (BUTTONS_PressValid(buttons.power.time, BUTTON_PRESSED_TIME))
 				{
 					AMP_PowerToggle();
 				}
@@ -320,9 +320,12 @@ int main(void)
 		if (adc.dataReady)
 		{
 			adc.dataReady = 0;
-			BUTTONS_ProcessADC_MainGroup(adc.data[5]);
-			BUTTONS_ProcessADC_SelectorGroup(adc.data[6]);
-			POTENTIOMETERS_SetCurrent(adc.data[0], adc.data[1], adc.data[4], adc.data[3], adc.data[2]);
+			if (system.power.state == On)
+			{
+				BUTTONS_ProcessADC_MainGroup(adc.data[5]);
+				BUTTONS_ProcessADC_SelectorGroup(adc.data[6]);
+				POTENTIOMETERS_SetCurrent(adc.data[0], adc.data[1], adc.data[4], adc.data[3], adc.data[2]);
+			}
 		}
 
 	    CALIBRATOR_Process(); // (Needs to run only for pot calibrations.)
@@ -414,7 +417,7 @@ static void MX_ADC_Init(void)
   hadc.Init.OversamplingMode = DISABLE;
   hadc.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
   hadc.Init.Resolution = ADC_RESOLUTION_8B;
-  hadc.Init.SamplingTime = ADC_SAMPLETIME_160CYCLES_5;
+  hadc.Init.SamplingTime = ADC_SAMPLETIME_79CYCLES_5;
   hadc.Init.ScanConvMode = ADC_SCAN_DIRECTION_FORWARD;
   hadc.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc.Init.ContinuousConvMode = DISABLE;
@@ -423,7 +426,7 @@ static void MX_ADC_Init(void)
   hadc.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc.Init.DMAContinuousRequests = DISABLE;
   hadc.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
-  hadc.Init.Overrun = ADC_OVR_DATA_PRESERVED;
+  hadc.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
   hadc.Init.LowPowerAutoWait = ENABLE;
   hadc.Init.LowPowerFrequencyMode = DISABLE;
   hadc.Init.LowPowerAutoPowerOff = DISABLE;

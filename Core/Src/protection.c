@@ -6,6 +6,7 @@
  */
 #include "protection.h"
 #include "amplifier.h"
+#include "input.h"
 #include "utilities.h"
 #include "system.h"
 #include "eeprom.h"

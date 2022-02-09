@@ -69,11 +69,6 @@ uint32_t BUTTONS_PressValid(const uint32_t time, const uint32_t value)
 
 void BUTTONS_ProcessADC_MainGroup(const uint8_t value)
 {
-	if (system.power.state != On)
-	{
-		return;
-	}
-
 	// DIRECT
 	if (value < BUTTON_DIRECT_ADC_HI)
 	{
@@ -269,11 +264,6 @@ void BUTTONS_ProcessADC_MainGroup(const uint8_t value)
 
 void BUTTONS_ProcessADC_SelectorGroup(const uint8_t value)
 {
-	if (system.power.state != On)
-	{
-		return;
-	}
-
 	// SELECTOR
 	if (value < BUTTON_SELECTOR_ADC_HI)
 	{
@@ -298,6 +288,9 @@ void BUTTONS_ProcessADC_SelectorGroup(const uint8_t value)
 				if (BUTTONS_PressValid(buttons.selector.time, BUTTON_HOLD_TIME))
 				{
 					buttons.selector.state = Hold;
+					// Toggle BT on/off
+					AMP_EnableBluetooth(!system.settings.bluetoothEnabled);
+					SYSTEM_Save();
 				}
 			} break;
 
@@ -311,19 +304,9 @@ void BUTTONS_ProcessADC_SelectorGroup(const uint8_t value)
 	{
 		if (buttons.selector.state == Pressed)
 		{
-			//LED_Set(LED_INPUT_SELECTOR, system.states.mute);
 			INPUT_Mute(!system.states.mute);
 			BLUETOOTH_Send(COMMAND_TOGGLE_MUTE, system.states.mute);
-		}
-		else if (buttons.selector.state == Hold)
-		{
-			// Toggle BT on/off
-			AMP_EnableBluetooth(!system.settings.bluetoothEnabled);
-			SYSTEM_Save();
 		}
 		buttons.selector.state = Released;
 	}
 }
-
-
-
