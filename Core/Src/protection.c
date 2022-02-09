@@ -86,6 +86,9 @@ void PROTECTION_Process(void)
 
 void PROTECTION_EnableDc(void)
 {
+	// Mute input
+	INPUT_Mute(1);
+
 	// Immediately disable power to transformers
 	AMP_SetPowerPin(GPIO_PIN_RESET);
 
@@ -106,6 +109,9 @@ void PROTECTION_EnableDc(void)
 
 void PROTECTION_EnableVoltage(void)
 {
+	// Mute input
+	INPUT_Mute(1);
+
 	// Immediately disable power to transformers
 	AMP_SetPowerPin(GPIO_PIN_RESET);
 
@@ -126,6 +132,9 @@ void PROTECTION_EnableVoltage(void)
 
 void PROTECTION_EnableTemperature(void)
 {
+	// Mute input
+	INPUT_Mute(1);
+
 	// Immediately disable power to transformers
 	AMP_SetPowerPin(GPIO_PIN_RESET);
 

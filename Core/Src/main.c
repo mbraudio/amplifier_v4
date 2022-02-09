@@ -884,7 +884,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOH, INPUT_0_Pin|SPEAKERS_ENABLE_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LED_RGB_2_Pin|BT_ENABLE_Pin|LED_HEARTBEAT_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED_RGB_2_Pin|LED_HEARTBEAT_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LED_BASS_Pin|LED_LOUDNESS_Pin|LED_SACD_Pin|LED_NETWORK_Pin
@@ -894,6 +894,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOD, LED_SPEAKERS_B_Pin|LED_SPEAKERS_A_Pin|LED_DIRECT_Pin|POWER_ENABLE_Pin
                           |GPIO_0_Pin|LED_POWER_Pin|DIR_CS_Pin|VOL_RESET_Pin
                           |WM_CS_Pin|DIR_RESET_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(BT_ENABLE_GPIO_Port, BT_ENABLE_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pins : LED_AMP_DIRECT_Pin INPUT_DAC_Pin LED_AUX_Pin LED_RECORDER_Pin */
   GPIO_InitStruct.Pin = LED_AMP_DIRECT_Pin|INPUT_DAC_Pin|LED_AUX_Pin|LED_RECORDER_Pin;
