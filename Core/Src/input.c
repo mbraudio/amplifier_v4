@@ -125,12 +125,19 @@ void INPUT_Confirmed(void)
 
 void INPUT_SetDirect(const uint8_t newIndex)
 {
+	// Ignore if same input is selected
+	if (system.settings.input == newIndex)
+	{
+		return;
+	}
+
 	// Turn off current led
 	LED_Set(input.inputs[system.settings.input].led, GPIO_PIN_RESET);
 	// Turn on new led
 	LED_Set(input.inputs[newIndex].led, GPIO_PIN_SET);
 	// Save current index
 	system.settings.input = newIndex;
+	// Confirm right away
 	INPUT_Confirmed();
 }
 

@@ -127,7 +127,8 @@ void IR_Decode(void)
 		} break;
 
 		// Bass
-		case IR_CODE_NAP_ON_OFF: {
+		case IR_CODE_NAP_ON_OFF:
+		{
 			if (ir.lastCommand != ir.commandToDecode)
 			{
 				ir.ignoreTime = IR_IGNORE_TIME_VOLUME;
@@ -136,7 +137,8 @@ void IR_Decode(void)
 			}
 		} break;
 
-		case IR_CODE_NAP_REWIND: {
+		case IR_CODE_NAP_REWIND:
+		{
 			if (ir.lastCommand != ir.commandToDecode)
 			{
 				ir.ignoreTime = IR_IGNORE_TIME_VOLUME;
@@ -146,7 +148,8 @@ void IR_Decode(void)
 		} break;
 
 		// Treble
-		case IR_CODE_NAP_PLAY: {
+		case IR_CODE_NAP_PLAY:
+		{
 			if (ir.lastCommand != ir.commandToDecode)
 			{
 				ir.ignoreTime = IR_IGNORE_TIME_VOLUME;
@@ -155,7 +158,8 @@ void IR_Decode(void)
 			}
 		} break;
 
-		case IR_CODE_NAP_STOP: {
+		case IR_CODE_NAP_STOP:
+		{
 			if (ir.lastCommand != ir.commandToDecode)
 			{
 				ir.ignoreTime = IR_IGNORE_TIME_VOLUME;
@@ -165,7 +169,8 @@ void IR_Decode(void)
 		} break;
 
 		// Balance
-		case IR_CODE_NAP_FUNC: {
+		case IR_CODE_NAP_FUNC:
+		{
 			if (ir.lastCommand != ir.commandToDecode)
 			{
 				ir.ignoreTime = IR_IGNORE_TIME_VOLUME;
@@ -174,7 +179,8 @@ void IR_Decode(void)
 			}
 		} break;
 
-		case IR_CODE_NAP_FORWARD: {
+		case IR_CODE_NAP_FORWARD:
+		{
 			if (ir.lastCommand != ir.commandToDecode)
 			{
 				ir.ignoreTime = IR_IGNORE_TIME_VOLUME;
@@ -206,6 +212,7 @@ void IR_Decode(void)
 			}
 		} break;
 
+		// INPUTS
 		case IR_CODE_INPUT_MINUS:
 		{
 			if (ir.lastCommand != ir.commandToDecode)
@@ -224,6 +231,56 @@ void IR_Decode(void)
 				ir.ignoreTime = IR_IGNORE_TIME_INPUT;
 				INPUT_Changed(1);
 				INPUT_Confirmed();
+				ir.lastCommand = ir.commandToDecode;
+			}
+		} break;
+
+		case IR_CODE_SACD_CD:
+		{
+			if (ir.lastCommand != ir.commandToDecode)
+			{
+				ir.ignoreTime = IR_IGNORE_TIME_INPUT;
+				INPUT_SetDirect(0);
+				ir.lastCommand = ir.commandToDecode;
+			}
+		} break;
+
+		case IR_CODE_NETWORK:
+		{
+			if (ir.lastCommand != ir.commandToDecode)
+			{
+				ir.ignoreTime = IR_IGNORE_TIME_INPUT;
+				INPUT_SetDirect(1);
+				ir.lastCommand = ir.commandToDecode;
+			}
+		} break;
+
+		case IR_CODE_TUNER:
+		{
+			if (ir.lastCommand != ir.commandToDecode)
+			{
+				ir.ignoreTime = IR_IGNORE_TIME_INPUT;
+				INPUT_SetDirect(2);
+				ir.lastCommand = ir.commandToDecode;
+			}
+		} break;
+
+		case IR_CODE_AUX:
+		{
+			if (ir.lastCommand != ir.commandToDecode)
+			{
+				ir.ignoreTime = IR_IGNORE_TIME_INPUT;
+				INPUT_SetDirect(3);
+				ir.lastCommand = ir.commandToDecode;
+			}
+		} break;
+
+		case IR_CODE_RECORDER:
+		{
+			if (ir.lastCommand != ir.commandToDecode)
+			{
+				ir.ignoreTime = IR_IGNORE_TIME_INPUT;
+				INPUT_SetDirect(4);
 				ir.lastCommand = ir.commandToDecode;
 			}
 		} break;
@@ -262,10 +319,22 @@ void IR_Decode(void)
 			}
 		} break;
 
+		case IR_CODE_APD:
+		{
+			if (ir.lastCommand != ir.commandToDecode)
+			{
+				ir.ignoreTime = IR_IGNORE_TIME_INPUT;
+				AMP_EnableBluetooth(!system.settings.bluetoothEnabled);
+				SYSTEM_Save();
+				ir.lastCommand = ir.commandToDecode;
+			}
+		} break;
+
 		case IR_CODE_OPTION:
 		{
 			if (ir.lastCommand != ir.commandToDecode)
 			{
+				ir.ignoreTime = IR_IGNORE_TIME_INPUT;
 				AMP_SetVolumeKnobLed(!system.settings.volumeKnobLed);
 				ir.lastCommand = ir.commandToDecode;
 			}
