@@ -5,6 +5,8 @@
  *      Author: Admin
  */
 
+#ifdef USE_CALIBRATOR
+
 #ifndef INC_CALIBRATOR_H_
 #define INC_CALIBRATOR_H_
 
@@ -26,3 +28,5 @@ void CALIBRATOR_Start(const uint32_t channel, const uint32_t delay);
 void CALIBRATOR_Process(void);
 
 #endif /* INC_CALIBRATOR_H_ */
+
+#endif

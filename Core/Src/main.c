@@ -171,7 +171,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		// ENCODER
 		case ENCODER_A_PIN:
 		case ENCODER_B_PIN: {
-			ENCODER_Encode(GPIO_Pin);
+			if (system.power.state == On) {
+				ENCODER_Encode(GPIO_Pin);
+			}
 		} break;
 
 		// PROTECTION
@@ -295,9 +297,10 @@ int main(void)
   // UART
   UART_Init(&huart1);
   HAL_UART_Receive_IT(&huart1, uartHandler.rxByte, UART_RX_SIZE);
+#ifdef USE_CALIBRATOR
   // CALIBRATOR (Needs to initialize only for pot calibrations.)
   CALIBRATOR_Initialize();
-
+#endif
   // START TIMERS
   HAL_TIM_Base_Start_IT(&htim7);
   HAL_TIM_Base_Start_IT(&htim6);
@@ -333,7 +336,9 @@ int main(void)
 			}
 		}
 
+#ifdef USE_CALIBRATOR
 	    CALIBRATOR_Process(); // (Needs to run only for pot calibrations.)
+#endif
 
 		DAC_Process();
 		INPUT_Process();

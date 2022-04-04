@@ -4,6 +4,7 @@
  *  Created on: 11. sij 2022.
  *      Author: Admin
  */
+#ifdef USE_CALIBRATOR
 #include "calibrator.h"
 #include "adc.h"
 #include "potentiometer.h"
@@ -78,4 +79,4 @@ void CALIBRATOR_Process(void)
 		}
 	}
 }
-
+#endif

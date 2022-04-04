@@ -130,10 +130,12 @@ void BLUETOOTH_Process(const uint8_t* data, const uint32_t size)
 			AMP_SetDacFilter(data[1]);
 		} break;
 
+#ifdef USE_CALIBRATOR
 		case COMMAND_CALIBRATE:
 		{
 			CALIBRATOR_Start(data[1], data[2]);
 		} break;
+#endif
 
 		default:
 		{
