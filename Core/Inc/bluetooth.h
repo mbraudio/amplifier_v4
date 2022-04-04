@@ -41,7 +41,7 @@ uint32_t BLUETOOTH_CheckCrc(const uint8_t* data, const uint32_t size);
 void BLUETOOTH_Send(const uint8_t command, const uint8_t value);
 void BLUETOOTH_Send2(const uint8_t command, const uint8_t value0, const uint8_t value1);
 void BLUETOOTH_Send3(const uint8_t command, const uint8_t value0, const uint8_t value1, const uint8_t value2);
-void BLUETOOTH_SendData(const uint8_t* data, const uint8_t length);
+void BLUETOOTH_SendData(const uint8_t* data, const uint16_t length);
 
 void BLUETOOTH_SendSystem(void);
 

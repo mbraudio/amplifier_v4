@@ -43,7 +43,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+//#define USE_FULL_ASSERT
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -200,6 +200,11 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 			}
 		} break;
 
+		default:
+		{
+
+		} break;
+
 	}
 }
 
@@ -324,7 +329,7 @@ int main(void)
 			{
 				BUTTONS_ProcessADC_MainGroup(adc.data[5]);
 				BUTTONS_ProcessADC_SelectorGroup(adc.data[6]);
-				POTENTIOMETERS_SetCurrent(adc.data[0], adc.data[1], adc.data[4], adc.data[3], adc.data[2]);
+				POTENTIOMETERS_SetCurrent(adc.data[0], adc.data[4], adc.data[3], adc.data[2]);
 			}
 		}
 
@@ -1046,6 +1051,9 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* User can add his own implementation to report the file name and line number,
      ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
+	//printf("Wrong parameters value: file %s on line %d\r\n", file, line);
+	volatile uint32_t failed = 0;
+	failed = 1;
 }
 #endif /* USE_FULL_ASSERT */
 

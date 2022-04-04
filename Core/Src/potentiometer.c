@@ -108,7 +108,7 @@ void POTENTIOMETERS_SetValue(const uint32_t index, const uint8_t value)
 	pot->actual = value;
 }
 
-void POTENTIOMETERS_SetCurrent(const uint8_t volume0, const uint8_t volume1, const uint8_t bass, const uint8_t treble, const uint8_t balance)
+void POTENTIOMETERS_SetCurrent(const uint8_t volume0, const uint8_t bass, const uint8_t treble, const uint8_t balance)
 {
 	POTENTIOMETERS_SetValue(POT_INDEX_VOLUME, volume0);
 	POTENTIOMETERS_SetValue(POT_INDEX_BASS, bass);
@@ -168,8 +168,8 @@ void POTENTIOMETERS_Process(void)
 			}
 
 			index = (i * 2) + 1;
-			potentiometers.data[index] = pot->logarithmic ? POTENTIOMETERS_GetIndexFromValue(pot) : pot->last;
-			potentiometers.data[index + 1] = pot->active;
+			potentiometers.data[index] = pot->logarithmic ? POTENTIOMETERS_GetIndexFromValue(pot) : (uint8_t)pot->last;
+			potentiometers.data[index + 1] = (uint8_t)pot->active;
 		}
 
 		if (potentiometers.send)
@@ -191,7 +191,7 @@ uint8_t POTENTIOMETERS_GetIndexFromValue(Potentiometer* pot)
 	{
 		if (pot->last <= adcNormal[i])
 		{
-			return i;
+			return (uint8_t)i;
 		}
 	}
 	return 0;

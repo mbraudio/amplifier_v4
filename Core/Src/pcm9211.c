@@ -6,11 +6,11 @@
  */
 #include "pcm9211.h"
 
-SPI_HandleTypeDef* hspi;
+SPI_HandleTypeDef* pcmspi;
 
 void PCM9211_Initialize(SPI_HandleTypeDef* h)
 {
-	hspi = h;
+	pcmspi = h;
 	HAL_GPIO_WritePin(DIR_CS_GPIO_Port, DIR_CS_Pin, GPIO_PIN_SET);
 }
 
@@ -47,7 +47,7 @@ void PCM9211_Write(const uint8_t reg, const uint8_t data)
 {
 	uint8_t txData[2] = { reg, data };
 	HAL_GPIO_WritePin(DIR_CS_GPIO_Port, DIR_CS_Pin, GPIO_PIN_RESET);
-	HAL_SPI_Transmit(hspi, txData, 2, 100);
+	HAL_SPI_Transmit(pcmspi, txData, 2, 100);
 	HAL_GPIO_WritePin(DIR_CS_GPIO_Port, DIR_CS_Pin, GPIO_PIN_SET);
 }
 
@@ -56,7 +56,7 @@ uint8_t PCM9211_Read(const uint8_t reg)
 	uint8_t txData[2] = { (reg + 0x80), 0 };
 	uint8_t rxData[2] = { 0, 0 };
 	HAL_GPIO_WritePin(DIR_CS_GPIO_Port, DIR_CS_Pin, GPIO_PIN_RESET);
-	HAL_SPI_TransmitReceive(hspi, txData, rxData, 2, 100);
+	HAL_SPI_TransmitReceive(pcmspi, txData, rxData, 2, 100);
 	HAL_GPIO_WritePin(DIR_CS_GPIO_Port, DIR_CS_Pin, GPIO_PIN_SET);
 	return rxData[1];
 }

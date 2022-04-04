@@ -10,7 +10,7 @@
 
 RotaryEncoder encoder;
 
-void ENCODER_Initialize(const uint32_t timeout, void(*valueChanged)(const int32_t), void(*valueConfirmed)(void))
+void ENCODER_Initialize(const uint32_t timeout, void(*valueChanged)(const int8_t), void(*valueConfirmed)(void))
 {
 	encoder.a = 1;
 	encoder.b = 1;

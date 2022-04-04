@@ -18,16 +18,16 @@
 
 typedef struct
 {
-	uint8_t		apd:1;
-	uint8_t		direct:1;
-	uint8_t		loudness:1;
-	uint8_t		speakersA:1;
-	uint8_t		speakersB:1;
-	uint8_t 	input:3;
+	uint8_t		apd;
+	uint8_t		direct;
+	uint8_t		loudness;
+	uint8_t		speakersA;
+	uint8_t		speakersB;
+	uint8_t 	input;
 	uint8_t 	brightnessIndex;
-	uint8_t 	volumeKnobLed:1;
+	uint8_t 	volumeKnobLed;
 	uint8_t 	dacFilter;
-	uint8_t		bluetoothEnabled:1;
+	uint8_t		bluetoothEnabled;
 	uint8_t		crc;
 } __attribute__((packed)) Settings;
 

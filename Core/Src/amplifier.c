@@ -131,6 +131,7 @@ void AMP_PowerToggle(void)
 {
 	switch (system.power.state)
 	{
+		default:
 		case Off:
 		{
 			system.power.phase = InitialPhase;
@@ -163,6 +164,7 @@ void AMP_ProcessPower(void)
 	{
 		switch (system.power.phase)
 		{
+			default:
 			case Idle:
 			{
 

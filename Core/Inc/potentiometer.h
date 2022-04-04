@@ -83,7 +83,7 @@ void POTENTIOMETERS_BalanceMinus(void);
 void POTENTIOMETERS_BalanceStop(void);
 
 // Common
-void POTENTIOMETERS_SetCurrent(const uint8_t volume0, const uint8_t volume1, const uint8_t bass, const uint8_t treble, const uint8_t balance);
+void POTENTIOMETERS_SetCurrent(const uint8_t volume0, const uint8_t bass, const uint8_t treble, const uint8_t balance);
 void POTENTIOMETERS_Process(void);
 uint8_t POTENTIOMETERS_GetValueFromIndex(const uint8_t index);
 uint8_t POTENTIOMETERS_GetIndexFromValue(Potentiometer* pot);

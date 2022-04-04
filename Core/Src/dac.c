@@ -113,11 +113,11 @@ PCM9211BitRate DAC_GetBitRate(void)
 
 	result = PCM9211_Read(PCM9211_REG_2F_DIR_OUTPUT_DATA_FORMAT);
 	switch (result) {
-		case PCM9211_DIR_DATA_FORMAT_24BIT_RIGHT_JUSTIFIED: { dac.bitRate = b24rj; }
-		case PCM9211_DIR_DATA_FORMAT_16BIT_RIGHT_JUSTIFIED: { dac.bitRate = b16rj; }
-		case PCM9211_DIR_DATA_FORMAT_24BIT_I2S: 			{ dac.bitRate = b24i2s; }
-		case PCM9211_DIR_DATA_FORMAT_24BIT_LEFT_JUSTIFIED: 	{ dac.bitRate = b24lj; }
-		default: { dac.bitRate = b24i2s; }
+		case PCM9211_DIR_DATA_FORMAT_24BIT_RIGHT_JUSTIFIED: { dac.bitRate = b24rj; break; }
+		case PCM9211_DIR_DATA_FORMAT_16BIT_RIGHT_JUSTIFIED: { dac.bitRate = b16rj; break; }
+		case PCM9211_DIR_DATA_FORMAT_24BIT_I2S: 			{ dac.bitRate = b24i2s; break; }
+		case PCM9211_DIR_DATA_FORMAT_24BIT_LEFT_JUSTIFIED: 	{ dac.bitRate = b24lj; break; }
+		default: { dac.bitRate = b24i2s; break; }
 	}
 
 	return dac.bitRate;

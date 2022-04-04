@@ -18,12 +18,12 @@
 typedef struct
 {
 	UART_HandleTypeDef* huart;
-	uint32_t	rxIndex;
+	uint16_t	rxIndex;
 	uint8_t		rxByte[UART_RX_SIZE];
 	uint8_t		rxBuffer[UART_RX_BUFFER_SIZE];
 	uint8_t		rxData[UART_RX_DATA_SIZE];
 	uint8_t		rxDataDecoded[UART_RX_DATA_SIZE];
-	uint32_t	rxDataLength;
+	uint16_t	rxDataLength;
 	uint32_t	rxDataReady;
 } UartHandler;
 

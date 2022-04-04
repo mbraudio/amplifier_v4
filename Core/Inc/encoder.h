@@ -31,13 +31,13 @@ typedef struct
 	uint32_t confirmTimeout;
 	uint32_t readyChange;
 	uint32_t readyConfirm;
-	void(*valueChanged)(const int32_t);
+	void(*valueChanged)(const int8_t);
 	void(*valueConfirmed)(void);
 } RotaryEncoder;
 
 extern RotaryEncoder encoder;
 
-void ENCODER_Initialize(const uint32_t timeout, void(*valueChanged)(const int32_t), void(*valueConfirmed)(void));
+void ENCODER_Initialize(const uint32_t timeout, void(*valueChanged)(const int8_t), void(*valueConfirmed)(void));
 void ENCODER_Encode(const uint16_t pin);
 void ENCODER_Process(void);
 

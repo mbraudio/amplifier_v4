@@ -39,13 +39,13 @@ int16_t TMP100_ReadTemperature(const uint8_t address)
 {
 	uint8_t data[2] = { 0x00, 0x00 };
 	HAL_I2C_Master_Receive(thi2c, address, data, 2, TMP100_TIMEOUT);
-	uint32_t temp = ((data[0] << 8) + data[1]) >> 4;
-	uint32_t cels = ((temp * 625) / 10000);
+	int32_t temp = ((data[0] << 8) + data[1]) >> 4;
+	int32_t cels = ((temp * 625) / 10000);
 	if (temp >= 0x800)
 	{
 		cels -= 256; // Negative, minus values
 	}
-	return cels;
+	return (int16_t)cels;
 }
 
 void TMP100_ReadTemperatures(void)
@@ -69,6 +69,6 @@ void TMP100_Process(void)
 		temperature.timer = 0;
 		TMP100_ReadTemperatures();
 		TMP100_CheckForProtection();
-		BLUETOOTH_Send2(COMMAND_UPDATE_TEMPERATURE, temperature.rightChannel, temperature.leftChannel);
+		BLUETOOTH_Send2(COMMAND_UPDATE_TEMPERATURE, (uint8_t)temperature.rightChannel, (uint8_t)temperature.leftChannel);
 	}
 }

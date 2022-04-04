@@ -98,11 +98,11 @@ void INPUT_Activate(void)
 	INPUT_Set(data);
 }
 
-void INPUT_Changed(const int32_t direction)
+void INPUT_Changed(const int8_t direction)
 {
 	int8_t index;
 	// Current index
-	index = system.settings.input;
+	index = (int8_t)system.settings.input;
 	// Turn off current led
 	LED_Set(input.inputs[index].led, GPIO_PIN_RESET);
 	// Add/subtract value
@@ -112,7 +112,7 @@ void INPUT_Changed(const int32_t direction)
 	// Turn on new led
 	LED_Set(input.inputs[index].led, GPIO_PIN_SET);
 	// Save current index
-	system.settings.input = index;
+	system.settings.input = (uint8_t)index;
 }
 
 void INPUT_Confirmed(void)

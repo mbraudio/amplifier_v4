@@ -57,7 +57,7 @@ void CALIBRATOR_Process(void)
 			for (i = 0; i < parts; i++)
 			{
 				data[0] = COMMAND_SEND_CALIBRATION_DATA_1;
-				data[1] = i;
+				data[1] = (uint8_t)i;
 				memcpy(&data[2], &calibrationManager.data[(i * DATA_BYTES)], DATA_BYTES);
 				BLUETOOTH_SendData(data, (DATA_BYTES + 2));
 				HAL_Delay(300);
@@ -66,9 +66,9 @@ void CALIBRATOR_Process(void)
 			if (remaining)
 			{
 				data[0] = COMMAND_SEND_CALIBRATION_DATA_2;
-				data[1] = i;
+				data[1] = (uint8_t)i;
 				memcpy(&data[2], &calibrationManager.data[(CALIBRATION_STEPS - remaining)], remaining);
-				BLUETOOTH_SendData(data, (remaining + 2));
+				BLUETOOTH_SendData(data, (uint16_t)(remaining + 2));
 			}
 			else
 			{

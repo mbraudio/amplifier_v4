@@ -26,7 +26,7 @@ void BLUETOOTH_Process(const uint8_t* data, const uint32_t size)
 		return;
 	}
 
-	uint32_t command = data[0];
+	uint8_t command = data[0];
 
 	switch (command)
 	{
@@ -134,6 +134,11 @@ void BLUETOOTH_Process(const uint8_t* data, const uint32_t size)
 		{
 			CALIBRATOR_Start(data[1], data[2]);
 		} break;
+
+		default:
+		{
+
+		} break;
 	}
 }
 
@@ -153,19 +158,19 @@ void BLUETOOTH_Send(const uint8_t command, const uint8_t value)
 
 void BLUETOOTH_Send2(const uint8_t command, const uint8_t value0, const uint8_t value1)
 {
-	uint8_t crc = command + value0 + value1;
+	uint8_t crc = (uint8_t)(command + value0 + value1);
 	uint8_t data[4] = { command, value0, value1, crc };
 	UART_Send(data, 4);
 }
 
 void BLUETOOTH_Send3(const uint8_t command, const uint8_t value0, const uint8_t value1, const uint8_t value2)
 {
-	uint8_t crc = command + value0 + value1 + value2;
+	uint8_t crc = (uint8_t)(command + value0 + value1 + value2);
 	uint8_t data[5] = { command, value0, value1, value2, crc };
 	UART_Send(data, 5);
 }
 
-void BLUETOOTH_SendData(const uint8_t* data, const uint8_t length)
+void BLUETOOTH_SendData(const uint8_t* data, const uint16_t length)
 {
 	UART_Send(data, length);
 }

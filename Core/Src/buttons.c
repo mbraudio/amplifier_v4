@@ -62,9 +62,9 @@ void BUTTONS_Initialize(void)
 
 uint32_t BUTTONS_PressValid(const uint32_t time, const uint32_t value)
 {
-	int32_t diff = buttons.timer - time;
+	int32_t diff = (int32_t)(buttons.timer - time);
 	if (diff < 0) { diff *= -1; }
-	return (diff >= value);
+	return ((uint32_t)diff >= value);
 }
 
 void BUTTONS_ProcessADC_MainGroup(const uint8_t value)

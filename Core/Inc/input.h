@@ -33,7 +33,7 @@ extern Input input;
 void INPUT_Initialize(void);
 void INPUT_Process(void);
 void INPUT_Activate(void);
-void INPUT_Changed(const int32_t direction);
+void INPUT_Changed(const int8_t direction);
 void INPUT_Confirmed(void);
 void INPUT_SetDirect(const uint8_t newIndex);
 void INPUT_InputsOff(void);
